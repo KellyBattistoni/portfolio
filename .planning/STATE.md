@@ -5,22 +5,22 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 1 — Scaffold + Safety Rails
+**Current focus:** Phase 1 — Complete ✓ → Phase 2 — i18n Backbone
 
 ## Current Position
 
-Phase: 1 of 8 (Scaffold + Safety Rails)
-Plan: 1 of 3 complete in current phase
-Status: In progress
-Last activity: 2026-06-09 — Plan 01-01 complete (Vite + React + TS + Tailwind scaffold builds clean)
+Phase: 1 of 8 (Scaffold + Safety Rails) — **COMPLETE**
+Plan: 3 of 3 complete in Phase 1
+Status: Phase 1 done — pending verification
+Last activity: 2026-06-09 — All 3 Phase 1 plans executed; verifier running
 
-Progress: [█░░░░░░░░░] 4% (1 of 24 expected plans)
+Progress: [█░░░░░░░░░] 12% (3 of ~24 expected plans)
 
 ## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 1 | Scaffold + Safety Rails | In progress | 1/3 |
+| 1 | Scaffold + Safety Rails | Verifying | 3/3 |
 | 2 | i18n Backbone | Pending | TBD |
 | 3 | Scroll Infrastructure | Pending | TBD |
 | 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
@@ -31,25 +31,24 @@ Progress: [█░░░░░░░░░] 4% (1 of 24 expected plans)
 
 ## Active Work
 
-Phase 1 in progress. Plan 01-01 complete. Next: Plan 01-02.
+Phase 1 execution complete. All 3 plans done. Verifier agent running.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: ~18 min
-- Total execution time: ~18 min
+- Total plans completed: 3
+- Average duration: ~21 min
+- Total execution time: ~63 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
 | 01-scaffold-safety-rails | 01 | ~18 min | 2 | 15 |
+| 01-scaffold-safety-rails | 02 | ~25 min | 2 | 7 |
+| 01-scaffold-safety-rails | 03 | ~20 min | 1 | 2 |
 
 ## Accumulated Context
 
 ### Decisions
-
-Decisions are logged in PROJECT.md Key Decisions table.
-Recent decisions affecting current work:
 
 - React + Vite over Next.js (no SSR needed; simpler GH Pages deploy)
 - Plasma only on hero, unmount on scroll past (not opacity fade) to stop rAF loop
@@ -58,25 +57,27 @@ Recent decisions affecting current work:
 - Root GitHub Pages repo `KellyBattistoni.github.io` (no `/portfolio` subpath)
 - [01-01] `ignoreDeprecations: "6.0"` in tsconfig.app.json — silences TS 6.0 deprecation of `baseUrl` while keeping `@/*` paths working
 - [01-01] `jiti` devDep installed — required by ESLint v10 to load `eslint.config.ts`
-- [01-01] ESLint config in TypeScript (`eslint.config.ts`) not JavaScript — matches source language; required removing scaffold's `eslint.config.js`
-- [01-01] Brand token classes (`bg-brand-bg`, `text-brand-accent`, `font-display`) referenced in App.tsx — Plan 02 must define them via Tailwind v4 `@theme`
+- [01-01] ESLint config in TypeScript (`eslint.config.ts`) not JavaScript — required removing scaffold's `eslint.config.js`
+- [01-02] SVG `feTurbulence` data URI used for noise texture — no binary PNG asset, deterministic, commits cleanly
+- [01-02] `react-error-boundary` v6 types `error` as `unknown` — `instanceof Error` guard required in both `FallbackProps` and `onError` callback
+- [01-02] `AnimationFallback` renders brand-gradient div only — no visible text, indistinguishable from Plasma placeholder
+- [01-03] `useState(getInitialCapabilities)` lazy initializer — synchronous first render, no flash of wrong state
+- [01-03] `isLowEnd` and `supportsWebGL2` sampled once on mount only — hardware doesn't change at runtime
 
-### Pending Todos
+### Resolved Blockers
 
-None yet.
+- TypeScript chosen (TS, not JSX-only) — confirmed via scaffold choice in 01-01
+- Both CV PDFs confirmed present in repo root — will copy to `public/` in Phase 6
 
-### Blockers/Concerns
+### Remaining Open Questions
 
-Open questions from research (resolve before / during Phase 1 planning):
-- TypeScript vs JSX-only (research recommends TS for i18n key safety)
-- framer-motion vs motion package name (verify at install)
-- Number of NDA-safe case studies ready (target 3–4 deep)
-- Primary CTA framing: clients vs jobs
-- Confirm both EN and ES CV PDFs exist in `public/`
-- Plasma GLSL shader source — port from inspo or author fresh
+- framer-motion vs motion package name (verify at install in Phase 3)
+- Number of NDA-safe case studies ready (target 3–4 deep) — needed before Phase 6
+- Primary CTA framing: clients vs jobs — needed before Phase 5
+- Plasma GLSL shader source — port from inspo or author fresh — needed before Phase 4
 
 ## Session Continuity
 
-Last session: 2026-06-09T23:14Z
-Stopped at: Completed Plan 01-01 (Vite + React + TS + Tailwind scaffold). Ready for Plan 01-02.
-Resume file: .planning/phases/01-scaffold-safety-rails/01-02-PLAN.md
+Last session: 2026-06-09
+Stopped at: Phase 1 execution complete (all 3 plans committed). Verifier running.
+Resume file: None — next step is `/gsd:plan-phase 2` after verification.
