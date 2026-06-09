@@ -31,7 +31,12 @@ This roadmap delivers a bilingual, dark-cinematic portfolio in a strict dependen
   2. The page renders with `#050505` background, `#FF4500` accent CSS variables exposed, Playfair Display and Inter loaded, and a visible noise texture overlay.
   3. Importing `useDeviceCapabilities()` anywhere in the app returns `{ prefersReducedMotion, isMobile, isLowEnd, supportsWebGL2 }` and reactively updates when the OS reduced-motion preference is toggled.
   4. An `ErrorBoundary` wraps a placeholder animation root and renders a fallback when a thrown error is forced inside it.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold Vite 8 + React 19 + TypeScript + Tailwind v4, install all deps, configure @/ alias, ESLint, Prettier
+- [ ] 01-02-PLAN.md — Brand tokens (@theme), Google Fonts, NoiseOverlay component, AnimationErrorBoundary, App wiring
+- [ ] 01-03-PLAN.md — useDeviceCapabilities hook (prefersReducedMotion, isMobile, isLowEnd, supportsWebGL2)
 
 ### Phase 2: i18n Backbone
 **Goal**: Wire react-i18next with EN/ES namespaces and a working language switcher before any section component or hardcoded string exists.
@@ -116,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Scaffold + Safety Rails | 0/TBD | Not started | - |
+| 1. Scaffold + Safety Rails | 0/3 | Not started | - |
 | 2. i18n Backbone | 0/TBD | Not started | - |
 | 3. Scroll Infrastructure | 0/TBD | Not started | - |
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
