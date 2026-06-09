@@ -10,17 +10,17 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 1 of 8 (Scaffold + Safety Rails)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-06-09 — Roadmap created (8 phases, 20/20 v1 requirements mapped)
+Plan: 1 of 3 complete in current phase
+Status: In progress
+Last activity: 2026-06-09 — Plan 01-01 complete (Vite + React + TS + Tailwind scaffold builds clean)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 4% (1 of 24 expected plans)
 
 ## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
-| 1 | Scaffold + Safety Rails | Pending | TBD |
+| 1 | Scaffold + Safety Rails | In progress | 1/3 |
 | 2 | i18n Backbone | Pending | TBD |
 | 3 | Scroll Infrastructure | Pending | TBD |
 | 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
@@ -31,14 +31,18 @@ Progress: [░░░░░░░░░░] 0%
 
 ## Active Work
 
-None — ready to begin Phase 1.
+Phase 1 in progress. Plan 01-01 complete. Next: Plan 01-02.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: —
+- Total plans completed: 1
+- Average duration: ~18 min
+- Total execution time: ~18 min
+
+| Phase | Plan | Duration | Tasks | Files |
+|-------|------|----------|-------|-------|
+| 01-scaffold-safety-rails | 01 | ~18 min | 2 | 15 |
 
 ## Accumulated Context
 
@@ -52,6 +56,10 @@ Recent decisions affecting current work:
 - PillNav hidden during hero, appears on scroll
 - EN/ES wired before any section component (no retrofit)
 - Root GitHub Pages repo `KellyBattistoni.github.io` (no `/portfolio` subpath)
+- [01-01] `ignoreDeprecations: "6.0"` in tsconfig.app.json — silences TS 6.0 deprecation of `baseUrl` while keeping `@/*` paths working
+- [01-01] `jiti` devDep installed — required by ESLint v10 to load `eslint.config.ts`
+- [01-01] ESLint config in TypeScript (`eslint.config.ts`) not JavaScript — matches source language; required removing scaffold's `eslint.config.js`
+- [01-01] Brand token classes (`bg-brand-bg`, `text-brand-accent`, `font-display`) referenced in App.tsx — Plan 02 must define them via Tailwind v4 `@theme`
 
 ### Pending Todos
 
@@ -69,6 +77,6 @@ Open questions from research (resolve before / during Phase 1 planning):
 
 ## Session Continuity
 
-Last session: 2026-06-09
-Stopped at: Roadmap and STATE created; ready to invoke `/gsd:plan-phase 1`.
-Resume file: None
+Last session: 2026-06-09T23:14Z
+Stopped at: Completed Plan 01-01 (Vite + React + TS + Tailwind scaffold). Ready for Plan 01-02.
+Resume file: .planning/phases/01-scaffold-safety-rails/01-02-PLAN.md
