@@ -63,32 +63,34 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INFRA-01 | Phase 1 | Pending |
-| INFRA-02 | Phase 1 | Pending |
-| INFRA-03 | Phase 2 | Pending |
-| INFRA-04 | Phase 3 | Pending |
-| INFRA-05 | Phase 8 | Pending |
-| DESIGN-01 | Phase 1 | Pending |
-| DESIGN-02 | Phase 4 | Pending |
-| DESIGN-03 | Phase 5 | Pending |
-| DESIGN-04 | Phase 3 | Pending |
-| DESIGN-05 | Phase 3 | Pending |
-| DESIGN-06 | Phase 6 | Pending |
-| CONT-01 | Phase 5 | Pending |
-| CONT-02 | Phase 6 | Pending |
-| CONT-03 | Phase 6 | Pending |
-| CONT-04 | Phase 6 | Pending |
-| CONT-05 | Phase 6 | Pending |
-| CONT-06 | Phase 6 | Pending |
-| I18N-01 | Phase 2 | Pending |
-| I18N-02 | Phase 2 | Pending |
-| I18N-03 | Phase 2 | Pending |
+| INFRA-01 | Phase 1 — Scaffold + Safety Rails | Pending |
+| INFRA-02 | Phase 1 — Scaffold + Safety Rails | Pending |
+| DESIGN-01 | Phase 1 — Scaffold + Safety Rails | Pending |
+| INFRA-03 | Phase 2 — i18n Backbone | Pending |
+| I18N-01 | Phase 2 — i18n Backbone | Pending |
+| I18N-02 | Phase 2 — i18n Backbone | Pending |
+| I18N-03 | Phase 2 — i18n Backbone | Pending |
+| INFRA-04 | Phase 3 — Scroll Infrastructure | Pending |
+| DESIGN-04 | Phase 3 — Scroll Infrastructure | Pending |
+| DESIGN-05 | Phase 3 — Scroll Infrastructure | Pending |
+| DESIGN-02 | Phase 4 — Visual Foundations (Plasma + Noise) | Pending |
+| CONT-01 | Phase 5 — Hero + PillNav | Pending |
+| DESIGN-03 | Phase 5 — Hero + PillNav | Pending |
+| CONT-02 | Phase 6 — Content Sections | Pending |
+| CONT-03 | Phase 6 — Content Sections | Pending |
+| CONT-04 | Phase 6 — Content Sections | Pending |
+| CONT-05 | Phase 6 — Content Sections | Pending |
+| CONT-06 | Phase 6 — Content Sections | Pending |
+| DESIGN-06 | Phase 6 — Content Sections | Pending |
+| INFRA-05 | Phase 8 — Deployment | Pending |
 
 **Coverage:**
-- v1 requirements: 18 total
-- Mapped to phases: 18
+- v1 requirements: 20 total (5 INFRA + 6 DESIGN + 6 CONT + 3 I18N)
+- Mapped to phases: 20
 - Unmapped: 0 ✓
+
+Phase 7 (Polish & Performance) is criteria-only — it does not introduce new requirements, but exercises every prior requirement under Lighthouse, accessibility, mobile, and cross-browser constraints.
 
 ---
 *Requirements defined: 2026-06-09*
-*Last updated: 2026-06-09 after initial definition*
+*Last updated: 2026-06-09 — traceability finalized against 8-phase roadmap*
