@@ -47,7 +47,12 @@ Plans:
   2. The 6 namespace JSON files (`common`, `hero`, `about`, `projects`, `stack`, `contact`) exist for both `en` and `es` and are statically imported at startup.
   3. Selecting a language writes `kbv-lang` to `localStorage`; a full reload restores that language and sets `document.documentElement.lang` to match.
   4. First-visit users with no stored preference are auto-detected via browser locale and default to ES if Spanish is preferred, EN otherwise.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Install i18n deps, create 12 namespace JSON files, write i18n init module + TypeScript module augmentation, wire main.tsx side-effect import
+- [ ] 02-02-PLAN.md — Build LanguageSwitcher (underline tabs), useLocalizeDocumentAttributes hook, wire App.tsx with demo hero strings inside AnimationErrorBoundary
+- [ ] 02-03-PLAN.md — Human verification checkpoint — confirm all 4 ROADMAP success criteria pass in a real browser
 
 ### Phase 3: Scroll Infrastructure
 **Goal**: Provide a single rAF-coalesced scroll source and the reveal/parallax primitives every visual component will consume.
@@ -122,7 +127,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Safety Rails | 3/3 | Complete ✓ | 2026-06-09 |
-| 2. i18n Backbone | 0/TBD | Not started | - |
+| 2. i18n Backbone | 0/3 | Not started | - |
 | 3. Scroll Infrastructure | 0/TBD | Not started | - |
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
