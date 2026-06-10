@@ -65,7 +65,7 @@ function getInitialCapabilities(): DeviceCapabilities {
   const isLowEnd = lowByCores || lowByMemory
 
   // supportsWebGL2: probe an offscreen canvas, discard immediately.
-  let supportsWebGL2 = false
+  let supportsWebGL2: boolean
   try {
     const canvas = document.createElement('canvas')
     supportsWebGL2 = !!canvas.getContext('webgl2')
