@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 3 — Scroll Infrastructure
+**Current focus:** Phase 4 — Visual Foundations (Plasma + Noise)
 
 ## Current Position
 
-Phase: 3 of 8 (Scroll Infrastructure) — In progress
-Plan: 2 of 3 in Phase 3 — complete; next: 03-03 ParallaxTestHarness + browser verification
-Status: Plan 03-02 complete — RevealSection + ParallaxCard shipped, build + lint green
-Last activity: 2026-06-10 — Plan 03-02 executed and committed (04f3e99, 5687b7f)
+Phase: 3 of 8 (Scroll Infrastructure) — Complete ✓
+Plan: 3 of 3 in Phase 3 — all complete; Phase 3 human-verified and closed
+Status: Phase 3 complete — all 6 browser verification checks passed (approved 2026-06-10)
+Last activity: 2026-06-10 — Plan 03-03 human checkpoint approved; SUMMARY.md written
 
-Progress: [████░░░░░░] 33% (8 of ~24 expected plans)
+Progress: [█████░░░░░] 38% (9 of ~24 expected plans)
 
 ## Phase Status
 
@@ -22,7 +22,7 @@ Progress: [████░░░░░░] 33% (8 of ~24 expected plans)
 |-------|------|--------|-------|
 | 1 | Scaffold + Safety Rails | Complete ✓ | 3/3 |
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
-| 3 | Scroll Infrastructure | In progress | 2/3 |
+| 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
 | 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
 | 6 | Content Sections | Pending | TBD |
@@ -31,7 +31,7 @@ Progress: [████░░░░░░] 33% (8 of ~24 expected plans)
 
 ## Active Work
 
-Phase 3 in progress. Plan 03-02 (Scroll Animation Primitives) complete: `RevealSection` ships scroll-triggered entry animations with 3 variants (fade-up, slide-from-left, scale-up), 120ms stagger across direct children, `start: 'top 85%'` with `once: true` self-killing ScrollTrigger, and `gsap.matchMedia` reduced-motion handling on top of the `useDeviceCapabilities` early-return. `ParallaxCard` ships a multi-layer `layers[]` API driven by a single `gsap.ticker.add()` callback, uses `gsap.quickSetter` for per-frame DOM writes, reads scroll position via `scrollStore.getRef()` (no scroll listener attached), skips parallax on mobile + reduced-motion, and clips drift via `overflow: hidden` on the card container. Build + lint green. Next: 03-03 ParallaxTestHarness + browser verification.
+Phase 3 complete ✓ (2026-06-10). All 3 plans shipped and human-verified. Plan 03-02 (Scroll Animation Primitives) shipped: `RevealSection` ships scroll-triggered entry animations with 3 variants (fade-up, slide-from-left, scale-up), 120ms stagger across direct children, `start: 'top 85%'` with `once: true` self-killing ScrollTrigger, and `gsap.matchMedia` reduced-motion handling on top of the `useDeviceCapabilities` early-return. `ParallaxCard` ships a multi-layer `layers[]` API driven by a single `gsap.ticker.add()` callback, uses `gsap.quickSetter` for per-frame DOM writes, reads scroll position via `scrollStore.getRef()` (no scroll listener attached), skips parallax on mobile + reduced-motion, and clips drift via `overflow: hidden` on the card container. Build + lint green. Next: 03-03 ParallaxTestHarness + browser verification.
 
 ## Performance Metrics
 
@@ -50,6 +50,7 @@ Phase 3 in progress. Plan 03-02 (Scroll Animation Primitives) complete: `RevealS
 | 02-i18n-backbone | 03 | ~5 min | 2 | 3 |
 | 03-scroll-infrastructure | 01 | 2 min | 2 | 4 |
 | 03-scroll-infrastructure | 02 | 2 min | 2 | 2 |
+| 03-scroll-infrastructure | 03 | 2 sessions | 3 (human checkpoint) | 2 |
 
 ## Accumulated Context
 
@@ -121,8 +122,8 @@ Phase 3 in progress. Plan 03-02 (Scroll Animation Primitives) complete: `RevealS
 
 - ~~framer-motion vs motion package name (verify at install in Phase 3)~~ — resolved 03-01: project uses GSAP 3.15 + @gsap/react 2.1, not framer-motion
 - ~~ParallaxCard API shape (single-speed vs multi-layer `layers[]`)~~ — resolved 03-02: multi-layer `layers: { content, speed, className? }[]` shipped
-- `ScrollTrigger.refresh()` on `document.fonts.ready` — verify in 03-03 whether Playfair Display font load causes ScrollTrigger to miscalculate positions
-- Whether to fold ScrollProvider's rAF loop into GSAP's ticker (single-loop architecture) — only if 03-03 observes tearing
+- ~~`ScrollTrigger.refresh()` on `document.fonts.ready`~~ — resolved 03-03: hook implemented and confirmed working; Playfair Display load does affect offsets without it
+- ~~Whether to fold ScrollProvider's rAF loop into GSAP's ticker~~ — resolved 03-03: no tearing observed; separate rAF loop stays
 - Number of NDA-safe case studies ready (target 3–4 deep) — needed before Phase 6
 - Primary CTA framing: clients vs jobs — needed before Phase 5
 - Plasma GLSL shader source — port from inspo or author fresh — needed before Phase 4
@@ -130,5 +131,5 @@ Phase 3 in progress. Plan 03-02 (Scroll Animation Primitives) complete: `RevealS
 ## Session Continuity
 
 Last session: 2026-06-10
-Stopped at: Plan 03-02 complete — `src/components/scroll/RevealSection.tsx` ships scroll-triggered reveal with 3 variants (fade-up, slide-from-left, scale-up), 120ms stagger, `start: 'top 85%'` + `once: true` self-killing ScrollTrigger, `gsap.matchMedia` reduced-motion handling. `src/components/scroll/ParallaxCard.tsx` ships multi-layer `layers[]` parallax driven by `gsap.ticker` + `gsap.quickSetter`, reads `scrollStore.getRef()` (no own scroll listener), skips on mobile + reduced-motion, `overflow: hidden` locked. Build + lint green. Commits: 04f3e99 (Task 1: RevealSection), 5687b7f (Task 2: ParallaxCard).
-Resume: execute Plan 03-03 (ParallaxTestHarness + browser verification — mount ScrollProvider in App, build a test harness page mounting both RevealSection and ParallaxCard with several layers, verify reveal timing + parallax depth in a real browser, decide on `ScrollTrigger.refresh()` font-load hook).
+Stopped at: Phase 3 complete. Plan 03-03 human checkpoint approved — all 6 browser verification checks passed. ScrollProvider wired in main.tsx, ScrollTrigger.refresh() on document.fonts.ready confirmed working, 3-card brand-styled test harness verified with RevealSection stagger + ParallaxCard parallax depth + reduced-motion + mobile disable. Commits: 8153fe9 (Task 1), 47d47ff (Task 2), d913a50 (fix), f9600c9 (cleanup).
+Resume: Plan Phase 4 (Visual Foundations — Plasma + Noise). Run `/gsd:plan-phase 4` in a fresh context.
