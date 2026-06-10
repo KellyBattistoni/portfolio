@@ -78,7 +78,12 @@ Plans:
   2. Scrolling past the hero unmounts the Plasma component (verified by `requestAnimationFrame` ID logs ceasing and WebGL context being lost) rather than just fading opacity.
   3. When `prefersReducedMotion` or low-end/no-WebGL2 is detected, Plasma is replaced by a static CSS radial gradient fallback with no GL context created.
   4. React 18 StrictMode double-mount in dev produces exactly one live WebGL context after settle (no leaks), confirmed by inspecting `WEBGL_lose_context` cleanup.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Install ogl, port shaders, ship pure <Plasma> OGL component + <PlasmaFallback> CSS gradient
+- [ ] 04-02-PLAN.md — Build <HeroBackdrop> dispatcher (useDeviceCapabilities + ScrollTrigger + fade state machine), wire test harness in App.tsx
+- [ ] 04-03-PLAN.md — Human verification checkpoint — confirm all 4 ROADMAP Phase 4 success criteria pass in a real browser
 
 ### Phase 5: Hero + PillNav — First Vertical Slice
 **Goal**: Prove the full architecture by shipping a complete bilingual hero with Plasma backdrop, scroll-reveal PillNav, and language switcher working together.
