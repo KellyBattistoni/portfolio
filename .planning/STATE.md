@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 
 ## Current Position
 
-Phase: 3 of 8 (Scroll Infrastructure) — Complete ✓
-Plan: 3 of 3 in Phase 3 — all complete; Phase 3 human-verified and closed
-Status: Phase 3 complete — all 6 browser verification checks passed (approved 2026-06-10)
-Last activity: 2026-06-10 — Plan 03-03 human checkpoint approved; SUMMARY.md written
+Phase: 4 of 8 (Visual Foundations — Plasma + Noise) — In progress
+Plan: 1 of 3 in Phase 4 — complete (leaf rendering primitives shipped)
+Status: Plasma + PlasmaFallback components built; ogl@1.0.11 installed; not yet wired into App.tsx (that's plan 04-02's job)
+Last activity: 2026-06-10 — Plan 04-01 SUMMARY.md written; ready for plan 04-02 (HeroBackdrop dispatcher)
 
-Progress: [█████░░░░░] 38% (9 of ~24 expected plans)
+Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
 
 ## Phase Status
 
@@ -23,7 +23,7 @@ Progress: [█████░░░░░] 38% (9 of ~24 expected plans)
 | 1 | Scaffold + Safety Rails | Complete ✓ | 3/3 |
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
-| 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
+| 4 | Visual Foundations — Plasma + Noise | In progress | 1/3 |
 | 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
 | 6 | Content Sections | Pending | TBD |
 | 7 | Polish & Performance | Pending | TBD |
@@ -31,14 +31,14 @@ Progress: [█████░░░░░] 38% (9 of ~24 expected plans)
 
 ## Active Work
 
-Phase 3 complete ✓ (2026-06-10). All 3 plans shipped and human-verified. Plan 03-02 (Scroll Animation Primitives) shipped: `RevealSection` ships scroll-triggered entry animations with 3 variants (fade-up, slide-from-left, scale-up), 120ms stagger across direct children, `start: 'top 85%'` with `once: true` self-killing ScrollTrigger, and `gsap.matchMedia` reduced-motion handling on top of the `useDeviceCapabilities` early-return. `ParallaxCard` ships a multi-layer `layers[]` API driven by a single `gsap.ticker.add()` callback, uses `gsap.quickSetter` for per-frame DOM writes, reads scroll position via `scrollStore.getRef()` (no scroll listener attached), skips parallax on mobile + reduced-motion, and clips drift via `overflow: hidden` on the card container. Build + lint green. Next: 03-03 ParallaxTestHarness + browser verification.
+Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. `ogl@1.0.11` installed; vertex + fragment GLSL ported character-for-character from `inspo.txt` into `src/components/plasma/Plasma.shaders.ts` (including the `sanitize()` NaN/Inf guard). `<Plasma>` ships as a pure leaf — `Renderer({ webgl: 2, alpha: true, antialias: false, dpr: min(devicePixelRatio, 2) })`, single `useEffect` owning the entire GL lifecycle, ResizeObserver writing `iResolution` in place, container-scoped mousemove (NOT window), direction prop locked to literal `'forward'`. StrictMode-hard cleanup in 6 documented steps: cancelAnimationFrame → ResizeObserver.disconnect → removeEventListener → WEBGL_lose_context.loseContext → canvas dims zeroed → DOM detach. `<PlasmaFallback>` ships zero-WebGL — multi-stop deep-red-to-black radial gradient (ellipse 50% 45%, stops 0/25/55/90%) with optional 7s ease-in-out opacity-only pulse. `@keyframes plasma-fallback-pulse` + `prefers-reduced-motion` flat-line override added to `src/styles/index.css`. Components are inert until plan 04-02's `<HeroBackdrop>` dispatcher imports them. Build + lint green. Next: 04-02 HeroBackdrop dispatcher (useDeviceCapabilities + scrollStore → Plasma | Fallback | null with pre-unmount fade).
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
-- Average duration: ~11 min
-- Total execution time: ~87 min
+- Total plans completed: 10
+- Average duration: ~10 min
+- Total execution time: ~91 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -51,6 +51,7 @@ Phase 3 complete ✓ (2026-06-10). All 3 plans shipped and human-verified. Plan 
 | 03-scroll-infrastructure | 01 | 2 min | 2 | 4 |
 | 03-scroll-infrastructure | 02 | 2 min | 2 | 2 |
 | 03-scroll-infrastructure | 03 | 2 sessions | 3 (human checkpoint) | 2 |
+| 04-visual-foundations-plasma-noise | 01 | 4 min | 3 | 6 |
 
 ## Accumulated Context
 
@@ -112,6 +113,19 @@ Phase 3 complete ✓ (2026-06-10). All 3 plans shipped and human-verified. Plan 
 - [03-02] ParallaxCard `overflow: hidden` LOCKED per user decision — drift clipped within card frame, no bleed into neighboring sections
 - [03-02] ParallaxCard skips parallax on `isMobile` (≤ 430px) in addition to reduced-motion — preserves battery, avoids visual jank where depth is barely perceptible
 - [03-02] Multi-layer ParallaxCard API (`layers: { content, speed, className? }[]`) ships now — resolves the Phase 3 research open question; no Phase 6 refactor expected
+- [04-01] ogl@^1.0.11 pinned (matches inspo, current published version, Unlicense) — ships own types/index.d.ts, NO `@types/ogl` (does not exist)
+- [04-01] Shaders extracted to `Plasma.shaders.ts` (separate file from Plasma.tsx) — ~60 LOC GLSL; separation makes IDE syntax highlighting easier and decouples shader edits from React lifecycle edits
+- [04-01] `direction` prop locked to literal `'forward'` — pingpong/reverse branches deleted from inspo port (dead code in hot rAF loop is mental overhead)
+- [04-01] `uSpeed` wired as `speed * 0.4` (inspo trick preserved) — maps the user-friendly [0..1] slider into the actual slow/meditative shader range
+- [04-01] WebGL lifecycle inside `useEffect` (NOT `useGSAP`) — useGSAP only frees GSAP resources, never WebGL contexts / rAF IDs / ResizeObservers; verified against GSAP React docs
+- [04-01] 6-step cleanup ritual: cancelAnimationFrame → ResizeObserver.disconnect → removeEventListener('mousemove') → WEBGL_lose_context.loseContext → canvas.width=0/canvas.height=0 → DOM detach (try/catch) — order is load-bearing
+- [04-01] DPR capped via `Math.min(devicePixelRatio || 1, 2)` — iPhone Pro DPR 3 = 9× pixel work = thermal throttle in ~30s without cap
+- [04-01] Float32Array uniforms (`iResolution`, `uMouse`) written in place every frame, NEVER reallocated — `program.uniforms.<name>.value` is the same array reference across frames
+- [04-01] Container-scoped mousemove (NOT window) — locked by CONTEXT.md; mouse parallax only when pointer is inside the hero
+- [04-01] PlasmaFallback gradient stops: 0% / 25% / 55% / 90% at ellipse 50% 45% — steep early falloff holds the hot orange core compact, long tail bleeds into #050505
+- [04-01] Pulse keyframes: opacity 0.85 → 1 → 0.85 over 7s ease-in-out — middle of the CONTEXT.md 6-8s range, clearly subliminal
+- [04-01] Belt-and-suspenders `@media (prefers-reduced-motion: reduce)` override AT the keyframes — even if the HeroBackdrop dispatcher (04-02) forgets to gate `animated`, the CSS flattens the pulse to static for affected users
+- [04-01] PlasmaFallback doc-comment phrased without literal "canvas"/"ogl" strings — phase verification grep is case-sensitive and demands 0 matches; meaning preserved via "WebGL bindings or 3D renderer imports" phrasing
 
 ### Resolved Blockers
 
@@ -126,10 +140,12 @@ Phase 3 complete ✓ (2026-06-10). All 3 plans shipped and human-verified. Plan 
 - ~~Whether to fold ScrollProvider's rAF loop into GSAP's ticker~~ — resolved 03-03: no tearing observed; separate rAF loop stays
 - Number of NDA-safe case studies ready (target 3–4 deep) — needed before Phase 6
 - Primary CTA framing: clients vs jobs — needed before Phase 5
-- Plasma GLSL shader source — port from inspo or author fresh — needed before Phase 4
+- ~~Plasma GLSL shader source — port from inspo or author fresh — needed before Phase 4~~ — resolved 04-01: ported verbatim from inspo.txt /src/Component.tsx into `src/components/plasma/Plasma.shaders.ts`
+- Whether HeroBackdrop should re-mount or just swap when `useFallback` flips at runtime (e.g. user toggles OS reduced-motion mid-session) — resolved direction in plan 04-02
+- Symmetric fade-in on scroll-back remount of Plasma — polish item flagged in 04-RESEARCH §Open Questions, decide during 04-03 browser checkpoint
 
 ## Session Continuity
 
 Last session: 2026-06-10
-Stopped at: Phase 3 complete. Plan 03-03 human checkpoint approved — all 6 browser verification checks passed. ScrollProvider wired in main.tsx, ScrollTrigger.refresh() on document.fonts.ready confirmed working, 3-card brand-styled test harness verified with RevealSection stagger + ParallaxCard parallax depth + reduced-motion + mobile disable. Commits: 8153fe9 (Task 1), 47d47ff (Task 2), d913a50 (fix), f9600c9 (cleanup).
-Resume: Plan Phase 4 (Visual Foundations — Plasma + Noise). Run `/gsd:plan-phase 4` in a fresh context.
+Stopped at: Completed 04-01-PLAN.md. Plasma + PlasmaFallback leaf components shipped, ogl@1.0.11 pinned. Commits: 5ccd198 (Task 1 — chore: install ogl + shaders), 4247075 (Task 2 — feat: Plasma OGL component), cea5202 (Task 3 — feat: PlasmaFallback + keyframes). Build + lint green. Components are not yet wired into App.tsx (plan 04-02's job).
+Resume: Plan 04-02 (HeroBackdrop dispatcher). Run `/gsd:execute-phase 4` to continue, or `/gsd:verify-work` first.
