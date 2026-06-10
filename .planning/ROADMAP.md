@@ -11,7 +11,7 @@ This roadmap delivers a bilingual, dark-cinematic portfolio in a strict dependen
 
 | # | Phase | Goal | Requirements | Status |
 |---|-------|------|--------------|--------|
-| 1 | Scaffold + Safety Rails | Vite/React/Tailwind project builds; animation kill-switch exists before any animation code | INFRA-01, INFRA-02, DESIGN-01 | Not started |
+| 1 | Scaffold + Safety Rails | Vite/React/Tailwind project builds; animation kill-switch exists before any animation code | INFRA-01, INFRA-02, DESIGN-01 | Complete ✓ 2026-06-09 |
 | 2 | i18n Backbone | EN/ES translation system wired before any section copy is written | INFRA-03, I18N-01, I18N-02, I18N-03 | Not started |
 | 3 | Scroll Infrastructure | Single scroll source-of-truth + reveal/parallax primitives ready for visual sections | INFRA-04, DESIGN-04, DESIGN-05 | Not started |
 | 4 | Visual Foundations — Plasma + Noise | Plasma WebGL hero shader and noise overlay render with full lifecycle safety | DESIGN-02 | Not started |
@@ -121,7 +121,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Scaffold + Safety Rails | 0/3 | Not started | - |
+| 1. Scaffold + Safety Rails | 3/3 | Complete ✓ | 2026-06-09 |
 | 2. i18n Backbone | 0/TBD | Not started | - |
 | 3. Scroll Infrastructure | 0/TBD | Not started | - |
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
