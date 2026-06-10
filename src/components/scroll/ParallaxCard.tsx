@@ -72,7 +72,7 @@ export function ParallaxCard({ layers, className }: ParallaxCardProps) {
         const el = layerRefs.current[i]
         if (!el || layer.speed === 0) return
 
-        const yRange = layer.speed * 100  // speed=0.15 → ±15px, speed=0.35 → ±35px
+        const yRange = layer.speed * 100 // speed=0.15 → ±15px, speed=0.35 → ±35px
 
         gsap.fromTo(
           el,

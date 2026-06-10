@@ -1,7 +1,10 @@
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 
 function AnimationFallback({ error }: FallbackProps) {
-  console.error('[AnimationErrorBoundary] Caught error:', error instanceof Error ? error.message : error)
+  console.error(
+    '[AnimationErrorBoundary] Caught error:',
+    error instanceof Error ? error.message : error
+  )
 
   return (
     <div
@@ -9,8 +12,7 @@ function AnimationFallback({ error }: FallbackProps) {
       style={{
         position: 'fixed',
         inset: 0,
-        background:
-          'radial-gradient(ellipse at 50% 60%, rgba(255, 69, 0, 0.35) 0%, #050505 65%)',
+        background: 'radial-gradient(ellipse at 50% 60%, rgba(255, 69, 0, 0.35) 0%, #050505 65%)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -25,10 +27,7 @@ interface AnimationErrorBoundaryProps {
   onError?: (error: Error, info: React.ErrorInfo) => void
 }
 
-export function AnimationErrorBoundary({
-  children,
-  onError,
-}: AnimationErrorBoundaryProps) {
+export function AnimationErrorBoundary({ children, onError }: AnimationErrorBoundaryProps) {
   return (
     <ErrorBoundary
       FallbackComponent={AnimationFallback}

@@ -54,8 +54,7 @@ void i18n
       lookupLocalStorage: 'kbv-lang',
       caches: ['localStorage'],
     },
-    parseMissingKeyHandler: (key, _defaultValue, options) =>
-      `${options?.ns ?? 'unknown'}:${key}`,
+    parseMissingKeyHandler: (key, _defaultValue, options) => `${options?.ns ?? 'unknown'}:${key}`,
     returnNull: false,
     react: {
       useSuspense: false,

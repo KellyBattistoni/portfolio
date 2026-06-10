@@ -256,98 +256,98 @@ export default function App() {
           stagger
           style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}
         >
-            {/* Card 1 — subtle parallax (speed 0.15 bg / 0.05 text) */}
-            <div style={DEMO_CARD_WRAPPER_STYLE}>
-              <ParallaxCard
-                layers={[
-                  {
-                    speed: 0.15,
-                    content: (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)',
-                        }}
-                      />
-                    ),
-                  },
-                  {
-                    speed: 0.05,
-                    content: (
-                      <DemoCardBody
-                        category="SEO / Automation"
-                        title="Search Pipeline"
-                        blurb="Automated content audit reducing manual review by 80%."
-                        tags={['Python', 'N8N', 'Airtable']}
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </div>
+          {/* Card 1 — subtle parallax (speed 0.15 bg / 0.05 text) */}
+          <div style={DEMO_CARD_WRAPPER_STYLE}>
+            <ParallaxCard
+              layers={[
+                {
+                  speed: 0.15,
+                  content: (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)',
+                      }}
+                    />
+                  ),
+                },
+                {
+                  speed: 0.05,
+                  content: (
+                    <DemoCardBody
+                      category="SEO / Automation"
+                      title="Search Pipeline"
+                      blurb="Automated content audit reducing manual review by 80%."
+                      tags={['Python', 'N8N', 'Airtable']}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </div>
 
-            {/* Card 2 — moderate parallax (speed 0.25 bg / 0.10 text) */}
-            <div style={DEMO_CARD_WRAPPER_STYLE}>
-              <ParallaxCard
-                layers={[
-                  {
-                    speed: 0.25,
-                    content: (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          background: 'linear-gradient(135deg, #1c1010 0%, #0f0808 100%)',
-                        }}
-                      />
-                    ),
-                  },
-                  {
-                    speed: 0.1,
-                    content: (
-                      <DemoCardBody
-                        category="AI / Integrations"
-                        title="AI Brief Engine"
-                        blurb="Claude MCP pipeline generating brand-aligned briefs at scale."
-                        tags={['Claude', 'Make.com', 'Supabase']}
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </div>
+          {/* Card 2 — moderate parallax (speed 0.25 bg / 0.10 text) */}
+          <div style={DEMO_CARD_WRAPPER_STYLE}>
+            <ParallaxCard
+              layers={[
+                {
+                  speed: 0.25,
+                  content: (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(135deg, #1c1010 0%, #0f0808 100%)',
+                      }}
+                    />
+                  ),
+                },
+                {
+                  speed: 0.1,
+                  content: (
+                    <DemoCardBody
+                      category="AI / Integrations"
+                      title="AI Brief Engine"
+                      blurb="Claude MCP pipeline generating brand-aligned briefs at scale."
+                      tags={['Claude', 'Make.com', 'Supabase']}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </div>
 
-            {/* Card 3 — cinematic parallax (speed 0.35 bg / 0.15 text) */}
-            <div style={DEMO_CARD_WRAPPER_STYLE}>
-              <ParallaxCard
-                layers={[
-                  {
-                    speed: 0.35,
-                    content: (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          background: 'linear-gradient(135deg, #181510 0%, #0e0c08 100%)',
-                        }}
-                      />
-                    ),
-                  },
-                  {
-                    speed: 0.15,
-                    content: (
-                      <DemoCardBody
-                        category="Data / Infrastructure"
-                        title="Analytics Stack"
-                        blurb="Self-hosted reporting replacing agency tooling, cutting costs 60%."
-                        tags={['Docker', 'Railway', 'Google Cloud']}
-                      />
-                    ),
-                  },
-                ]}
-              />
-            </div>
+          {/* Card 3 — cinematic parallax (speed 0.35 bg / 0.15 text) */}
+          <div style={DEMO_CARD_WRAPPER_STYLE}>
+            <ParallaxCard
+              layers={[
+                {
+                  speed: 0.35,
+                  content: (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(135deg, #181510 0%, #0e0c08 100%)',
+                      }}
+                    />
+                  ),
+                },
+                {
+                  speed: 0.15,
+                  content: (
+                    <DemoCardBody
+                      category="Data / Infrastructure"
+                      title="Analytics Stack"
+                      blurb="Self-hosted reporting replacing agency tooling, cutting costs 60%."
+                      tags={['Docker', 'Railway', 'Google Cloud']}
+                    />
+                  ),
+                },
+              ]}
+            />
+          </div>
         </RevealSection>
       </section>
 

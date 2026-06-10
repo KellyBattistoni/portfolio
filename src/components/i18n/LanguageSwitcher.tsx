@@ -47,7 +47,7 @@ export function LanguageSwitcher() {
               'text-white/80 hover:text-white transition-colors',
               'after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-px',
               'after:bg-[#FF4500] after:origin-left after:transition-transform after:duration-300',
-              isActive ? 'after:scale-x-100 text-white' : 'after:scale-x-0',
+              isActive ? 'after:scale-x-100 text-white' : 'after:scale-x-0'
             )}
           >
             {t(`switcher.${lng}` as const)}

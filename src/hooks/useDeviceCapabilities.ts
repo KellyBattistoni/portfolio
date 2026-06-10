@@ -43,9 +43,7 @@ function getInitialCapabilities(): DeviceCapabilities {
     return DEFAULT_CAPABILITIES
   }
 
-  const prefersReducedMotion = window.matchMedia(
-    '(prefers-reduced-motion: reduce)',
-  ).matches
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   const isMobile = window.innerWidth <= MOBILE_BREAKPOINT_PX
 
@@ -58,9 +56,7 @@ function getInitialCapabilities(): DeviceCapabilities {
 
   const nav = navigator as NavigatorWithDeviceMemory
   const lowByMemory =
-    typeof nav.deviceMemory !== 'undefined'
-      ? nav.deviceMemory < LOW_END_MEMORY_THRESHOLD_GB
-      : false
+    typeof nav.deviceMemory !== 'undefined' ? nav.deviceMemory < LOW_END_MEMORY_THRESHOLD_GB : false
 
   const isLowEnd = lowByCores || lowByMemory
 
@@ -79,9 +75,7 @@ function getInitialCapabilities(): DeviceCapabilities {
 export function useDeviceCapabilities(): DeviceCapabilities {
   // Compute synchronously so the first render reflects real capabilities
   // (no flash of wrong state).
-  const [capabilities, setCapabilities] = useState<DeviceCapabilities>(
-    getInitialCapabilities,
-  )
+  const [capabilities, setCapabilities] = useState<DeviceCapabilities>(getInitialCapabilities)
 
   useEffect(() => {
     if (typeof window === 'undefined') return

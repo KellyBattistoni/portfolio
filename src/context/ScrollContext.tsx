@@ -23,13 +23,7 @@
  * Source: react.dev/reference/react/useSyncExternalStore + GSAP ticker docs.
  */
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useRef,
-  type ReactNode,
-} from 'react'
+import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react'
 
 /**
  * Snapshot shape consumed by useSyncExternalStore selectors and by
@@ -174,11 +168,7 @@ export function ScrollProvider({ children }: ScrollProviderProps) {
     }
   }, [])
 
-  return (
-    <ScrollContext.Provider value={scrollStore}>
-      {children}
-    </ScrollContext.Provider>
-  )
+  return <ScrollContext.Provider value={scrollStore}>{children}</ScrollContext.Provider>
 }
 
 /**
