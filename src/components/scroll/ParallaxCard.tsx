@@ -11,14 +11,11 @@
  *   />
  *
  * Architecture decisions:
- *   - Reads scroll position from `scrollStore.getRef()` inside a single
- *     `gsap.ticker.add(tick)` callback. No scroll listener is attached here —
- *     the ScrollProvider's passive listener is the only one in the app.
- *   - Uses `gsap.quickSetter(el, 'y', 'px')` per layer instead of `gsap.set` —
- *     quickSetter caches the lookup, skips overwrite handling, and writes ~3x
- *     faster than `gsap.set` per frame.
- *   - Per-layer `y` is accumulated by `delta * speed` each tick. Reading the
- *     current `y` via `gsap.getProperty(el, 'y')` avoids tracking it in JS.
+ *   - Uses ScrollTrigger scrub to tie each layer's y position to the card's
+ *     viewport progress (top-of-card enters bottom → bottom-of-card exits top).
+ *     At the midpoint the layer is at y=0; it travels from -yRange to +yRange
+ *     over the full scroll arc. This bounds displacement so content never clips
+ *     regardless of where the card sits on the page.
  *   - Card container has `overflow: hidden` (LOCKED per user decision) so
  *     layer movement is visually clipped within the card frame.
  *   - Layers are absolutely positioned (`inset: 0`) inside a relative card,
@@ -32,8 +29,7 @@
  */
 
 import { useRef, type ReactNode } from 'react'
-import { gsap, useGSAP } from '@/lib/gsap'
-import { scrollStore } from '@/context/ScrollContext'
+import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 
 export interface ParallaxLayer {
@@ -68,45 +64,39 @@ export function ParallaxCard({ layers, className }: ParallaxCardProps) {
       // statically at their initial position, content remains fully readable.
       if (prefersReducedMotion || isMobile) return
 
-      // Pre-build per-layer quickSetters. Each setter caches the target el
-      // and the property writer — far cheaper than gsap.set inside the tick.
-      const setters = layers.map((_, i) => {
+      // ScrollTrigger scrub: each layer animates from -yRange to +yRange as the
+      // card scrolls from entering the bottom of the viewport to exiting the top.
+      // At the midpoint (card center at viewport center) y=0. This bounds the
+      // displacement so content never gets clipped regardless of page position.
+      layers.forEach((layer, i) => {
         const el = layerRefs.current[i]
-        return el ? gsap.quickSetter(el, 'y', 'px') : null
+        if (!el || layer.speed === 0) return
+
+        const yRange = layer.speed * 100  // speed=0.15 → ±15px, speed=0.35 → ±35px
+
+        gsap.fromTo(
+          el,
+          { y: -yRange },
+          {
+            y: yRange,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: cardRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 1,
+            },
+          }
+        )
       })
 
-      // Track the last scroll position so each tick applies only the delta —
-      // per-layer y accumulates independently at its own speed multiplier.
-      let lastScrollY = scrollStore.getRef().y
-
-      const tick = () => {
-        const currentY = scrollStore.getRef().y
-        const delta = currentY - lastScrollY
-
-        // No scroll motion this frame — bail early, no DOM writes.
-        if (delta === 0) return
-
-        layers.forEach((layer, i) => {
-          const setter = setters[i]
-          if (!setter) return
-          const el = layerRefs.current[i]
-          if (!el) return
-          const current = gsap.getProperty(el, 'y') as number
-          setter(current + delta * layer.speed)
-        })
-
-        lastScrollY = currentY
-      }
-
-      gsap.ticker.add(tick)
-
       return () => {
-        gsap.ticker.remove(tick)
+        ScrollTrigger.getAll().forEach((t) => t.kill())
       }
     },
     {
       scope: cardRef,
-      dependencies: [prefersReducedMotion, isMobile, layers],
+      dependencies: [prefersReducedMotion, isMobile],
     }
   )
 
@@ -114,7 +104,7 @@ export function ParallaxCard({ layers, className }: ParallaxCardProps) {
     <div
       ref={cardRef}
       className={className}
-      style={{ position: 'relative', overflow: 'hidden' }}
+      style={{ position: 'relative', overflow: 'hidden', height: '100%' }}
     >
       {layers.map((layer, i) => (
         <div

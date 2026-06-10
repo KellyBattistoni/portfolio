@@ -36,10 +36,7 @@ export type RevealVariant = 'fade-up' | 'slide-from-left' | 'scale-up'
  * Tween-vars pair per variant. `from` is the pre-reveal state, `to` is the
  * resting state animated into when the trigger fires.
  */
-const VARIANTS: Record<
-  RevealVariant,
-  { from: gsap.TweenVars; to: gsap.TweenVars }
-> = {
+const VARIANTS: Record<RevealVariant, { from: gsap.TweenVars; to: gsap.TweenVars }> = {
   'fade-up': {
     from: { opacity: 0, y: 30 },
     to: { opacity: 1, y: 0 },
@@ -69,6 +66,8 @@ export interface RevealSectionProps {
   delay?: number
   /** Forwarded to the wrapper `<div>`. */
   className?: string
+  /** Forwarded to the wrapper `<div>`. */
+  style?: React.CSSProperties
 }
 
 export function RevealSection({
@@ -78,6 +77,7 @@ export function RevealSection({
   duration = 0.6,
   delay,
   className,
+  style,
 }: RevealSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const { prefersReducedMotion } = useDeviceCapabilities()
@@ -143,7 +143,7 @@ export function RevealSection({
   )
 
   return (
-    <div ref={containerRef} className={className}>
+    <div ref={containerRef} className={className} style={style}>
       {children}
     </div>
   )

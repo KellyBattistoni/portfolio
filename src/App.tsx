@@ -251,14 +251,11 @@ export default function App() {
           </p>
         </RevealSection>
 
-        <RevealSection variant="fade-up" stagger>
-          <div
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '2rem',
-            }}
-          >
+        <RevealSection
+          variant="fade-up"
+          stagger
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem' }}
+        >
             {/* Card 1 — subtle parallax (speed 0.15 bg / 0.05 text) */}
             <div style={DEMO_CARD_WRAPPER_STYLE}>
               <ParallaxCard
@@ -270,8 +267,7 @@ export default function App() {
                         style={{
                           width: '100%',
                           height: '100%',
-                          background:
-                            'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)',
+                          background: 'linear-gradient(135deg, #1a1a1a 0%, #0d0d0d 100%)',
                         }}
                       />
                     ),
@@ -302,8 +298,7 @@ export default function App() {
                         style={{
                           width: '100%',
                           height: '100%',
-                          background:
-                            'linear-gradient(135deg, #1c1010 0%, #0f0808 100%)',
+                          background: 'linear-gradient(135deg, #1c1010 0%, #0f0808 100%)',
                         }}
                       />
                     ),
@@ -334,8 +329,7 @@ export default function App() {
                         style={{
                           width: '100%',
                           height: '100%',
-                          background:
-                            'linear-gradient(135deg, #181510 0%, #0e0c08 100%)',
+                          background: 'linear-gradient(135deg, #181510 0%, #0e0c08 100%)',
                         }}
                       />
                     ),
@@ -354,7 +348,6 @@ export default function App() {
                 ]}
               />
             </div>
-          </div>
         </RevealSection>
       </section>
 
