@@ -1,9 +1,11 @@
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NoiseOverlay } from '@/components/layout/NoiseOverlay'
 import { AnimationErrorBoundary } from '@/components/error/AnimationErrorBoundary'
 import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { useLocalizeDocumentAttributes } from '@/hooks/useLocalizeDocumentAttributes'
+import { ScrollTrigger } from '@/lib/gsap'
 
 function AnimationRootPlaceholder() {
   return (
@@ -34,6 +36,18 @@ export default function App() {
 
   // Demo hero strings — proves i18n round-trips. Replaced by the real Hero component in Phase 5.
   const { t } = useTranslation('hero')
+
+  // Playfair Display loads asynchronously from Google Fonts. If ScrollTrigger
+  // measures element positions before the font is ready, it may compute wrong
+  // trigger offsets — the fallback font has different metrics than Playfair,
+  // so layout height shifts when the real font swaps in. Calling
+  // ScrollTrigger.refresh() after document.fonts.ready forces a recalculation
+  // once the final layout is settled.
+  useEffect(() => {
+    document.fonts.ready.then(() => {
+      ScrollTrigger.refresh()
+    })
+  }, [])
 
   return (
     <>
