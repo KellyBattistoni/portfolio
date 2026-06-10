@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 2 of 8 (i18n Backbone) — In progress
-Plan: 1 of 3 in Phase 2 — Complete ✓
-Status: Plan 02-01 complete (i18n backbone init shipped) — ready for Plan 02-02
-Last activity: 2026-06-10 — Plan 02-01 executed and self-checked
+Plan: 2 of 3 in Phase 2 — Complete ✓
+Status: Plan 02-02 complete (LanguageSwitcher + hook + App wiring shipped) — ready for Plan 02-03
+Last activity: 2026-06-10 — Plan 02-02 executed and self-checked
 
-Progress: [█░░░░░░░░░] 16% (4 of ~24 expected plans)
+Progress: [██░░░░░░░░] 21% (5 of ~24 expected plans)
 
 ## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 1 | Scaffold + Safety Rails | Complete ✓ | 3/3 |
-| 2 | i18n Backbone | In progress | 1/3 |
+| 2 | i18n Backbone | In progress | 2/3 |
 | 3 | Scroll Infrastructure | Pending | TBD |
 | 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
 | 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
@@ -31,14 +31,14 @@ Progress: [█░░░░░░░░░] 16% (4 of ~24 expected plans)
 
 ## Active Work
 
-Phase 2 in progress. Plan 02-01 (i18n init backbone) complete. Next: Plan 02-02 (translation hooks + first localized component) per `.planning/phases/02-i18n-backbone/02-02-PLAN.md`.
+Phase 2 in progress. Plans 02-01 and 02-02 complete. Next: Plan 02-03 (verification + browser sanity checkpoint) per `.planning/phases/02-i18n-backbone/02-03-PLAN.md`.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: ~19 min
-- Total execution time: ~75 min
+- Total plans completed: 5
+- Average duration: ~16 min
+- Total execution time: ~78 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -46,6 +46,7 @@ Phase 2 in progress. Plan 02-01 (i18n init backbone) complete. Next: Plan 02-02 
 | 01-scaffold-safety-rails | 02 | ~25 min | 2 | 7 |
 | 01-scaffold-safety-rails | 03 | ~20 min | 1 | 2 |
 | 02-i18n-backbone | 01 | ~12 min | 3 | 16 |
+| 02-i18n-backbone | 02 | ~3 min | 3 | 3 |
 
 ## Accumulated Context
 
@@ -74,6 +75,13 @@ Phase 2 in progress. Plan 02-01 (i18n init backbone) complete. Next: Plan 02-02 
 - [02-01] `useSuspense: false` — resources are sync-bundled, no Suspense boundary needed
 - [02-01] `meta.title`/`meta.description` shipped as empty strings — keys defined now, copy in Phase 7
 - [02-01] About/projects/stack/contact namespaces ship `_placeholder` stub — keeps namespace registered + ts-augmented until Phase 3 fills
+- [02-02] Hook uses useTranslation() not direct import of @/lib/i18n — keeps hook composable and React-context-aware
+- [02-02] LanguageSwitcher reads i18n.resolvedLanguage in active comparison + handleChange guard — never raw i18n.language
+- [02-02] handleChange short-circuits if lng === current — avoids redundant changeLanguage calls / re-renders
+- [02-02] Switcher hard-codes fixed top-right positioning — Phase 5 strips classes when moving into PillNav (no className prop now)
+- [02-02] Accent color #FF4500 inline (after:bg-[#FF4500]) — explicit per CONTEXT.md, not yet hooked to CSS variable token
+- [02-02] LanguageSwitcher wrapped in its OWN AnimationErrorBoundary in App.tsx — isolated crash domain from animation root
+- [02-02] Demo hero uses inline styles intentionally — throwaway code, Phase 5 replaces the whole <main> with the real Hero component
 
 ### Resolved Blockers
 
@@ -90,5 +98,5 @@ Phase 2 in progress. Plan 02-01 (i18n init backbone) complete. Next: Plan 02-02 
 ## Session Continuity
 
 Last session: 2026-06-10
-Stopped at: Plan 02-01 complete — i18n backbone (3 packages + 12 JSON files + init module + types + main wiring) shipped, build/typecheck/lint all clean.
-Resume: continue Phase 2 with Plan 02-02 (`.planning/phases/02-i18n-backbone/02-02-PLAN.md`)
+Stopped at: Plan 02-02 complete — LanguageSwitcher (EN/ES underline tabs) + useLocalizeDocumentAttributes hook + App.tsx wiring shipped. Build (252.92 kB / 80.27 kB gzip), typecheck, and lint all clean.
+Resume: continue Phase 2 with Plan 02-03 (`.planning/phases/02-i18n-backbone/02-03-PLAN.md`) — verification + browser sanity checkpoint.
