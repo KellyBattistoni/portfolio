@@ -13,7 +13,7 @@ This roadmap delivers a bilingual, dark-cinematic portfolio in a strict dependen
 |---|-------|------|--------------|--------|
 | 1 | Scaffold + Safety Rails | Vite/React/Tailwind project builds; animation kill-switch exists before any animation code | INFRA-01, INFRA-02, DESIGN-01 | Complete ✓ 2026-06-09 |
 | 2 | i18n Backbone | EN/ES translation system wired before any section copy is written | INFRA-03, I18N-01, I18N-02, I18N-03 | Complete ✓ 2026-06-10 |
-| 3 | Scroll Infrastructure | Single scroll source-of-truth + reveal/parallax primitives ready for visual sections | INFRA-04, DESIGN-04, DESIGN-05 | Not started |
+| 3 | Scroll Infrastructure | Single scroll source-of-truth + reveal/parallax primitives ready for visual sections | INFRA-04, DESIGN-04, DESIGN-05 | Planned (3 plans) |
 | 4 | Visual Foundations — Plasma + Noise | Plasma WebGL hero shader and noise overlay render with full lifecycle safety | DESIGN-02 | Not started |
 | 5 | Hero + PillNav — First Vertical Slice | Full-screen hero with Plasma backdrop, scroll-reveal PillNav, bilingual copy | CONT-01, DESIGN-03 | Not started |
 | 6 | Content Sections | About, Projects (parallax), Stack, Contact, CV — all bilingual | CONT-02, CONT-03, CONT-04, CONT-05, CONT-06, DESIGN-06 | Not started |
@@ -62,7 +62,12 @@ Plans:
   1. A single `ScrollProvider` publishes `{ y, progress }` via context and only one passive `scroll` listener is attached to `window` (verifiable via DevTools).
   2. Any element wrapped in `RevealSection` animates from `opacity: 0, y: 30` to `opacity: 1, y: 0` exactly once when it enters the viewport, and skips animation entirely when `prefersReducedMotion` is true.
   3. A `ParallaxCard` test harness renders 3 stacked cards that shift at distinct vertical speeds on scroll using only `transform: translate3d(...)` updates — no per-card scroll listeners.
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 03-01-PLAN.md — Install GSAP, create src/lib/gsap.ts registration module and ScrollContext with rAF-coalesced external store
+- [ ] 03-02-PLAN.md — Build RevealSection (3 variants, stagger, reduced-motion) and ParallaxCard (multi-layer ticker + quickSetter)
+- [ ] 03-03-PLAN.md — Wire ScrollProvider in main.tsx, build brand-styled test harness, human verification checkpoint
 
 ### Phase 4: Visual Foundations — Plasma + Noise
 **Goal**: Ship the Plasma WebGL hero background with correct lifecycle, fallback, and unmount behavior so the hero scene can be assembled in Phase 5.
@@ -128,7 +133,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Safety Rails | 3/3 | Complete ✓ | 2026-06-09 |
 | 2. i18n Backbone | 3/3 | Complete ✓ | 2026-06-10 |
-| 3. Scroll Infrastructure | 0/TBD | Not started | - |
+| 3. Scroll Infrastructure | 0/3 | Planned | - |
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
 | 6. Content Sections | 0/TBD | Not started | - |
