@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 2 — i18n Backbone
+**Current focus:** Phase 3 — Scroll Infrastructure
 
 ## Current Position
 
-Phase: 2 of 8 (i18n Backbone) — In progress
-Plan: 2 of 3 in Phase 2 — Complete ✓
-Status: Plan 02-02 complete (LanguageSwitcher + hook + App wiring shipped) — ready for Plan 02-03
-Last activity: 2026-06-10 — Plan 02-02 executed and self-checked
+Phase: 3 of 8 (Scroll Infrastructure) — Not started
+Plan: 0 of TBD in Phase 3 — pending planning
+Status: Phase 2 complete (all 4 ROADMAP success criteria PASS by user verification) — ready to plan Phase 3
+Last activity: 2026-06-10 — Plan 02-03 user-approved; Phase 2 closed
 
-Progress: [██░░░░░░░░] 21% (5 of ~24 expected plans)
+Progress: [██░░░░░░░░] 25% (6 of ~24 expected plans)
 
 ## Phase Status
 
 | Phase | Name | Status | Plans |
 |-------|------|--------|-------|
 | 1 | Scaffold + Safety Rails | Complete ✓ | 3/3 |
-| 2 | i18n Backbone | In progress | 2/3 |
+| 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Pending | TBD |
 | 4 | Visual Foundations — Plasma + Noise | Pending | TBD |
 | 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
@@ -31,14 +31,14 @@ Progress: [██░░░░░░░░] 21% (5 of ~24 expected plans)
 
 ## Active Work
 
-Phase 2 in progress. Plans 02-01 and 02-02 complete. Next: Plan 02-03 (verification + browser sanity checkpoint) per `.planning/phases/02-i18n-backbone/02-03-PLAN.md`.
+Phase 2 complete. All 4 ROADMAP success criteria PASS (user-approved end-to-end browser verification). Next: plan Phase 3 (Scroll Infrastructure) via `/gsd:plan-phase 03`.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 5
-- Average duration: ~16 min
-- Total execution time: ~78 min
+- Total plans completed: 6
+- Average duration: ~14 min
+- Total execution time: ~83 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -47,6 +47,7 @@ Phase 2 in progress. Plans 02-01 and 02-02 complete. Next: Plan 02-03 (verificat
 | 01-scaffold-safety-rails | 03 | ~20 min | 1 | 2 |
 | 02-i18n-backbone | 01 | ~12 min | 3 | 16 |
 | 02-i18n-backbone | 02 | ~3 min | 3 | 3 |
+| 02-i18n-backbone | 03 | ~5 min | 2 | 3 |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Phase 2 in progress. Plans 02-01 and 02-02 complete. Next: Plan 02-03 (verificat
 - [02-02] Accent color #FF4500 inline (after:bg-[#FF4500]) — explicit per CONTEXT.md, not yet hooked to CSS variable token
 - [02-02] LanguageSwitcher wrapped in its OWN AnimationErrorBoundary in App.tsx — isolated crash domain from animation root
 - [02-02] Demo hero uses inline styles intentionally — throwaway code, Phase 5 replaces the whole <main> with the real Hero component
+- [02-03] Phase 2 closure gated by human browser verification (not just automated checks) — i18n correctness lives in the visible UX
+- [02-03] User typed "approved" confirming all 4 ROADMAP Phase 2 success criteria PASS — phase marked Complete
 
 ### Resolved Blockers
 
@@ -98,5 +101,5 @@ Phase 2 in progress. Plans 02-01 and 02-02 complete. Next: Plan 02-03 (verificat
 ## Session Continuity
 
 Last session: 2026-06-10
-Stopped at: Plan 02-02 complete — LanguageSwitcher (EN/ES underline tabs) + useLocalizeDocumentAttributes hook + App.tsx wiring shipped. Build (252.92 kB / 80.27 kB gzip), typecheck, and lint all clean.
-Resume: continue Phase 2 with Plan 02-03 (`.planning/phases/02-i18n-backbone/02-03-PLAN.md`) — verification + browser sanity checkpoint.
+Stopped at: Phase 2 complete — Plan 02-03 user-approved (all 4 ROADMAP success criteria PASS via real-browser verification). Plans 02-01, 02-02, 02-03 all done. i18n backbone fully proven: instant EN/ES toggle, 12 namespace JSONs at startup, kbv-lang localStorage persistence + <html lang> sync, browser-locale auto-detection on first visit.
+Resume: plan Phase 3 (Scroll Infrastructure) via `/gsd:plan-phase 03`.

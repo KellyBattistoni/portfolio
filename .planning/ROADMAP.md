@@ -12,7 +12,7 @@ This roadmap delivers a bilingual, dark-cinematic portfolio in a strict dependen
 | # | Phase | Goal | Requirements | Status |
 |---|-------|------|--------------|--------|
 | 1 | Scaffold + Safety Rails | Vite/React/Tailwind project builds; animation kill-switch exists before any animation code | INFRA-01, INFRA-02, DESIGN-01 | Complete ✓ 2026-06-09 |
-| 2 | i18n Backbone | EN/ES translation system wired before any section copy is written | INFRA-03, I18N-01, I18N-02, I18N-03 | Not started |
+| 2 | i18n Backbone | EN/ES translation system wired before any section copy is written | INFRA-03, I18N-01, I18N-02, I18N-03 | Complete ✓ 2026-06-10 |
 | 3 | Scroll Infrastructure | Single scroll source-of-truth + reveal/parallax primitives ready for visual sections | INFRA-04, DESIGN-04, DESIGN-05 | Not started |
 | 4 | Visual Foundations — Plasma + Noise | Plasma WebGL hero shader and noise overlay render with full lifecycle safety | DESIGN-02 | Not started |
 | 5 | Hero + PillNav — First Vertical Slice | Full-screen hero with Plasma backdrop, scroll-reveal PillNav, bilingual copy | CONT-01, DESIGN-03 | Not started |
@@ -50,9 +50,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Install i18n deps, create 12 namespace JSON files, write i18n init module + TypeScript module augmentation, wire main.tsx side-effect import
-- [ ] 02-02-PLAN.md — Build LanguageSwitcher (underline tabs), useLocalizeDocumentAttributes hook, wire App.tsx with demo hero strings inside AnimationErrorBoundary
-- [ ] 02-03-PLAN.md — Human verification checkpoint — confirm all 4 ROADMAP success criteria pass in a real browser
+- [x] 02-01-PLAN.md — Install i18n deps, create 12 namespace JSON files, write i18n init module + TypeScript module augmentation, wire main.tsx side-effect import
+- [x] 02-02-PLAN.md — Build LanguageSwitcher (underline tabs), useLocalizeDocumentAttributes hook, wire App.tsx with demo hero strings inside AnimationErrorBoundary
+- [x] 02-03-PLAN.md — Human verification checkpoint — confirm all 4 ROADMAP success criteria pass in a real browser
 
 ### Phase 3: Scroll Infrastructure
 **Goal**: Provide a single rAF-coalesced scroll source and the reveal/parallax primitives every visual component will consume.
@@ -127,7 +127,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Scaffold + Safety Rails | 3/3 | Complete ✓ | 2026-06-09 |
-| 2. i18n Backbone | 0/3 | Not started | - |
+| 2. i18n Backbone | 3/3 | Complete ✓ | 2026-06-10 |
 | 3. Scroll Infrastructure | 0/TBD | Not started | - |
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
