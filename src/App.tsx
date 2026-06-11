@@ -1,8 +1,9 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NoiseOverlay } from '@/components/layout/NoiseOverlay'
 import { AnimationErrorBoundary } from '@/components/error/AnimationErrorBoundary'
 import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher'
+import { HeroBackdrop } from '@/components/plasma/HeroBackdrop'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { useLocalizeDocumentAttributes } from '@/hooks/useLocalizeDocumentAttributes'
 import { ScrollTrigger } from '@/lib/gsap'
@@ -138,6 +139,12 @@ export default function App() {
   void isLowEnd
   void supportsWebGL2
 
+  // Phase 4 test harness — placeholder hero section ref. HeroBackdrop's
+  // ScrollTrigger uses this as the `trigger` config so the dispatcher's
+  // onLeave / onEnterBack fire when this section's bottom edge crosses the
+  // viewport top. Phase 5 replaces this ref with the real <Hero> root ref.
+  const heroRef = useRef<HTMLElement>(null)
+
   // Demo hero strings — proves i18n round-trips. Replaced by the real Hero component in Phase 5.
   const { t } = useTranslation('hero')
 
@@ -157,6 +164,62 @@ export default function App() {
     <>
       {/* Global noise grain overlay — always on top */}
       <NoiseOverlay />
+
+      {/*
+        Phase 4 test harness — placeholder hero section so HeroBackdrop has a
+        real DOM target for its ScrollTrigger. The placeholder text is
+        intentionally minimal (Phase 5 replaces this whole section with the
+        real <Hero> component including PillNav, i18n copy, and CTA).
+
+        Layout choices:
+          - minHeight: '100vh'  — gives ScrollTrigger something to scroll past
+          - position: 'relative' — required so the absolute-positioned Plasma
+            canvas inside HeroBackdrop is positioned against this section.
+          - isolation: 'isolate' — creates a new stacking context so Plasma
+            stays contained to this section instead of bleeding into the
+            existing demo hero below.
+          - overflow: 'hidden'  — guards against the WebGL canvas momentarily
+            exceeding the section box during ResizeObserver settling.
+      */}
+      <section
+        ref={heroRef}
+        style={{
+          position: 'relative',
+          minHeight: '100vh',
+          overflow: 'hidden',
+          isolation: 'isolate',
+        }}
+        aria-label="Plasma test harness"
+      >
+        <AnimationErrorBoundary>
+          <HeroBackdrop heroRef={heroRef} />
+        </AnimationErrorBoundary>
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            padding: '6rem 2rem',
+            color: 'white',
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(2rem, 5vw, 4rem)',
+            pointerEvents: 'none',
+          }}
+        >
+          Phase 4 — Plasma test harness
+          <p
+            style={{
+              fontFamily: 'var(--font-body)',
+              fontSize: '1rem',
+              opacity: 0.7,
+              maxWidth: '60ch',
+              marginTop: '1rem',
+            }}
+          >
+            Scroll past this section to verify Plasma unmounts. Scroll back up
+            to verify it remounts. Move the mouse to verify subtle warp.
+          </p>
+        </div>
+      </section>
 
       {/* Animation root — ErrorBoundary catches WebGL / rAF failures */}
       <AnimationErrorBoundary>
