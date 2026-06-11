@@ -40,9 +40,7 @@ export function PlasmaFallback({ animated = false }: PlasmaFallbackProps) {
         // `undefined` lets React strip the property entirely from the DOM —
         // `'none'` would emit `animation: none` (harmless but noisier in
         // DevTools).
-        animation: animated
-          ? 'plasma-fallback-pulse 7s ease-in-out infinite'
-          : undefined,
+        animation: animated ? 'plasma-fallback-pulse 7s ease-in-out infinite' : undefined,
       }}
     />
   )

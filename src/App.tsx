@@ -185,6 +185,7 @@ export default function App() {
         ref={heroRef}
         style={{
           position: 'relative',
+          zIndex: 1,
           minHeight: '100vh',
           overflow: 'hidden',
           isolation: 'isolate',
@@ -210,13 +211,13 @@ export default function App() {
             style={{
               fontFamily: 'var(--font-body)',
               fontSize: '1rem',
-              opacity: 0.7,
+              opacity: 0.85,
               maxWidth: '60ch',
               marginTop: '1rem',
             }}
           >
-            Scroll past this section to verify Plasma unmounts. Scroll back up
-            to verify it remounts. Move the mouse to verify subtle warp.
+            Scroll past this section to verify Plasma unmounts. Scroll back up to verify it
+            remounts. Move the mouse to verify subtle warp.
           </p>
         </div>
       </section>

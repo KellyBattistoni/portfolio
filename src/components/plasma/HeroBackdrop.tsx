@@ -140,7 +140,7 @@ export function HeroBackdrop({ heroRef }: HeroBackdropProps) {
     return (
       <div
         ref={containerRef}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
       >
         <PlasmaFallback animated={!prefersReducedMotion} />
       </div>
@@ -154,7 +154,7 @@ export function HeroBackdrop({ heroRef }: HeroBackdropProps) {
     return (
       <div
         ref={containerRef}
-        style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+        style={{ position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none' }}
         aria-hidden="true"
       />
     )
@@ -167,6 +167,7 @@ export function HeroBackdrop({ heroRef }: HeroBackdropProps) {
       style={{
         position: 'absolute',
         inset: 0,
+        zIndex: 0,
         opacity: phase === 'fading' ? 0 : 1,
         transition: `opacity ${FADE_MS}ms ease-out`,
         pointerEvents: 'none',

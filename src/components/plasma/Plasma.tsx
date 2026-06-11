@@ -126,16 +126,27 @@ export function Plasma({
     ro.observe(container)
     setSize()
 
-    // --- Container-scoped mousemove (NOT window — per CONTEXT.md) ---
+    // --- Document-level mousemove with container bounds check ---
+    // The canvas lives on a GPU compositor layer and is excluded from Chrome's
+    // DOM hit-test tree, so mousemove never reaches the container directly.
+    // Listening on document and filtering by getBoundingClientRect() preserves
+    // the "only active over the canvas area" contract from CONTEXT.md.
     let handleMouseMove: ((e: MouseEvent) => void) | null = null
     if (mouseInteractive) {
       handleMouseMove = (e: MouseEvent) => {
         const rect = container.getBoundingClientRect()
-        const u = program.uniforms.uMouse.value as Float32Array
-        u[0] = e.clientX - rect.left
-        u[1] = e.clientY - rect.top
+        if (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        ) {
+          const u = program.uniforms.uMouse.value as Float32Array
+          u[0] = e.clientX - rect.left
+          u[1] = e.clientY - rect.top
+        }
       }
-      container.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mousemove', handleMouseMove, { passive: true })
     }
 
     // --- rAF loop ---
@@ -159,7 +170,7 @@ export function Plasma({
       // 3. Remove the mouse listener (null-guard — listener may never have
       //    been attached if mouseInteractive was false).
       if (handleMouseMove) {
-        container.removeEventListener('mousemove', handleMouseMove)
+        document.removeEventListener('mousemove', handleMouseMove)
       }
 
       // 4. Release the GL context BEFORE detaching the canvas. Optional

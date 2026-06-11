@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 4 of 8 (Visual Foundations — Plasma + Noise) — In progress
-Plan: 1 of 3 in Phase 4 — complete (leaf rendering primitives shipped)
-Status: Plasma + PlasmaFallback components built; ogl@1.0.11 installed; not yet wired into App.tsx (that's plan 04-02's job)
-Last activity: 2026-06-10 — Plan 04-01 SUMMARY.md written; ready for plan 04-02 (HeroBackdrop dispatcher)
+Plan: 3 of 3 in Phase 4 — checkpoint in progress (browser verification underway)
+Status: Plans 04-01 and 04-02 complete. 04-03 human checkpoint started — 3 fixes applied during verification, ready to resume full 6-check test.
+Last activity: 2026-06-11 — Browser verification in progress; resume with Check 1 (mouse warp + FPS) in next session
 
 Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
 
@@ -52,6 +52,7 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 | 03-scroll-infrastructure | 02 | 2 min | 2 | 2 |
 | 03-scroll-infrastructure | 03 | 2 sessions | 3 (human checkpoint) | 2 |
 | 04-visual-foundations-plasma-noise | 01 | 4 min | 3 | 6 |
+| Phase 04-visual-foundations-plasma-noise P02 | 3 min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -126,6 +127,9 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 - [04-01] Pulse keyframes: opacity 0.85 → 1 → 0.85 over 7s ease-in-out — middle of the CONTEXT.md 6-8s range, clearly subliminal
 - [04-01] Belt-and-suspenders `@media (prefers-reduced-motion: reduce)` override AT the keyframes — even if the HeroBackdrop dispatcher (04-02) forgets to gate `animated`, the CSS flattens the pulse to static for affected users
 - [04-01] PlasmaFallback doc-comment phrased without literal "canvas"/"ogl" strings — phase verification grep is case-sensitive and demands 0 matches; meaning preserved via "WebGL bindings or 3D renderer imports" phrasing
+- [04-03] `AnimationRootPlaceholder` (position:fixed, z-index:0) was painting over the hero section's text — section had no z-index (auto) so it painted before the fixed overlay. Fix: `zIndex:1` on the hero `<section>` in App.tsx
+- [04-03] HeroBackdrop container divs require explicit `zIndex:0` — without it, Chrome's GPU compositor can stack the WebGL canvas above `position:relative z-index:1` siblings despite CSS stacking spec
+- [04-03] WebGL canvas is excluded from Chrome's DOM hit-test tree (promoted to GPU compositor layer) — mousemove never reaches the Plasma container via bubbling. Fix: document-level listener with `getBoundingClientRect()` bounds check in Plasma.tsx
 
 ### Resolved Blockers
 
@@ -146,6 +150,6 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 
 ## Session Continuity
 
-Last session: 2026-06-10
-Stopped at: Completed 04-01-PLAN.md. Plasma + PlasmaFallback leaf components shipped, ogl@1.0.11 pinned. Commits: 5ccd198 (Task 1 — chore: install ogl + shaders), 4247075 (Task 2 — feat: Plasma OGL component), cea5202 (Task 3 — feat: PlasmaFallback + keyframes). Build + lint green. Components are not yet wired into App.tsx (plan 04-02's job).
-Resume: Plan 04-02 (HeroBackdrop dispatcher). Run `/gsd:execute-phase 4` to continue, or `/gsd:verify-work` first.
+Last session: 2026-06-11
+Stopped at: Phase 4 plans 04-01 and 04-02 complete. 04-03 human checkpoint in progress — dev server was running at localhost:5173. Three bugs fixed during browser verification: (1) section z-index for AnimationRootPlaceholder overlap, (2) explicit zIndex:0 on HeroBackdrop containers, (3) Plasma mousemove moved to document level with bounds check (GPU layer hit-test workaround). Mouse warp confirmed working. Full 6-check test to be resumed.
+Resume: Open http://localhost:5173 (run `npm run dev` if needed) and run all 6 checks from the Phase 4 checkpoint list. Reply "approved" to close the phase.
