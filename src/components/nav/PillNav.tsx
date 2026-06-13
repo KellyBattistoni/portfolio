@@ -63,10 +63,7 @@ function PillNavItem({
 }) {
   const wrapRef = useRef<HTMLSpanElement>(null)
   return (
-    <a
-      href={href}
-      style={{ textDecoration: 'none', display: 'inline-block' }}
-    >
+    <a href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>
       <span
         ref={wrapRef}
         style={{
@@ -117,12 +114,11 @@ export function PillNav({ heroRef }: PillNavProps) {
   const { t } = useTranslation('common')
   const { prefersReducedMotion } = useDeviceCapabilities()
   const pillRef = useRef<HTMLElement>(null)
+  // Nav items collapse to maxWidth:0 on load; the pill shrinks to fit EN/ES only.
+  const navItemsRef = useRef<HTMLDivElement>(null)
 
   const { contextSafe } = useGSAP(
     () => {
-      // Reduced-motion: render pill visible with no animations. Skip both the
-      // entrance tween and the matchMedia guard so the static DOM is never
-      // touched by GSAP.
       if (prefersReducedMotion) return
 
       const mm = gsap.matchMedia()
@@ -130,22 +126,18 @@ export function PillNav({ heroRef }: PillNavProps) {
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (!heroRef.current) return
 
-        // Hide before animating in. Placing the `set` inside the no-preference
-        // branch (not at the top of the effect) means reduced-motion users
-        // never get the hidden state applied — the pill is visible on load.
-        gsap.set(pillRef.current, { autoAlpha: 0, x: -20 })
+        gsap.set(navItemsRef.current, { maxWidth: 0, opacity: 0 })
 
-        gsap.to(pillRef.current, {
-          autoAlpha: 1,
-          x: 0,
-          duration: 0.5,
-          ease: 'power2.out',
+        // Pill opens first, text fades in once the container has room.
+        const tl = gsap.timeline({
           scrollTrigger: {
             trigger: heroRef.current,
-            start: '70% top',
+            start: '40% top',
             once: true,
           },
         })
+        tl.to(navItemsRef.current, { maxWidth: 380, duration: 0.2, ease: 'power2.out' })
+        tl.to(navItemsRef.current, { opacity: 1, duration: 0.3, ease: 'power2.out' })
 
         return () => {
           ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
@@ -159,9 +151,6 @@ export function PillNav({ heroRef }: PillNavProps) {
     { scope: pillRef, dependencies: [prefersReducedMotion] }
   )
 
-  // Hover handlers are wrapped in contextSafe so the GSAP context can revert
-  // the tweens on unmount even though the events fire outside the React render
-  // cycle.
   const handleMouseEnter = contextSafe((el: HTMLElement) => {
     const text = el.querySelector('.nav-text')
     const circle = el.querySelector('.nav-circle')
@@ -187,7 +176,6 @@ export function PillNav({ heroRef }: PillNavProps) {
         zIndex: 50,
         display: 'flex',
         alignItems: 'center',
-        gap: '0.25rem',
         background: 'rgba(0,0,0,0.45)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
@@ -196,24 +184,37 @@ export function PillNav({ heroRef }: PillNavProps) {
         padding: '0.4rem 1rem',
       }}
     >
-      {NAV_ITEMS.map((item) => (
-        <PillNavItem
-          key={item.key}
-          href={item.href}
-          label={t(`nav.${item.key satisfies NavItemKey}` as const)}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        />
-      ))}
-      <span
-        aria-hidden="true"
+      {/* Collapses to 0 on load; expands at 70% scroll — pill grows leftward */}
+      <div
+        ref={navItemsRef}
         style={{
-          width: '1px',
-          height: '1rem',
-          background: 'rgba(255,255,255,0.15)',
-          margin: '0 0.5rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.25rem',
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
         }}
-      />
+      >
+        {NAV_ITEMS.map((item) => (
+          <PillNavItem
+            key={item.key}
+            href={item.href}
+            label={t(`nav.${item.key satisfies NavItemKey}` as const)}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          />
+        ))}
+        <span
+          aria-hidden="true"
+          style={{
+            width: '1px',
+            height: '1rem',
+            background: 'rgba(255,255,255,0.15)',
+            margin: '0 0.5rem',
+            flexShrink: 0,
+          }}
+        />
+      </div>
       <LanguageSwitcher className="flex gap-3" />
     </nav>
   )

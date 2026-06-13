@@ -161,14 +161,9 @@ export function MobileNav({ heroRef }: MobileNavProps) {
   })
 
   return (
-    <div ref={containerRef}>
-      {/* Hamburger / close trigger */}
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={handleToggle}
-        aria-expanded={isOpen}
-        aria-label={isOpen ? 'Close menu' : 'Open menu'}
+    <>
+      {/* Language switcher — always visible from page load, independent of hamburger threshold */}
+      <div
         style={{
           position: 'fixed',
           top: '1.25rem',
@@ -179,84 +174,109 @@ export function MobileNav({ heroRef }: MobileNavProps) {
           WebkitBackdropFilter: 'blur(12px)',
           border: '1px solid rgba(255,255,255,0.08)',
           borderRadius: '9999px',
-          width: '2.5rem',
-          height: '2.5rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          cursor: 'pointer',
-          color: 'white',
-          fontSize: '1.1rem',
+          padding: '0.4rem 0.75rem',
         }}
       >
-        {isOpen ? '×' : '☰'}
-      </button>
+        <LanguageSwitcher className="flex gap-3" />
+      </div>
 
-      {/* Backdrop — closes panel on tap; only rendered while panel is open */}
-      {isOpen && (
-        <div
-          onClick={handleClose}
-          aria-hidden="true"
+      <div ref={containerRef}>
+        {/* Hamburger — animates in at 70% hero scroll, positioned left of lang pill */}
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={handleToggle}
+          aria-expanded={isOpen}
+          aria-label={isOpen ? 'Close menu' : 'Open menu'}
           style={{
             position: 'fixed',
-            inset: 0,
-            zIndex: 40,
-            background: 'rgba(0,0,0,0.5)',
-            pointerEvents: 'auto',
+            top: '1.25rem',
+            right: '7.5rem',
+            zIndex: 60,
+            background: 'rgba(0,0,0,0.45)',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            borderRadius: '9999px',
+            width: '2.5rem',
+            height: '2.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            color: 'white',
+            fontSize: '1.1rem',
           }}
-        />
-      )}
+        >
+          {isOpen ? '×' : '☰'}
+        </button>
 
-      {/* Side panel — slides in from right via GSAP timeline (or display
-          toggle for reduced-motion users) */}
-      <div
-        ref={panelRef}
-        style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: '75vw',
-          maxWidth: '320px',
-          zIndex: 50,
-          background: '#0a0a0a',
-          borderLeft: '1px solid rgba(255,255,255,0.06)',
-          padding: '5rem 2rem 3rem',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '0',
-          // Reduced-motion users get an instant display-toggle open/close.
-          // Non-reduced-motion users always have display:flex; the GSAP
-          // timeline handles the off-screen positioning via `x`.
-          ...(prefersReducedMotion ? { display: isOpen ? 'flex' : 'none' } : {}),
-        }}
-      >
-        {NAV_ITEMS.map((item, i) => (
-          <a
-            key={item.key}
-            href={item.href}
-            ref={(el) => {
-              itemRefs.current[i] = el
-            }}
-            onClick={(e) => {
-              e.preventDefault()
-              handleNavClick(item.href)
-            }}
+        {/* Backdrop — closes panel on tap; only rendered while panel is open */}
+        {isOpen && (
+          <div
+            onClick={handleClose}
+            aria-hidden="true"
             style={{
-              display: 'block',
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(1.5rem, 6vw, 2rem)',
-              color: 'white',
-              textDecoration: 'none',
-              padding: '0.75rem 0',
-              borderBottom: '1px solid rgba(255,255,255,0.06)',
+              position: 'fixed',
+              inset: 0,
+              zIndex: 40,
+              background: 'rgba(0,0,0,0.5)',
+              pointerEvents: 'auto',
             }}
-          >
-            {t(`nav.${item.key satisfies NavItemKey}` as const)}
-          </a>
-        ))}
-        <LanguageSwitcher className="mt-6 flex gap-4" />
+          />
+        )}
+
+        {/* Side panel — slides in from right via GSAP timeline (or display
+          toggle for reduced-motion users) */}
+        <div
+          ref={panelRef}
+          style={{
+            position: 'fixed',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: '75vw',
+            maxWidth: '320px',
+            zIndex: 50,
+            background: '#0a0a0a',
+            borderLeft: '1px solid rgba(255,255,255,0.06)',
+            padding: '5rem 2rem 3rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0',
+            // Reduced-motion users get an instant display-toggle open/close.
+            // Non-reduced-motion users always have display:flex; the GSAP
+            // timeline handles the off-screen positioning via `x`.
+            ...(prefersReducedMotion ? { display: isOpen ? 'flex' : 'none' } : {}),
+          }}
+        >
+          {NAV_ITEMS.map((item, i) => (
+            <a
+              key={item.key}
+              href={item.href}
+              ref={(el) => {
+                itemRefs.current[i] = el
+              }}
+              onClick={(e) => {
+                e.preventDefault()
+                handleNavClick(item.href)
+              }}
+              style={{
+                display: 'block',
+                fontFamily: 'var(--font-display)',
+                fontSize: 'clamp(1.5rem, 6vw, 2rem)',
+                color: 'white',
+                textDecoration: 'none',
+                padding: '0.75rem 0',
+                borderBottom: '1px solid rgba(255,255,255,0.06)',
+              }}
+            >
+              {t(`nav.${item.key satisfies NavItemKey}` as const)}
+            </a>
+          ))}
+          <LanguageSwitcher className="mt-6 flex gap-4" />
+        </div>
       </div>
-    </div>
+    </>
   )
 }

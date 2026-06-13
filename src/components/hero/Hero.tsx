@@ -149,8 +149,8 @@ export function Hero({ sectionRef }: HeroProps) {
           ref={taglineRef}
           style={{
             fontFamily: 'var(--font-sans)',
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            color: 'rgba(255,255,255,0.7)',
+            fontSize: 'clamp(1.15rem, 2.3vw, 1.625rem)',
+            color: 'rgba(255,255,255,0.88)',
             margin: 0,
             maxWidth: '44ch',
           }}

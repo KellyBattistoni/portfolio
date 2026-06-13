@@ -25,6 +25,8 @@ export default function App() {
       <NoiseOverlay />
       <Hero sectionRef={heroRef} />
       {isMobile ? <MobileNav heroRef={heroRef} /> : <PillNav heroRef={heroRef} />}
+      {/* Phase 6 placeholder — gives ScrollTrigger room to fire during verification */}
+      <div style={{ height: '200vh', background: '#050505' }} />
     </>
   )
 }
