@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — In progress
-Plan: 2 of 4 in Phase 5 (05-01 + 05-02 complete)
-Status: Plans 05-01 and 05-02 shipped. Hero component built and committed; Plan 05-03 (PillNav + MobileNav) executing in parallel wave 2.
-Last activity: 2026-06-13 — Plan 05-02 executed. One task commit (908e256). SUMMARY written.
+Plan: 3 of 4 in Phase 5 (05-01 + 05-02 + 05-03 complete)
+Status: Plans 05-01, 05-02, and 05-03 shipped. Hero, PillNav, and MobileNav all built and committed. Plan 05-04 (mount into App.tsx + cleanup) is the final plan of Phase 5.
+Last activity: 2026-06-13 — Plan 05-03 executed. Two task commits (908e256 absorbed Task 1 PillNav due to parallel-wave cross-staging; a1e7b99 Task 2 MobileNav). SUMMARY written.
 
-Progress: [█████░░░░░] 50% (12 of ~24 expected plans)
+Progress: [█████░░░░░] 54% (13 of ~24 expected plans)
 
 ## Phase Status
 
@@ -24,21 +24,21 @@ Progress: [█████░░░░░] 50% (12 of ~24 expected plans)
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
-| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 2/4 |
+| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 3/4 |
 | 6 | Content Sections | Pending | TBD |
 | 7 | Polish & Performance | Pending | TBD |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
 
-Phase 5 in progress. Plan 05-02 (Hero component) shipped 2026-06-13. `src/components/hero/Hero.tsx` (~182 LOC) implements a full-screen bilingual hero section: name h1 + tagline p + ghost CTA a (border #FF4500) centered over the HeroBackdrop dispatcher wrapped in AnimationErrorBoundary. Per-element scroll-parallax fade-out via three independent GSAP ScrollTrigger scrub tweens with divergent end values — CTA disappears first at 30% top, tagline at 35% top, name at 40% top (brand anchor stays readable longest). prefersReducedMotion double-guarded (early-return + `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`). sectionRef is a forwarded prop (`React.RefObject<HTMLElement | null>`) so Plan 05-03's PillNav can use the same DOM node as its appear-on-scroll trigger. All GSAP imports route through `@/lib/gsap`. Explicit zIndex on section and content overlay per the Phase 4-03 Chrome GPU compositor fix. Build + lint green. Plan 05-03 (PillNav + MobileNav) executing in parallel Wave 2 — its in-progress source `src/components/nav/PillNav.tsx` was inadvertently captured in the Hero commit (Git for Windows sibling-directory behavior; documented in 05-02 SUMMARY). Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder.
+Phase 5 in progress. Plan 05-03 (PillNav + MobileNav) shipped 2026-06-13. `src/components/nav/PillNav.tsx` (220 LOC) implements a glass-pill desktop nav fixed top-right: four nav items (About/Work/Stack/Contact via `t('common:nav.*')`) with rising-circle hover (real DOM `.nav-circle` scale 0→1 + `.nav-text` y:0→-4 driven by GSAP), entrance via ScrollTrigger at 70% hero-top scroll (autoAlpha + x:-20→0, once:true self-killing), composed `<LanguageSwitcher className="flex gap-3" />`. `src/components/nav/MobileNav.tsx` (262 LOC) implements a hamburger trigger (☰/×, fades in at the same 70% threshold) + side panel sliding from the right via a paused GSAP timeline (panel x:100%→0% then nav items autoAlpha+y stagger 0.08s, '-=0.15' overlap). Timeline direction is toggled via `tlRef.current.reversed(!tlRef.current.reversed())` — `useState` is reserved for ARIA + icon only and is NOT in the useGSAP dependency array (the documented anti-pattern). `contextSafe` wraps all five event handlers (mouseenter/leave, toggle, close, navClick). Reduced-motion handled cleanly in both: PillNav early-returns so the pill renders visible from first paint; MobileNav skips timeline entirely and the panel uses `display:flex/none` from `isOpen`. Build + lint green. Deviation: Task 1's PillNav.tsx was captured in the parallel 05-02 Hero commit (`908e256`) due to Wave 2 sibling-directory staging; content is correct and matches plan, documented in 05-03 SUMMARY. Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder + the standalone LanguageSwitcher.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: ~8 min
-- Total execution time: ~96 min
+- Total execution time: ~100 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -55,6 +55,7 @@ Phase 5 in progress. Plan 05-02 (Hero component) shipped 2026-06-13. `src/compon
 | 04-visual-foundations-plasma-noise | 02 | 3 min | 2 | 2 |
 | 05-hero-pillnav-first-vertical-slice | 01 | ~2 min | 2 | 5 |
 | 05-hero-pillnav-first-vertical-slice | 02 | ~3 min | 1 | 1 |
+| 05-hero-pillnav-first-vertical-slice | 03 | ~4 min | 2 | 2 |
 
 ## Accumulated Context
 
@@ -147,6 +148,16 @@ Phase 5 in progress. Plan 05-02 (Hero component) shipped 2026-06-13. `src/compon
 - [05-02] CTA is `<a href="#work">` not `<button>` — hash-anchor semantically correct for in-page scroll target to the future Projects section; explicit `cursor: pointer` added (beyond plan's style list) so the pointer cursor is unambiguous across browsers
 - [05-02] HeroBackdrop wrapped in AnimationErrorBoundary inside Hero — Plasma WebGL crashes cannot take the hero copy down with them
 - [05-02] Explicit `zIndex: 1` on both `<section>` and the content overlay div — required per Phase 4-03 fix for Chrome GPU compositor stacking the WebGL canvas above text without explicit indices
+- [05-03] Both PillNav and MobileNav accept `heroRef: RefObject<HTMLElement | null>` and use it as ScrollTrigger trigger — single Hero DOM node anchors all four scroll-driven effects (Hero per-element parallax, PillNav entrance, hamburger entrance, future polish), no extra trigger sentinels
+- [05-03] PillNav rising-circle hover uses real DOM `.nav-circle` + `.nav-text` spans (not CSS pseudo-elements) — GSAP can drive both targets independently with their own easing curves (circle 0.25s power2.out / text 0.2s power2.out enter)
+- [05-03] `gsap.set(pillRef.current, { autoAlpha: 0, x: -20 })` placed INSIDE the `mm.add('(prefers-reduced-motion: no-preference)')` callback — reduced-motion users see the pill visible from first paint with zero animation
+- [05-03] MobileNav timeline-direction toggle (`tlRef.current.reversed(!tlRef.current.reversed())`) instead of useState-as-useGSAP-dependency — timeline built once, only its direction flips. `isOpen` state reserved for ARIA + icon swap and is NOT in the useGSAP dep array (the documented anti-pattern from 05-03 research)
+- [05-03] Timeline parked at `tl.reverse(0)` after construction — initial `tl.reversed() === true`, so the first toggle plays it forward (open). Cleaner than tracking a separate "first toggle" flag
+- [05-03] Panel timeline composition: `.to(panel, x:0%)` then `.from(items, autoAlpha:0 y:20 stagger:0.08)` with `'-=0.15'` overlap — items start rising before the panel finishes sliding, feels less staccato
+- [05-03] Nav-link click defers `scrollIntoView` by 150ms after `handleClose()` — panel close animation starts before the page begins scrolling, no snap-and-scroll combo
+- [05-03] Reduced-motion MobileNav uses `display:flex/none` on the panel via conditional spread on `style` driven by `isOpen` — `position:fixed` panel means `visibility:hidden` is semantically wrong; `display:none` is the explicit "functionally absent" signal for assistive tech
+- [05-03] `contextSafe` wraps all five event handlers (handleMouseEnter/Leave/Toggle/Close/NavClick) — events fire outside React's render cycle, GSAP context must own them to revert on unmount
+- [05-03] Parallel-wave cross-commit: Task 1 PillNav.tsx was bundled into the Plan 05-02 Hero commit `908e256` due to Wave 2 sibling-directory staging — content is correct, build/lint pass; documented in 05-03 SUMMARY rather than rewritten
 
 ### Resolved Blockers
 
@@ -168,4 +179,4 @@ Phase 5 in progress. Plan 05-02 (Hero component) shipped 2026-06-13. `src/compon
 ## Session Continuity
 
 Last session: 2026-06-13
-Stopped at: Completed Plan 05-02 (Hero component with scroll-parallax fade-out + HeroBackdrop integration). Plan 05-03 (PillNav + MobileNav) executing in parallel Wave 2. Next after 05-03 closes: Plan 05-04 — mount Hero + Nav into App.tsx and retire Phase 4 test harness placeholder.
+Stopped at: Completed Plan 05-03 (PillNav + MobileNav). Wave 2 of Phase 5 now closed — Hero, PillNav, and MobileNav all built. Next: Plan 05-04 — mount Hero + PillNav + MobileNav into App.tsx, pass `heroRef` from the Hero section down to both nav components, retire the Phase 4 plasma test harness placeholder, and remove the standalone `<LanguageSwitcher />` block (now composed inside the nav components).
