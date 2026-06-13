@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — In progress
-Plan: 1 of 4 in Phase 5 (05-01 complete)
-Status: Plan 05-01 shipped (locale JSONs + position-neutral LanguageSwitcher). Ready to execute 05-02 + 05-03 (Wave 2 — parallelizable).
-Last activity: 2026-06-13 — Plan 05-01 executed. Two task commits (f8f014a, 4853c2f). SUMMARY written.
+Plan: 2 of 4 in Phase 5 (05-01 + 05-02 complete)
+Status: Plans 05-01 and 05-02 shipped. Hero component built and committed; Plan 05-03 (PillNav + MobileNav) executing in parallel wave 2.
+Last activity: 2026-06-13 — Plan 05-02 executed. One task commit (908e256). SUMMARY written.
 
-Progress: [█████░░░░░] 46% (11 of ~24 expected plans)
+Progress: [█████░░░░░] 50% (12 of ~24 expected plans)
 
 ## Phase Status
 
@@ -24,21 +24,21 @@ Progress: [█████░░░░░] 46% (11 of ~24 expected plans)
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
-| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 1/4 |
+| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 2/4 |
 | 6 | Content Sections | Pending | TBD |
 | 7 | Polish & Performance | Pending | TBD |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
 
-Phase 5 in progress. Plan 05-01 (i18n foundation for the vertical slice) shipped 2026-06-13. Locale JSONs now carry the locked Phase 5 copy: EN tagline "I automate what holds people back." / ES "Automatizo lo que le frena a la gente.", CTA "See my work" / "Ver mi trabajo", and a `nav` block under `common` with ariaLabel + about/work/stack/contact in both locales (ES nav: Sobre mí/Trabajo/Stack/Contacto — Stack untranslated as brand term). `LanguageSwitcher` was refactored from a fixed-positioned floater into a position-neutral primitive: optional `className?: string` prop replaces the default `flex gap-4` via `clsx(className ?? 'flex gap-4')`, so callers (PillNav, MobileNav) own positioning. No `@types/i18next.d.ts` edits required — `as const` + `typeof resources` auto-types `t('nav.*')` and `t('cta')` through the existing CustomTypeOptions augmentation. Build + lint green. Standalone `<LanguageSwitcher />` in App.tsx still compiles (Plan 04 will remove it). Next: Wave 2 — Plan 05-02 (Hero component consuming `t('heading.tagline')`/`t('cta')`) and Plan 05-03 (PillNav + MobileNav composing the new switcher and consuming `t('common:nav.*')`) — parallelizable.
+Phase 5 in progress. Plan 05-02 (Hero component) shipped 2026-06-13. `src/components/hero/Hero.tsx` (~182 LOC) implements a full-screen bilingual hero section: name h1 + tagline p + ghost CTA a (border #FF4500) centered over the HeroBackdrop dispatcher wrapped in AnimationErrorBoundary. Per-element scroll-parallax fade-out via three independent GSAP ScrollTrigger scrub tweens with divergent end values — CTA disappears first at 30% top, tagline at 35% top, name at 40% top (brand anchor stays readable longest). prefersReducedMotion double-guarded (early-return + `gsap.matchMedia('(prefers-reduced-motion: no-preference)')`). sectionRef is a forwarded prop (`React.RefObject<HTMLElement | null>`) so Plan 05-03's PillNav can use the same DOM node as its appear-on-scroll trigger. All GSAP imports route through `@/lib/gsap`. Explicit zIndex on section and content overlay per the Phase 4-03 Chrome GPU compositor fix. Build + lint green. Plan 05-03 (PillNav + MobileNav) executing in parallel Wave 2 — its in-progress source `src/components/nav/PillNav.tsx` was inadvertently captured in the Hero commit (Git for Windows sibling-directory behavior; documented in 05-02 SUMMARY). Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: ~9 min
-- Total execution time: ~93 min
+- Total plans completed: 12
+- Average duration: ~8 min
+- Total execution time: ~96 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -54,6 +54,7 @@ Phase 5 in progress. Plan 05-01 (i18n foundation for the vertical slice) shipped
 | 04-visual-foundations-plasma-noise | 01 | 4 min | 3 | 6 |
 | 04-visual-foundations-plasma-noise | 02 | 3 min | 2 | 2 |
 | 05-hero-pillnav-first-vertical-slice | 01 | ~2 min | 2 | 5 |
+| 05-hero-pillnav-first-vertical-slice | 02 | ~3 min | 1 | 1 |
 
 ## Accumulated Context
 
@@ -138,6 +139,14 @@ Phase 5 in progress. Plan 05-01 (i18n foundation for the vertical slice) shipped
 - [05-01] LanguageSwitcher signature changed to `({ className }: { className?: string })` — caller-provided className fully replaces the `flex gap-4` default via `clsx(className ?? 'flex gap-4')`, eliminating Tailwind class conflicts when composed inside PillNav/MobileNav
 - [05-01] Standalone `<LanguageSwitcher />` in App.tsx left in place — backward-compatible with the default, scheduled for removal in Plan 05-04 once PillNav and MobileNav mount
 - [05-01] No `@types/i18next.d.ts` edits required — `typeof resources` + `as const` on JSON imports auto-types `t('nav.about')`, `t('cta')`, and `t('switcher.ariaLabel')` through the existing CustomTypeOptions augmentation; verified by clean `tsc -b` exit
+- [05-02] Hero accepts `sectionRef: React.RefObject<HTMLElement | null>` as a prop — caller owns the ref so PillNav (05-03) and the same Hero instance use the same DOM node as ScrollTrigger trigger. The `| null` union matches @types/react 19's inferred `useRef<HTMLElement>(null)` type; without it the caller's ref would not be assignable to the prop
+- [05-02] Three independent `gsap.to()` ScrollTriggers (not a single timeline) — name/tagline/CTA each get their own trigger with divergent end values (40%/35%/30%). End-value divergence is the entire point of the design; three triggers express it more clearly than a single timeline with parallel position params
+- [05-02] CTA fades fastest (30% top end) → tagline (35%) → name (40%) — name is the brand anchor, stays readable longest as the user scrolls
+- [05-02] No `scope` option on Hero's `useGSAP` — the effect targets individual element refs (`nameRef.current` etc.), never selector strings inside the section root. Passing a scope would be semantically incorrect since we use no scoped selectors
+- [05-02] Belt-and-suspenders cleanup — outer `mm.revert()` + inner `ScrollTrigger.getAll().forEach(t => t.kill())` inside the matchMedia branch, same pattern as RevealSection (Phase 3)
+- [05-02] CTA is `<a href="#work">` not `<button>` — hash-anchor semantically correct for in-page scroll target to the future Projects section; explicit `cursor: pointer` added (beyond plan's style list) so the pointer cursor is unambiguous across browsers
+- [05-02] HeroBackdrop wrapped in AnimationErrorBoundary inside Hero — Plasma WebGL crashes cannot take the hero copy down with them
+- [05-02] Explicit `zIndex: 1` on both `<section>` and the content overlay div — required per Phase 4-03 fix for Chrome GPU compositor stacking the WebGL canvas above text without explicit indices
 
 ### Resolved Blockers
 
@@ -159,4 +168,4 @@ Phase 5 in progress. Plan 05-01 (i18n foundation for the vertical slice) shipped
 ## Session Continuity
 
 Last session: 2026-06-13
-Stopped at: Completed Plan 05-01 (locale JSONs + position-neutral LanguageSwitcher). Next: execute Wave 2 — Plans 05-02 (Hero) + 05-03 (PillNav + MobileNav) in parallel.
+Stopped at: Completed Plan 05-02 (Hero component with scroll-parallax fade-out + HeroBackdrop integration). Plan 05-03 (PillNav + MobileNav) executing in parallel Wave 2. Next after 05-03 closes: Plan 05-04 — mount Hero + Nav into App.tsx and retire Phase 4 test harness placeholder.
