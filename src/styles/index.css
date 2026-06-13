@@ -36,30 +36,3 @@ body {
   color: white;
 }
 
-/* ----------------------------------------------------------------------- */
-/* PlasmaFallback — slow opacity pulse used when WebGL2 is unavailable but */
-/* the user has NOT requested reduced motion. Opacity-only (GPU-composited).*/
-/* ----------------------------------------------------------------------- */
-@keyframes plasma-fallback-pulse {
-  0%,
-  100% {
-    opacity: 0.85;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* Belt-and-suspenders: even if a caller forgets to gate `animated`, the */
-/* CSS itself flattens the pulse to a static gradient under reduced-motion.*/
-@media (prefers-reduced-motion: reduce) {
-  @keyframes plasma-fallback-pulse {
-    0%,
-    100% {
-      opacity: 0.85;
-    }
-    50% {
-      opacity: 0.85;
-    }
-  }
-}

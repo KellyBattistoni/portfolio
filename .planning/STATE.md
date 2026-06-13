@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 4 — Visual Foundations (Plasma + Noise)
+**Current focus:** Phase 5 — Hero + PillNav (First Vertical Slice)
 
 ## Current Position
 
-Phase: 4 of 8 (Visual Foundations — Plasma + Noise) — In progress
-Plan: 3 of 3 in Phase 4 — checkpoint in progress (browser verification underway)
-Status: Plans 04-01 and 04-02 complete. 04-03 human checkpoint started — 3 fixes applied during verification, ready to resume full 6-check test.
-Last activity: 2026-06-11 — Browser verification in progress; resume with Check 1 (mouse warp + FPS) in next session
+Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — Not started
+Plan: 0 of TBD in Phase 5
+Status: Phase 4 complete. All 6 browser verification checks PASS. Ready to start Phase 5.
+Last activity: 2026-06-12 — Phase 4 closed. All 6 checks passed. 04-03-SUMMARY.md written.
 
 Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
 
@@ -23,7 +23,7 @@ Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
 | 1 | Scaffold + Safety Rails | Complete ✓ | 3/3 |
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
-| 4 | Visual Foundations — Plasma + Noise | In progress | 1/3 |
+| 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
 | 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
 | 6 | Content Sections | Pending | TBD |
 | 7 | Polish & Performance | Pending | TBD |
@@ -150,6 +150,6 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 
 ## Session Continuity
 
-Last session: 2026-06-11
-Stopped at: Phase 4 plans 04-01 and 04-02 complete. 04-03 human checkpoint in progress — dev server was running at localhost:5173. Three bugs fixed during browser verification: (1) section z-index for AnimationRootPlaceholder overlap, (2) explicit zIndex:0 on HeroBackdrop containers, (3) Plasma mousemove moved to document level with bounds check (GPU layer hit-test workaround). Mouse warp confirmed working. Full 6-check test to be resumed.
-Resume: Open http://localhost:5173 (run `npm run dev` if needed) and run all 6 checks from the Phase 4 checkpoint list. Reply "approved" to close the phase.
+Last session: 2026-06-12 (resumed)
+Stopped at: Applied fix for Check 2 (canvas not unmounting on scroll). Root cause: heroRef (external ref owned by parent App) was null when HeroBackdrop's useEffect ran in React 19 StrictMode. Fix: replaced heroRef with containerRef (this component's own root div, position:absolute inset:0) as the ScrollTrigger trigger — identical bounding rect, guaranteed non-null. Removed heroRef from HeroBackdropProps. Build green.
+Resume: Re-run Check 2 in browser. Then complete checks 3–6 and type 'approved' to close Phase 4.

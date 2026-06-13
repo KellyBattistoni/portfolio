@@ -4,6 +4,266 @@
 **Domain:** OGL 1.0.11 WebGL2 shader background in a React 19 + Vite SPA with GSAP ScrollTrigger, ScrollProvider-driven mount/unmount, and `prefers-reduced-motion` / no-WebGL2 fallback
 **Confidence:** HIGH on stack/primitives, HIGH on cleanup pattern, MEDIUM on mount-decision wiring (multiple valid approaches, recommended one is opinionated)
 
+## Mouse Interaction Debug Analysis
+
+**Added:** 2026-06-12
+**Status:** Diagnosis of the 04-03 checkpoint regression — mouse warp behaves like "panning a photo" and (depending on axis) inverts cursor direction.
+**Confidence:** HIGH — traced through inspo source, current source, and shader math with explicit numbers below.
+
+### TL;DR
+
+The shader is correct. The current `handleMouseMove` is wrong in three independent ways:
+
+1. **Coordinate-space mismatch (DPR bug).** `uMouse` is written in **CSS pixels** while the shader's `center = iResolution.xy * 0.5` is in **drawing-buffer pixels** (CSS × DPR). On a Retina display (DPR = 2) the inspo's own demo only *appeared* to work because the demo container's CSS half-width happens to be a small number relative to the shader's `0.0002` coefficient — at viewport scale (1920×1080) this dimensional inconsistency produces ~400-pixel warps and cross-axis "crosstalk" (a horizontal mouse move bleeds into a vertical warp because `uMouse.y` and `center.y` are off by a factor of DPR).
+2. **The `0.04` compression is applied around the wrong center.** The current code compresses around `cx = rect.width / 2` (CSS half), but the shader then subtracts `center = drawingBufferWidth / 2` (CSS half × DPR). On a non-Retina monitor (DPR = 1) the compression *does* work as intended; on Retina the compression delta is effectively cancelled by the DPR offset and the warp returns to near-full strength.
+3. **The warp direction is the inspo's "feature", not a bug — but it is unintuitive at full-viewport scale.** The shader adds `mouseOffset * length(C - center)` to `C`, then reads the pattern at the shifted `C`. Sampling further to the right of where the fragment lives means the pattern visually moves to the **left** — i.e. **away** from the cursor. On the inspo's small 896×504 demo this reads as a gentle parallax. On a 1920×1080 hero it reads as the page being "shoved" away from the cursor — exactly the "moving a photo" sensation the user described. The current Y-flip *partially* addresses this for the Y axis but **does not address X**, which is why the user reports the fix still feels wrong.
+
+The correct fix is to (a) work entirely in drawing-buffer pixels, (b) negate the delta so the pattern is pulled **toward** the cursor instead of pushed away, and (c) keep a compression factor (≈ 0.10–0.15) to stay subtle on a full-viewport hero. The lerp is fine and should stay.
+
+### Q1 — What does the inspo pass as `uMouse`?
+
+**Pixel coordinates, in CSS pixels, in the container's local frame, with y growing downward.** Not normalized, not flipped.
+
+`inspo.txt` lines 621–629:
+
+```ts
+const handleMouseMove = (e: MouseEvent) => {
+  if (!mouseInteractive || !containerRef.current) return;
+  const rect = containerRef.current.getBoundingClientRect();
+  mousePos.current.x = e.clientX - rect.left;   // [0, rect.width]   (CSS px)
+  mousePos.current.y = e.clientY - rect.top;    // [0, rect.height]  (CSS px, top = 0)
+  const mouseUniform = program.uniforms.uMouse.value as Float32Array;
+  mouseUniform[0] = mousePos.current.x;
+  mouseUniform[1] = mousePos.current.y;
+};
+```
+
+**Critical dimensional inconsistency in the inspo:**
+- `uMouse` is in **CSS pixels** (raw `clientX/Y` minus the rect offset).
+- `iResolution` is in **drawing-buffer pixels** (`gl.drawingBufferWidth/Height`, which on DPR = 2 is double `rect.width/Height`).
+- The shader compares them as if they were in the same space: `mouseOffset = (uMouse - center) * 0.0002`.
+
+On the inspo's 896×504 demo at DPR = 2, `iResolution = (1792, 1008)` and `center = (896, 504)`. A mouse at the right edge gives `uMouse = (896, 252)`, so `(uMouse - center) = (0, -252)` — small enough that the `0.0002` coefficient × the `length(C - center)` factor (≈ 1028 at the corner) produces a corner displacement of ≈ 52 drawing-buffer pixels (≈ 26 CSS px). That is the "subtle nudge" the inspo's author tuned by eye.
+
+**On a 1920×1080 hero at DPR = 2**, `iResolution = (3840, 2160)` and `center = (1920, 1080)`. Same right-edge mouse gives `uMouse = (1920, 540)`, so `(uMouse - center) = (0, -540)`. Displacement at the corner scales accordingly — **see Q4 for the actual numbers** — and it is no longer "subtle."
+
+### Q2 — Is there any smoothing/lerp in the inspo?
+
+**No.** The inspo writes the mouse position directly into the `uMouse` uniform Float32Array on every mousemove event. There is no rAF-side interpolation, no easing, no lerp. The smoothness in the demo comes from (a) the small displacement magnitudes at demo scale and (b) mousemove being naturally sample-rate-limited.
+
+The lerp in the current implementation (`mouseCurrent += (mouseTarget - mouseCurrent) * 0.06`) is a **correct addition** for the full-viewport use case — without it, large viewport-scale jumps from one mousemove event to the next would feel jittery. **Keep the lerp.** It is not the source of the bug.
+
+### Q3 — Is the listener on the container or the document?
+
+**Inspo: container** (`containerRef.current.addEventListener('mousemove', handleMouseMove)`).
+
+**Current implementation: document, with a bounds check.**
+
+This change was reasonable on paper — a full-bleed canvas living behind a noise overlay (`<NoiseOverlay zIndex: 50, pointer-events: none>`) might not receive pointer events directly because GPU-composited layers above it can intercept them. But in practice the container in our Plasma component has `pointer-events: none` (it's `aria-hidden`), so neither approach would receive events naturally — both rely on bubbling. The `document` listener with a bounds check is **safer** for a hero that gets text content, PillNav, and a language switcher overlaid on top of it (Phase 5). Keep the document-level listener.
+
+**One subtle bug in the current bounds check, however:** when the user moves the cursor *out* of the hero, `mouseTarget` keeps its last value, and the lerp keeps approaching that off-center value. The pattern never recovers to the neutral center. Either re-center `mouseTarget` to `(cx, cy)` on mouseleave, or *always* update `mouseTarget` and clamp it. For a hero that the user scrolls past quickly this is minor, but it's worth fixing while we're here.
+
+### Q4 — What does the shader do with `uMouse`? Step through with numbers.
+
+Shader, lines 34–39 of `Plasma.shaders.ts`:
+
+```glsl
+vec2 center = iResolution.xy * 0.5;
+C = (C - center) / uScale + center;
+vec2 mouseOffset = (uMouse - center) * 0.0002;
+C += mouseOffset * length(C - center) * step(0.5, uMouseInteractive);
+```
+
+`C` starts as `gl_FragCoord.xy` — the **drawing-buffer pixel** position of the current fragment, with **y = 0 at the bottom** (GL convention).
+
+**Step 1 — scale around center:** `(C - center) / uScale + center`. With `uScale = 1.1`, this slightly zooms the pattern. Irrelevant to the mouse bug.
+
+**Step 2 — compute the mouse offset vector.** This is a single 2-vector, the *same* for every fragment in the frame. It is the direction from the canvas center to the mouse cursor (in shader coords), scaled by `0.0002`.
+
+**Step 3 — apply the warp.** `C += mouseOffset * length(C - center)`. The displacement magnitude is `|mouseOffset| × length(C - center)` — **zero at center, maximum at corners**, in the direction of `mouseOffset`. Then the shader reads the rest of the pattern at `C + displacement`. Reading a position *to the right of* a fragment makes the pattern there appear *to the left* of its old position — i.e. the pattern **moves opposite to** the mouse direction.
+
+**Trace — inspo demo, 896×504 CSS, DPR = 2 (drawing buffer 1792×1008), mouse at right edge mid-height CSS (896, 252):**
+
+- `iResolution = (1792, 1008)`, `center = (896, 504)`
+- `uMouse = (896, 252)`  ← **CSS pixels**
+- `(uMouse - center) = (0, -252)`
+- `mouseOffset = (0, -0.0504)`
+- Top-right corner fragment: `gl_FragCoord = (1792, 1008)`, `C - center = (896, 504)`, `length ≈ 1028`
+- Displacement at top-right corner: `(0, -0.0504 × 1028) ≈ (0, -52)` drawing-buffer px (≈ -26 CSS px)
+- Visual reading: pattern at the corner shifts **downward in GL** = **upward in CSS** (toward the top of the canvas) — the pattern moves **away from** where the mouse is (mid-height) and toward the top.
+
+Subtle, mostly invisible — the inspo "works."
+
+**Trace — current implementation, 1920×1080 CSS, DPR = 2 (drawing buffer 3840×2160), mouse at right edge mid-height CSS (1920, 540):**
+
+Current `handleMouseMove`:
+
+```ts
+const cx = rect.width  / 2  // = 960    (CSS px)
+const cy = rect.height / 2  // = 540    (CSS px)
+const rawX =  (e.clientX - rect.left) - cx                   // = 1920 - 960          = 960
+const rawY = -((e.clientY - rect.top)  - cy)                 // = -(540 - 540)        = 0
+mouseTarget[0] = cx + rawX * 0.04                             // = 960  + 38.4         = 998.4
+mouseTarget[1] = cy + rawY * 0.04                             // = 540  + 0            = 540
+```
+
+After lerp settles: `uMouse ≈ (998.4, 540)`. **CSS pixels.**
+
+Shader: `center = drawing-buffer / 2 = (1920, 1080)`.
+
+- `(uMouse - center) = (998.4 - 1920, 540 - 1080) = (-921.6, -540)`
+- `mouseOffset = (-0.184, -0.108)`
+- Right-edge mid-height fragment: `gl_FragCoord = (3840, 1080)`, `C - center = (1920, 0)`, `length = 1920`
+- Displacement: `(-0.184 × 1920, -0.108 × 1920) = (-353, -207)` drawing-buffer px
+- **Notice the Y component is -207 even though the mouse only moved horizontally.** That's the DPR-mismatch crosstalk: `uMouse.y` (540, CSS) vs. `center.y` (1080, drawing-buffer) produces a non-zero Y-delta from a purely-horizontal cursor.
+
+**Sanity check — current implementation, mouse at CENTER CSS (960, 540):**
+
+- `rawX = 0, rawY = 0` ⇒ `mouseTarget = (960, 540)`
+- `(uMouse - center) = (960 - 1920, 540 - 1080) = (-960, -540)`
+- `mouseOffset = (-0.192, -0.108)`
+- Right-edge mid-height fragment displacement: `(-0.192 × 1920, -0.108 × 1920) = (-369, -207)` drawing-buffer px
+
+**The pattern is warped even with the cursor sitting still at the canvas center.** That is the smoking gun — the "neutral" mouse state is not neutral. Visually this manifests as: the pattern is permanently pulled toward the lower-left of the canvas, and the cursor only nudges that pull. Exactly the "moving around a photo" sensation.
+
+### Q5 — What is the "correct" displacement?
+
+For a full-viewport hero we want **maximum corner displacement on the order of 30–60 drawing-buffer pixels** when the mouse is at an extreme corner. That is "noticeable parallax" without being "panning." For comparison, the inspo demo's max corner displacement was ≈ 52 drawing-buffer px.
+
+Working backwards through the shader: the corner has `length(C - center) ≈ 2203` on a 1920×1080 / DPR-2 hero. To get a 50-px corner displacement we need `|mouseOffset| ≤ 0.0227`. With the shader's `0.0002` coefficient, that means `|uMouse - center| ≤ 113` drawing-buffer pixels. Half-canvas is 1920. So we need to **compress the natural delta down to ≈ 6 %** — close to the user's intuition with the `0.04` (4 %) number, but applied in the **right coordinate space**.
+
+Compression around 0.10–0.15 gives a comfortably visible-but-subtle warp; 0.05–0.08 gives a "barely there" parallax. Final number is **Claude's discretion** to tune by eye.
+
+### Q6 — What is wrong with the current fix?
+
+| Aspect | Status | Why |
+|---|---|---|
+| Y-flip (`rawY = -(clientY - rect.top - cy)`) | **Half-right, half-wrong** | The flip changes the *sign of the Y delta*, but the shader still computes `uMouse - center` against a *drawing-buffer* center while `uMouse` is in *CSS* space — so the result has the wrong magnitude AND a residual offset that depends on DPR (see Q4 sanity check). On DPR = 1 the flip alone would be enough to make the pattern follow the cursor on the Y axis (but it would still push *away* on the X axis — the user would feel inverted-X-but-correct-Y, a strange split). |
+| `0.04` compression | **Right idea, wrong space** | Compression is applied around CSS `cx, cy`, but the shader subtracts drawing-buffer center. On DPR = 2 the compression delta is effectively swamped by the DPR-induced offset. On DPR = 1 it works correctly. |
+| `0.06` lerp | **Correct, keep it** | Smooths viewport-scale mouse jumps. Without it, large mousemove deltas feel sharp on a big hero. |
+| Re-centering on resize (`setSize` initialises `mouseTarget` / `mouseCurrent`) | **Correct, keep it** | Good defensive default. |
+| Bounds check on document listener | **Correct in spirit, has a minor leak** | When the cursor exits the hero, `mouseTarget` keeps its last off-center value. Re-center it on exit (`else { mouseTarget[0] = cx_db; mouseTarget[1] = cy_db; }`) to let the lerp return to neutral. |
+| Warp direction (away from cursor) | **Wrong for our design intent** | Inspo's "feature" is fine on a demo but feels like the page being shoved on a full-viewport hero. Negate the offset so the pattern is pulled *toward* the cursor. |
+
+### Q7 — The minimal correct fix
+
+Two changes inside `useEffect` in `Plasma.tsx`:
+
+1. Replace the `handleMouseMove` body with the version below, which works entirely in **drawing-buffer pixels**, negates the delta to pull toward the cursor, applies compression in the correct space, and includes a Y-flip (`gl_FragCoord.y = 0` is at the bottom, `clientY = 0` is at the top — without the flip, the Y warp goes the wrong way after the negation).
+2. Re-centre `mouseTarget` to the drawing-buffer center inside `setSize` so the resize default lives in the same space as the runtime updates.
+
+```ts
+// Compression factor: how much of the natural mouse-to-center delta to
+// pass to the shader. The shader was tuned for a ~900x500 demo where the
+// half-canvas is ~450 drawing-buffer px; on a 1920x1080 hero at DPR=2 the
+// half-canvas is 1920 drawing-buffer px (~4x larger), so we need to cut the
+// delta to roughly 1/4 of the natural value to match the inspo's feel.
+// 0.10 = "subtle but visible parallax"; tune by eye in 0.05..0.15.
+const MOUSE_COMPRESS = 0.10
+const LERP = 0.06
+
+// --- setSize: keep the iResolution write, then re-centre targets in the
+// SAME coordinate space the shader uses (drawing-buffer px). ---
+const setSize = () => {
+  const rect = container.getBoundingClientRect()
+  const w = Math.max(1, Math.floor(rect.width))
+  const h = Math.max(1, Math.floor(rect.height))
+  renderer.setSize(w, h)
+  const res = program.uniforms.iResolution.value as Float32Array
+  res[0] = gl.drawingBufferWidth
+  res[1] = gl.drawingBufferHeight
+  // Neutral mouse = canvas center, in drawing-buffer pixels (same as
+  // `center` in the shader). This makes (uMouse - center) === 0 at rest.
+  const cxDB = gl.drawingBufferWidth  * 0.5
+  const cyDB = gl.drawingBufferHeight * 0.5
+  mouseTarget[0]  = cxDB
+  mouseTarget[1]  = cyDB
+  mouseCurrent[0] = cxDB
+  mouseCurrent[1] = cyDB
+}
+
+// --- handleMouseMove: all math in drawing-buffer pixels ---
+let handleMouseMove: ((e: MouseEvent) => void) | null = null
+if (mouseInteractive) {
+  handleMouseMove = (e: MouseEvent) => {
+    const rect = container.getBoundingClientRect()
+    const cxDB = gl.drawingBufferWidth  * 0.5
+    const cyDB = gl.drawingBufferHeight * 0.5
+
+    // Out-of-bounds: drift back to neutral instead of holding the last value.
+    if (
+      e.clientX < rect.left || e.clientX > rect.right ||
+      e.clientY < rect.top  || e.clientY > rect.bottom
+    ) {
+      mouseTarget[0] = cxDB
+      mouseTarget[1] = cyDB
+      return
+    }
+
+    // Get DPR from the renderer (already capped at 2 in the constructor),
+    // not from window.devicePixelRatio (could differ on zoom changes).
+    const dpr = renderer.dpr
+
+    // Delta from canvas center, in CSS px, with Y flipped:
+    //   gl_FragCoord.y = 0 is at the bottom of the canvas;
+    //   clientY        = 0 is at the top.
+    // After the flip, "mouse above center" -> positive Y delta in GL space.
+    const cssDx =  (e.clientX - rect.left) - rect.width  * 0.5
+    const cssDy = -((e.clientY - rect.top) - rect.height * 0.5)
+
+    // Convert to drawing-buffer space (the space `center` lives in),
+    // compress to stay subtle on a full-viewport hero, and NEGATE so
+    // the shader's "warp pushes pattern away" becomes "warp pulls pattern
+    // toward the cursor".
+    mouseTarget[0] = cxDB - cssDx * dpr * MOUSE_COMPRESS
+    mouseTarget[1] = cyDB - cssDy * dpr * MOUSE_COMPRESS
+  }
+  document.addEventListener('mousemove', handleMouseMove, { passive: true })
+}
+```
+
+The rAF lerp block stays unchanged — `LERP = 0.06`, lerp `mouseCurrent` toward `mouseTarget`, write to `uMouse`.
+
+**Why this is correct, in one line per Q:**
+- Q1 mismatch: `cxDB / cyDB` and the `dpr` multiplier put the JS in the same space as the shader's `center`.
+- Q4 crosstalk: with the spaces aligned, a purely-horizontal cursor produces a purely-horizontal `(uMouse - center)` and a purely-horizontal warp. No more bleeding into Y.
+- Q5 magnitude: `MOUSE_COMPRESS = 0.10` caps the corner displacement at ≈ 88 drawing-buffer px (= `1920 × 0.10 × 0.0002 × 2203`). With the user's preferred sensitivity it can be lowered further; 0.05 gives ≈ 44 px (matches the inspo demo's feel).
+- Q6 direction: the leading minus in `cxDB - cssDx * dpr * MOUSE_COMPRESS` flips the offset direction in the shader, so the pattern follows the cursor instead of fleeing it.
+
+### What the user should see after the fix
+
+- **Mouse at canvas center**: pattern is perfectly steady. No drift, no lean. (Sanity check — this was *not* true under the current code.)
+- **Mouse hard right, mid-height**: the right edge of the pattern is gently pulled to the right (≈ 50–90 px of warp at the corner, falling smoothly to zero at the center). The left half of the canvas is almost unaffected.
+- **Mouse hard left, mid-height**: mirror of the above. Left edge pulled left.
+- **Mouse top-center**: top of the pattern is pulled upward.
+- **Mouse bottom-center**: bottom is pulled downward.
+- **Diagonal moves**: the warp direction tracks the cursor diagonally (cursor in top-right corner pulls the top-right of the pattern toward the cursor; far edge moves the most).
+- **Cursor leaves the hero**: pattern drifts back to neutral over ~10 frames (the LERP at 0.06).
+- **No "photo-pan" feel**: the warp is bounded and feels like a soft magnetic pull on the pattern's structure, not a translation of the whole image.
+- **No axis inversion**: pattern moves with the cursor on both X and Y.
+
+### Knobs to tune live, if the fix still feels off
+
+| Symptom | Adjust | Direction |
+|---|---|---|
+| Still feels too strong | `MOUSE_COMPRESS` | Lower (try 0.05, then 0.03) |
+| Feels laggy | `LERP` | Raise (try 0.10, then 0.15) |
+| Feels too snappy | `LERP` | Lower (try 0.04) |
+| Centre is not truly steady | Verify `dpr` in the formula matches `renderer.dpr` exactly (NOT `window.devicePixelRatio`) | — |
+| X works but Y is inverted | Sign of `cssDy` flip — remove the leading `-` in `cssDy` | — |
+| Pattern moves *away* from cursor again | Leading minus in the `mouseTarget` formulas was removed | Restore it |
+
+### Sources for this section
+
+- `inspo.txt` lines 467–690 — the reference `Plasma` component. Direct read.
+- `Plasma.shaders.ts` lines 34–39 — the warp math. Direct read.
+- `Plasma.tsx` lines 124–168 — the current (broken) handler. Direct read.
+- WebGL `gl_FragCoord` semantics (y = 0 at bottom) — Khronos GLSL ES 3.00 spec §7.1.4, well established, not version-sensitive.
+- OGL `Renderer.dpr` field — already in use in this component (`renderer = new Renderer({ ..., dpr: ... })`); `renderer.dpr` reflects the value passed in.
+
+---
+
+
 <user_constraints>
 ## User Constraints (from CONTEXT.md)
 

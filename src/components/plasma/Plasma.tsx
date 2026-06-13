@@ -112,6 +112,19 @@ export function Plasma({
     })
     const mesh = new Mesh(gl, { geometry, program })
 
+    // Mouse lerp state — declared before setSize() which initialises them.
+    // Neutral = drawing-buffer centre (same space as the shader's `center`),
+    // so (uMouse - center) === 0 at rest and the pattern is perfectly steady.
+    //
+    // MOUSE_COMPRESS: the shader's 0.0002 coefficient was tuned for an
+    // ~896×504 demo (corner ≈ 1028 DB px, max displacement ≈ 52 DB px).
+    // At 1920×1080 / DPR=2 the corner is ≈ 2203 DB px — 4× larger. 0.10
+    // caps corner displacement at ≈ 88 DB px, matching the inspo's feel.
+    const MOUSE_COMPRESS = 0.04
+    const LERP = 0.03
+    const mouseTarget = new Float32Array([0, 0])
+    const mouseCurrent = new Float32Array([0, 0])
+
     // --- ResizeObserver: write into iResolution Float32Array in place ---
     const setSize = () => {
       const rect = container.getBoundingClientRect()
@@ -121,30 +134,49 @@ export function Plasma({
       const res = program.uniforms.iResolution.value as Float32Array
       res[0] = gl.drawingBufferWidth
       res[1] = gl.drawingBufferHeight
+      // Neutral mouse in drawing-buffer space (matches shader `center`).
+      const cxDB = gl.drawingBufferWidth * 0.5
+      const cyDB = gl.drawingBufferHeight * 0.5
+      mouseTarget[0] = cxDB
+      mouseTarget[1] = cyDB
+      mouseCurrent[0] = cxDB
+      mouseCurrent[1] = cyDB
     }
     const ro = new ResizeObserver(setSize)
     ro.observe(container)
     setSize()
 
-    // --- Document-level mousemove with container bounds check ---
-    // The canvas lives on a GPU compositor layer and is excluded from Chrome's
-    // DOM hit-test tree, so mousemove never reaches the container directly.
-    // Listening on document and filtering by getBoundingClientRect() preserves
-    // the "only active over the canvas area" contract from CONTEXT.md.
+    // --- Document-level mousemove (GPU layer excludes container from hit-test) ---
     let handleMouseMove: ((e: MouseEvent) => void) | null = null
     if (mouseInteractive) {
       handleMouseMove = (e: MouseEvent) => {
         const rect = container.getBoundingClientRect()
+        const cxDB = gl.drawingBufferWidth * 0.5
+        const cyDB = gl.drawingBufferHeight * 0.5
+
+        // Out-of-bounds: drift back to neutral so the pattern returns to rest.
         if (
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right &&
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom
+          e.clientX < rect.left ||
+          e.clientX > rect.right ||
+          e.clientY < rect.top ||
+          e.clientY > rect.bottom
         ) {
-          const u = program.uniforms.uMouse.value as Float32Array
-          u[0] = e.clientX - rect.left
-          u[1] = e.clientY - rect.top
+          mouseTarget[0] = cxDB
+          mouseTarget[1] = cyDB
+          return
         }
+
+        // Delta from CSS centre. Y is flipped because gl_FragCoord.y=0 is the
+        // bottom of the canvas while CSS clientY=0 is the top.
+        const cssDx = e.clientX - rect.left - rect.width * 0.5
+        const cssDy = -(e.clientY - rect.top - rect.height * 0.5)
+
+        // Scale to drawing-buffer space (multiply by DPR), compress for
+        // full-viewport scale, then NEGATE so the pattern follows the cursor
+        // (the inspo's "push away" reads as a photo-pan at hero scale).
+        const dpr = renderer.dpr // capped at 2 in the constructor
+        mouseTarget[0] = cxDB - cssDx * dpr * MOUSE_COMPRESS
+        mouseTarget[1] = cyDB - cssDy * dpr * MOUSE_COMPRESS
       }
       document.addEventListener('mousemove', handleMouseMove, { passive: true })
     }
@@ -153,6 +185,13 @@ export function Plasma({
     let raf = 0
     const t0 = performance.now()
     const loop = (t: number) => {
+      if (mouseInteractive) {
+        mouseCurrent[0] += (mouseTarget[0] - mouseCurrent[0]) * LERP
+        mouseCurrent[1] += (mouseTarget[1] - mouseCurrent[1]) * LERP
+        const u = program.uniforms.uMouse.value as Float32Array
+        u[0] = mouseCurrent[0]
+        u[1] = mouseCurrent[1]
+      }
       ;(program.uniforms.iTime as { value: number }).value = (t - t0) * 0.001
       renderer.render({ scene: mesh })
       raf = requestAnimationFrame(loop)

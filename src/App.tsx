@@ -17,7 +17,17 @@ function AnimationRootPlaceholder() {
         position: 'fixed',
         inset: 0,
         zIndex: 0,
-        background: 'radial-gradient(ellipse at 50% 40%, rgba(255, 69, 0, 0.15) 0%, #050505 60%)',
+        background:
+          'radial-gradient(ellipse at 50% 38%, ' +
+          'rgb(90, 18, 2) 0%, ' +
+          'rgb(74, 15, 2) 12%, ' +
+          'rgb(58, 12, 2) 23%, ' +
+          'rgb(44, 10, 2) 34%, ' +
+          'rgb(31, 8, 2) 46%, ' +
+          'rgb(20, 7, 3) 57%, ' +
+          'rgb(12, 6, 3) 68%, ' +
+          'rgb(8, 5, 4) 78%, ' +
+          'rgb(5, 5, 5) 90%)',
         pointerEvents: 'none',
       }}
       aria-hidden="true"
@@ -193,7 +203,7 @@ export default function App() {
         aria-label="Plasma test harness"
       >
         <AnimationErrorBoundary>
-          <HeroBackdrop heroRef={heroRef} />
+          <HeroBackdrop />
         </AnimationErrorBoundary>
         <div
           style={{
@@ -284,7 +294,6 @@ export default function App() {
       */}
       <section
         style={{
-          background: '#050505',
           padding: '6rem 2rem',
           display: 'flex',
           flexDirection: 'column',
