@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 
 ## Current Position
 
-Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — Not started
-Plan: 0 of TBD in Phase 5
-Status: Phase 4 complete. All 6 browser verification checks PASS. Ready to start Phase 5.
-Last activity: 2026-06-12 — Phase 4 closed. All 6 checks passed. 04-03-SUMMARY.md written.
+Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — In progress
+Plan: 1 of 4 in Phase 5 (05-01 complete)
+Status: Plan 05-01 shipped (locale JSONs + position-neutral LanguageSwitcher). Ready to execute 05-02 + 05-03 (Wave 2 — parallelizable).
+Last activity: 2026-06-13 — Plan 05-01 executed. Two task commits (f8f014a, 4853c2f). SUMMARY written.
 
-Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
+Progress: [█████░░░░░] 46% (11 of ~24 expected plans)
 
 ## Phase Status
 
@@ -24,21 +24,21 @@ Progress: [█████░░░░░] 42% (10 of ~24 expected plans)
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
-| 5 | Hero + PillNav — First Vertical Slice | Pending | TBD |
+| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 1/4 |
 | 6 | Content Sections | Pending | TBD |
 | 7 | Polish & Performance | Pending | TBD |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
 
-Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. `ogl@1.0.11` installed; vertex + fragment GLSL ported character-for-character from `inspo.txt` into `src/components/plasma/Plasma.shaders.ts` (including the `sanitize()` NaN/Inf guard). `<Plasma>` ships as a pure leaf — `Renderer({ webgl: 2, alpha: true, antialias: false, dpr: min(devicePixelRatio, 2) })`, single `useEffect` owning the entire GL lifecycle, ResizeObserver writing `iResolution` in place, container-scoped mousemove (NOT window), direction prop locked to literal `'forward'`. StrictMode-hard cleanup in 6 documented steps: cancelAnimationFrame → ResizeObserver.disconnect → removeEventListener → WEBGL_lose_context.loseContext → canvas dims zeroed → DOM detach. `<PlasmaFallback>` ships zero-WebGL — multi-stop deep-red-to-black radial gradient (ellipse 50% 45%, stops 0/25/55/90%) with optional 7s ease-in-out opacity-only pulse. `@keyframes plasma-fallback-pulse` + `prefers-reduced-motion` flat-line override added to `src/styles/index.css`. Components are inert until plan 04-02's `<HeroBackdrop>` dispatcher imports them. Build + lint green. Next: 04-02 HeroBackdrop dispatcher (useDeviceCapabilities + scrollStore → Plasma | Fallback | null with pre-unmount fade).
+Phase 5 in progress. Plan 05-01 (i18n foundation for the vertical slice) shipped 2026-06-13. Locale JSONs now carry the locked Phase 5 copy: EN tagline "I automate what holds people back." / ES "Automatizo lo que le frena a la gente.", CTA "See my work" / "Ver mi trabajo", and a `nav` block under `common` with ariaLabel + about/work/stack/contact in both locales (ES nav: Sobre mí/Trabajo/Stack/Contacto — Stack untranslated as brand term). `LanguageSwitcher` was refactored from a fixed-positioned floater into a position-neutral primitive: optional `className?: string` prop replaces the default `flex gap-4` via `clsx(className ?? 'flex gap-4')`, so callers (PillNav, MobileNav) own positioning. No `@types/i18next.d.ts` edits required — `as const` + `typeof resources` auto-types `t('nav.*')` and `t('cta')` through the existing CustomTypeOptions augmentation. Build + lint green. Standalone `<LanguageSwitcher />` in App.tsx still compiles (Plan 04 will remove it). Next: Wave 2 — Plan 05-02 (Hero component consuming `t('heading.tagline')`/`t('cta')`) and Plan 05-03 (PillNav + MobileNav composing the new switcher and consuming `t('common:nav.*')`) — parallelizable.
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 10
-- Average duration: ~10 min
-- Total execution time: ~91 min
+- Total plans completed: 11
+- Average duration: ~9 min
+- Total execution time: ~93 min
 
 | Phase | Plan | Duration | Tasks | Files |
 |-------|------|----------|-------|-------|
@@ -52,7 +52,8 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 | 03-scroll-infrastructure | 02 | 2 min | 2 | 2 |
 | 03-scroll-infrastructure | 03 | 2 sessions | 3 (human checkpoint) | 2 |
 | 04-visual-foundations-plasma-noise | 01 | 4 min | 3 | 6 |
-| Phase 04-visual-foundations-plasma-noise P02 | 3 min | 2 tasks | 2 files |
+| 04-visual-foundations-plasma-noise | 02 | 3 min | 2 | 2 |
+| 05-hero-pillnav-first-vertical-slice | 01 | ~2 min | 2 | 5 |
 
 ## Accumulated Context
 
@@ -130,6 +131,13 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 - [04-03] `AnimationRootPlaceholder` (position:fixed, z-index:0) was painting over the hero section's text — section had no z-index (auto) so it painted before the fixed overlay. Fix: `zIndex:1` on the hero `<section>` in App.tsx
 - [04-03] HeroBackdrop container divs require explicit `zIndex:0` — without it, Chrome's GPU compositor can stack the WebGL canvas above `position:relative z-index:1` siblings despite CSS stacking spec
 - [04-03] WebGL canvas is excluded from Chrome's DOM hit-test tree (promoted to GPU compositor layer) — mousemove never reaches the Plasma container via bubbling. Fix: document-level listener with `getBoundingClientRect()` bounds check in Plasma.tsx
+- [05-01] Phase 5 hero copy locked in locale JSON: EN tagline "I automate what holds people back." / ES "Automatizo lo que le frena a la gente." — strings live in `src/locales/{en,es}/hero.json` as the contract; consumers in 05-02/05-03/05-04 never duplicate copy in component source
+- [05-01] Phase 5 CTA locked: EN "See my work" / ES "Ver mi trabajo" — replaces the verbose Phase 2 placeholder "View selected work" / "Ver proyectos seleccionados"
+- [05-01] Primary nav labels live under `common.nav.*` (not a separate `nav` namespace) — keeps nav strings co-located with switcher labels under the always-loaded `common` namespace, so PillNav doesn't need to add a second `useTranslation`
+- [05-01] ES nav: "Stack" stays untranslated as brand term (alongside "Sobre mí" / "Trabajo" / "Contacto") — aligns with the engineering audience and avoids the awkward "Pila" translation
+- [05-01] LanguageSwitcher signature changed to `({ className }: { className?: string })` — caller-provided className fully replaces the `flex gap-4` default via `clsx(className ?? 'flex gap-4')`, eliminating Tailwind class conflicts when composed inside PillNav/MobileNav
+- [05-01] Standalone `<LanguageSwitcher />` in App.tsx left in place — backward-compatible with the default, scheduled for removal in Plan 05-04 once PillNav and MobileNav mount
+- [05-01] No `@types/i18next.d.ts` edits required — `typeof resources` + `as const` on JSON imports auto-types `t('nav.about')`, `t('cta')`, and `t('switcher.ariaLabel')` through the existing CustomTypeOptions augmentation; verified by clean `tsc -b` exit
 
 ### Resolved Blockers
 
@@ -150,5 +158,5 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 
 ## Session Continuity
 
-Last session: 2026-06-12 (resumed)
-Stopped at: Session resumed, proceeding to Phase 5 planning.
+Last session: 2026-06-13
+Stopped at: Completed Plan 05-01 (locale JSONs + position-neutral LanguageSwitcher). Next: execute Wave 2 — Plans 05-02 (Hero) + 05-03 (PillNav + MobileNav) in parallel.
