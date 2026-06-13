@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-06-09)
 ## Current Position
 
 Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — In progress
-Plan: 3 of 4 in Phase 5 (05-01 + 05-02 + 05-03 complete)
-Status: Plans 05-01, 05-02, and 05-03 shipped. Hero, PillNav, and MobileNav all built and committed. Plan 05-04 (mount into App.tsx + cleanup) is the final plan of Phase 5.
-Last activity: 2026-06-13 — Plan 05-03 executed. Two task commits (908e256 absorbed Task 1 PillNav due to parallel-wave cross-staging; a1e7b99 Task 2 MobileNav). SUMMARY written.
+Plan: 4 of 4 in Phase 5 — App.tsx wired, browser verification in progress (partial)
+Status: App.tsx rewritten (4b3a564), all test harnesses removed, Hero + PillNav + MobileNav wired. Browser verification checks 1–2 in progress. Stopped mid-verification to continue in new chat.
+Last activity: 2026-06-13 — App.tsx wired. Browser verification in progress. Adjustments: tagline size clamp(1.15rem,2.3vw,1.625rem) opacity 0.88; PillNav expand trigger 40% top, 0.2s width + 0.3s opacity, always-visible EN/ES via maxWidth collapse; MobileNav standalone lang pill at right:1.25rem, hamburger at right:7.5rem; cta updated to "Check my work"/"Revisa mi trabajo"; ES tagline updated to "Automatizo lo que detiene a las personas."
 
 Progress: [█████░░░░░] 54% (13 of ~24 expected plans)
 
