@@ -13,13 +13,14 @@ type Lang = (typeof LANGS)[number]
  * - Calls `i18n.changeLanguage(lng)` on click; void-prefixed to satisfy
  *   no-floating-promises (react-i18next re-renders on languageChanged event)
  *
- * Positioned fixed top-right for Phase 2 only. Phase 5 imports this same
- * component into PillNav — DO NOT couple positioning to a parent here.
+ * Position-neutral: accepts a `className` prop so callers (PillNav, MobileNav,
+ * or any wrapper) own positioning. Default is `flex gap-4` for backward-compat
+ * standalone usage; providing a className fully replaces the default.
  *
  * Wrapped by AnimationErrorBoundary in App.tsx (per Phase 1 policy: anything
  * with a transition is bounded).
  */
-export function LanguageSwitcher() {
+export function LanguageSwitcher({ className }: { className?: string }) {
   const { i18n, t } = useTranslation('common')
   const current = (i18n.resolvedLanguage as Lang | undefined) ?? 'en'
 
@@ -32,7 +33,7 @@ export function LanguageSwitcher() {
     <div
       role="group"
       aria-label={t('switcher.ariaLabel')}
-      className="fixed top-6 right-6 z-50 flex gap-4"
+      className={clsx(className ?? 'flex gap-4')}
     >
       {LANGS.map((lng) => {
         const isActive = lng === current
