@@ -94,7 +94,13 @@ Plans:
   2. Hero content fades and shifts on scroll via `ScrollProvider` progress, and Plasma unmounts as the hero leaves the viewport.
   3. PillNav is invisible while the hero is in view and animates in via GSAP after 70% of hero height is scrolled, with a rising-circle hover effect per item.
   4. The mobile hamburger menu opens/closes via GSAP timeline at viewport widths ≤ 430px, with the EN/ES switcher reachable inside both desktop and mobile nav.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Update i18n strings (hero + nav) and add className prop to LanguageSwitcher
+- [ ] 05-02-PLAN.md — Build Hero.tsx with Plasma backdrop, bilingual copy, scroll-parallax fade-out
+- [ ] 05-03-PLAN.md — Build PillNav.tsx (rising-circle hover) and MobileNav.tsx (GSAP timeline panel)
+- [ ] 05-04-PLAN.md — Wire App.tsx + human verification checkpoint
 
 ### Phase 6: Content Sections
 **Goal**: Deliver all remaining content sections — About, Projects (with parallax), Stack, Contact, CV download — fully bilingual on top of the proven Phase 5 architecture.

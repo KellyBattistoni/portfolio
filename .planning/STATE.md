@@ -151,5 +151,4 @@ Phase 4 in progress. Plan 04-01 (leaf rendering primitives) shipped 2026-06-10. 
 ## Session Continuity
 
 Last session: 2026-06-12 (resumed)
-Stopped at: Applied fix for Check 2 (canvas not unmounting on scroll). Root cause: heroRef (external ref owned by parent App) was null when HeroBackdrop's useEffect ran in React 19 StrictMode. Fix: replaced heroRef with containerRef (this component's own root div, position:absolute inset:0) as the ScrollTrigger trigger — identical bounding rect, guaranteed non-null. Removed heroRef from HeroBackdropProps. Build green.
-Resume: Re-run Check 2 in browser. Then complete checks 3–6 and type 'approved' to close Phase 4.
+Stopped at: Session resumed, proceeding to Phase 5 planning.
