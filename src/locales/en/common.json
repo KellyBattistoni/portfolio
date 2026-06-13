@@ -7,5 +7,12 @@
   "meta": {
     "title": "",
     "description": ""
+  },
+  "nav": {
+    "ariaLabel": "Primary navigation",
+    "about": "About",
+    "work": "Work",
+    "stack": "Stack",
+    "contact": "Contact"
   }
 }
