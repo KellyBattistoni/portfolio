@@ -1,1 +1,49 @@
-{ "_placeholder": "TODO Phase 3 (EN) — projects.{project1,project2,...}.{title,context,outcome,tech}" }
+{
+  "title": "Selected work",
+  "labels": {
+    "problem": "Problem",
+    "solution": "Solution",
+    "result": "Result",
+    "tech": "Stack",
+    "expand": "Read more",
+    "collapse": "Show less"
+  },
+  "cards": {
+    "project1": {
+      "title": "Lead-handoff orchestration",
+      "context": "Mid-sized SEO agency, marketing operations",
+      "outcome": "Lead-to-sales latency cut from 18min to <2min, 24/7",
+      "tech": ["Make.com", "n8n", "Airtable", "Notion"],
+      "problem": "Inbound leads slipped between forms, CRMs, and inbox triage. First-touch SLA broke on 40% of nights and weekends, and weekend traffic was effectively a dead zone.",
+      "solution": "Single n8n pipeline normalized every inbound source, scored intent, routed to the rep on rotation, and posted a Claude-drafted opener into the rep's tool of choice — Notion for some, Airtable for others.",
+      "result": "First-touch SLA hit 99% across all hours. Inbox triage stopped being a job. Weekend conversion caught up to weekday."
+    },
+    "project2": {
+      "title": "Content production pipeline",
+      "context": "SEO agency, content operations",
+      "outcome": "Brief-to-publish time down from 6 days to under 36 hours",
+      "tech": ["n8n", "Claude / MCP", "Notion", "GitHub"],
+      "problem": "Briefs sat in Notion for days waiting for a writer, then waited again for editorial review, then again for SEO QA. Each handoff added a calendar day; the chain was longer than the work.",
+      "solution": "Claude with MCP read each brief, drafted a first pass against brand-voice memory, ran on-page SEO checks against a custom ruleset, and surfaced the result in Notion already flagged for the right human reviewer — writer, editor, or SEO lead.",
+      "result": "Brief-to-publish dropped to under 36 hours. Writers spent their time on the 30% that needed a human, not the 70% that didn't."
+    },
+    "project3": {
+      "title": "Competitor intelligence loop",
+      "context": "B2B SaaS marketing team",
+      "outcome": "Weekly competitor digest produced fully unattended; analyst hours redeployed to strategy",
+      "tech": ["Apify", "Python", "Supabase", "Claude / MCP"],
+      "problem": "Tracking five competitors across pricing pages, release notes, and ad creative was a 4-hour Friday ritual for one analyst. Half the time the diff was trivial; the other half it mattered, and nobody trusted the eyeball method to catch it consistently.",
+      "solution": "Apify scrapers captured each surface on schedule, Python normalized the diffs into Supabase, and Claude wrote a short narrative every Friday morning naming what changed, what didn't, and what to investigate.",
+      "result": "Weekly digest landed unattended. The analyst stopped scraping and started reading; her time moved to the actual strategy work."
+    },
+    "project4": {
+      "title": "Client reporting & dashboards ETL",
+      "context": "Marketing agency, account management",
+      "outcome": "Monthly reporting effort per client cut from ~6 hours to ~20 minutes of review",
+      "tech": ["Python", "Docker", "Railway", "Google Cloud", "Supabase"],
+      "problem": "Each account manager hand-pulled GA, Search Console, and ad-platform numbers into a deck every month. Three or four data sources, twelve clients, six hours each — and the deck still didn't tie out half the time.",
+      "solution": "Containerized Python ETL on Railway pulled every source on a schedule into Supabase, with a Google Cloud Run job assembling per-client dashboard snapshots. Account managers got a pre-filled draft with the numbers already reconciled.",
+      "result": "Monthly reporting collapsed to a 20-minute review pass. Numbers tied out. Account managers spent the recovered time on the conversation the client actually wanted."
+    }
+  }
+}

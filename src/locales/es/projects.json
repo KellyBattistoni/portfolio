@@ -1,1 +1,49 @@
-{ "_placeholder": "TODO Phase 3 (ES) — projects.{project1,project2,...}.{title,context,outcome,tech}" }
+{
+  "title": "Trabajo seleccionado",
+  "labels": {
+    "problem": "Problema",
+    "solution": "Solución",
+    "result": "Resultado",
+    "tech": "Stack",
+    "expand": "Ver más",
+    "collapse": "Mostrar menos"
+  },
+  "cards": {
+    "project1": {
+      "title": "Orquestación de derivación de leads",
+      "context": "Agencia SEO mediana, operaciones de marketing",
+      "outcome": "Latencia de lead a ventas reducida de 18min a <2min, 24/7",
+      "tech": ["Make.com", "n8n", "Airtable", "Notion"],
+      "problem": "Los leads entrantes se perdían entre formularios, CRMs y triage de bandeja. El SLA de primer contacto se rompía en el 40% de las noches y fines de semana, y el tráfico de fin de semana era prácticamente zona muerta.",
+      "solution": "Un único pipeline en n8n normalizó cada fuente de entrada, puntuó intención, derivó al comercial en rotación y publicó una apertura redactada por Claude en la herramienta de cada comercial — Notion para unos, Airtable para otros.",
+      "result": "El SLA de primer contacto subió al 99% en todas las franjas. El triage de bandeja dejó de ser un trabajo. La conversión de fin de semana se igualó a la de entre semana."
+    },
+    "project2": {
+      "title": "Pipeline de producción de contenido",
+      "context": "Agencia SEO, operaciones de contenido",
+      "outcome": "Tiempo de brief a publicación reducido de 6 días a menos de 36 horas",
+      "tech": ["n8n", "Claude / MCP", "Notion", "GitHub"],
+      "problem": "Los briefs se quedaban en Notion esperando un redactor durante días, después esperaban revisión editorial, después QA de SEO. Cada handoff sumaba un día al calendario; la cadena era más larga que el trabajo.",
+      "solution": "Claude con MCP leía cada brief, redactaba una primera versión contra una memoria de voz de marca, ejecutaba checks de SEO on-page contra un ruleset propio y dejaba el resultado en Notion ya etiquetado para la persona correcta — redactor, editor o SEO lead.",
+      "result": "El brief a publicación bajó de 36 horas. Los redactores dedicaron tiempo al 30% que necesitaba a una persona, no al 70% que no."
+    },
+    "project3": {
+      "title": "Loop de inteligencia competitiva",
+      "context": "Equipo de marketing de SaaS B2B",
+      "outcome": "Informe semanal de competidores producido de forma desatendida; horas de la analista redirigidas a estrategia",
+      "tech": ["Apify", "Python", "Supabase", "Claude / MCP"],
+      "problem": "Hacer seguimiento a cinco competidores entre páginas de pricing, release notes y creatividades de anuncios era un ritual de 4 horas cada viernes para una analista. La mitad de las veces el diff era trivial; la otra mitad importaba, y nadie confiaba en que el método a ojo lo cazara siempre.",
+      "solution": "Los scrapers de Apify capturaban cada superficie en horario, Python normalizaba los diffs en Supabase y Claude escribía cada viernes por la mañana una narrativa breve nombrando qué cambió, qué no, y qué tocaba investigar.",
+      "result": "El informe semanal aterrizaba desatendido. La analista dejó de scrapear y empezó a leer; su tiempo se movió al trabajo real de estrategia."
+    },
+    "project4": {
+      "title": "Reporting de clientes y ETL de dashboards",
+      "context": "Agencia de marketing, gestión de cuentas",
+      "outcome": "Esfuerzo mensual de reporting por cliente reducido de ~6 horas a ~20 minutos de revisión",
+      "tech": ["Python", "Docker", "Railway", "Google Cloud", "Supabase"],
+      "problem": "Cada account manager extraía a mano números de GA, Search Console y plataformas de ads para un deck mensual. Tres o cuatro fuentes, doce clientes, seis horas cada uno — y el deck igual no cuadraba la mitad de las veces.",
+      "solution": "Un ETL en Python contenedorizado sobre Railway tiraba de cada fuente en horario hacia Supabase, con un job en Google Cloud Run montando snapshots de dashboard por cliente. Los account managers recibían un borrador pre-rellenado con las cifras ya reconciliadas.",
+      "result": "El reporting mensual se redujo a una pasada de revisión de 20 minutos. Las cifras cuadraban. Los account managers dedicaron el tiempo recuperado a la conversación que el cliente realmente quería tener."
+    }
+  }
+}
