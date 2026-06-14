@@ -111,7 +111,15 @@ Plans:
   2. Projects section renders 3–4 case study cards with project name, context, outcome metric, and tech stack — each card parallax-shifting at a distinct speed; all copy is NDA-respectful in EN and ES.
   3. Stack section displays a categorized visual grid of tools (Make.com, N8N, Claude/MCP, Supabase, Python, JavaScript, Docker, Railway, Google Cloud, GitHub, Airtable, Notion, Apify) over a dot-grid background.
   4. Contact section exposes a working `mailto:kelly@seomarketing.com` link and a LinkedIn link, and the CV download button serves `Harvard_CV_Kelly_Battistoni_EN.pdf` in EN mode and `Harvard_CV_Kelly_Battistoni_ES.pdf` in ES mode.
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 06-01-PLAN.md — Install @icons-pack/react-simple-icons, copy CV PDFs and 3 brand SVGs into public/
+- [ ] 06-02-PLAN.md — Draft About prose (EN+ES) and build <About /> with RevealSection + brand-accent divider
+- [ ] 06-03-PLAN.md — Draft NDA-safe Projects copy (EN+ES) and build <Projects /> + <ProjectCard /> with ParallaxCard + expand-in-place
+- [ ] 06-04-PLAN.md — Draft stack categories (EN+ES), 3 inline-SVG TSX components, stack-registry + StackIcon, build <Stack /> with dot-grid background
+- [ ] 06-05-PLAN.md — Draft Contact copy + LinkedIn placeholder (EN+ES) and build <Contact /> with mailto/LinkedIn + EN/ES CV download toggle
+- [ ] 06-06-PLAN.md — Wire all four sections into App.tsx and run human browser verification checkpoint
 
 ### Phase 7: Polish & Performance
 **Goal**: Bring the site to launch quality — Lighthouse 90+, mobile-real-device tested, WCAG AA, cross-browser verified.
