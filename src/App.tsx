@@ -6,6 +6,11 @@ import { ScrollTrigger } from '@/lib/gsap'
 import { Hero } from '@/components/hero/Hero'
 import { PillNav } from '@/components/nav/PillNav'
 import { MobileNav } from '@/components/nav/MobileNav'
+import { AnimationErrorBoundary } from '@/components/error/AnimationErrorBoundary'
+import { About } from '@/components/sections/About'
+import { Projects } from '@/components/sections/Projects'
+import { Stack } from '@/components/sections/Stack'
+import { Contact } from '@/components/sections/Contact'
 
 export default function App() {
   useLocalizeDocumentAttributes()
@@ -25,8 +30,10 @@ export default function App() {
       <NoiseOverlay />
       <Hero sectionRef={heroRef} />
       {isMobile ? <MobileNav heroRef={heroRef} /> : <PillNav heroRef={heroRef} />}
-      {/* Phase 6 placeholder — gives ScrollTrigger room to fire during verification */}
-      <div style={{ height: '200vh', background: '#050505' }} />
+      <AnimationErrorBoundary><About /></AnimationErrorBoundary>
+      <AnimationErrorBoundary><Projects /></AnimationErrorBoundary>
+      <AnimationErrorBoundary><Stack /></AnimationErrorBoundary>
+      <AnimationErrorBoundary><Contact /></AnimationErrorBoundary>
     </>
   )
 }
