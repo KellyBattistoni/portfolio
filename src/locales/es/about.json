@@ -1,1 +1,6 @@
-{ "_placeholder": "TODO Phase 3 (ES) — copia de la sección about" }
+{
+  "title": "Sobre mí",
+  "paragraph1": "Hay ingenieras que persiguen el último framework. Yo sigo el sistema que está debajo — el instante en que un proceso se rompe, el punto donde una herramienta deja de ganarse su lugar. La mentalidad de ingeniera nunca cambió; lo que cambió fue el terreno. Los planos mecánicos se volvieron diagramas de automatización, y el mismo instinto por el ajuste y la tolerancia se aplicó a los flujos de datos y a los traspasos entre personas.",
+  "paragraph2": "Años dentro de una agencia de SEO y marketing me enseñaron que el trabajo que se esconde detrás de los dashboards casi siempre es más interesante que el dashboard en sí. Lo que empezó parchando hojas de cálculo cosidas a mano por otras personas terminó siendo construir las automatizaciones que vuelven esas hojas innecesarias — Make.com, n8n, Claude con MCP, un poco de Python cuando el no-code deja de escalar. Cada herramienta elegida por la forma del problema, no por la forma del stack.",
+  "paragraph3": "Veo el sistema completo, me adapto más rápido que cualquiera en la sala y pienso adelantado al negocio — porque todo flujo de trabajo esconde la misma pregunta: ¿qué necesita esta persona dejar de hacer mañana?"
+}

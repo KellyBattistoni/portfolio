@@ -1,1 +1,6 @@
-{ "_placeholder": "TODO Phase 3 (EN) — about section copy" }
+{
+  "title": "About",
+  "paragraph1": "Some engineers chase the latest framework. I trace the system underneath — the moment a process breaks, the place where a tool stops earning its keep. The engineering mindset never changed; the domain did. Mechanical drawings turned into automation diagrams, the same instinct for fit and tolerance applied to data flows and human handoffs.",
+  "paragraph2": "Years inside an SEO and marketing agency taught me that the work hiding behind dashboards is almost always more interesting than the dashboard itself. What started as patching other people's hand-stitched spreadsheets turned into building the automations that make those spreadsheets unnecessary — Make.com, n8n, Claude with MCP, a little Python where the no-code stops scaling. Each tool chosen for the shape of the problem, not the shape of the stack.",
+  "paragraph3": "I see the full system, adapt faster than anyone in the room, and think ahead on the business — because every workflow has the same question underneath: what does this person actually need to stop doing tomorrow?"
+}
