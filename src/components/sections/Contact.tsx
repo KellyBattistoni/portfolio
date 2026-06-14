@@ -16,13 +16,10 @@ export function Contact() {
   const [cvLang, setCvLang] = useState<'en' | 'es'>('en')
 
   const cvHref =
-    cvLang === 'en'
-      ? '/Harvard_CV_Kelly_Battistoni_EN.pdf'
-      : '/Harvard_CV_Kelly_Battistoni_ES.pdf'
+    cvLang === 'en' ? '/Harvard_CV_Kelly_Battistoni_EN.pdf' : '/Harvard_CV_Kelly_Battistoni_ES.pdf'
 
   const linkedinUrl = t('linkedin.url')
-  const linkedinIsLive =
-    linkedinUrl !== LINKEDIN_PLACEHOLDER && linkedinUrl.length > 0
+  const linkedinIsLive = linkedinUrl !== LINKEDIN_PLACEHOLDER && linkedinUrl.length > 0
 
   return (
     <section
@@ -42,9 +39,7 @@ export function Contact() {
           {t('heading')}
         </h2>
 
-        <p style={{ fontSize: '1.125rem', lineHeight: 1.7, marginBottom: '2rem' }}>
-          {t('invite')}
-        </p>
+        <p style={{ fontSize: '1.125rem', lineHeight: 1.7, marginBottom: '2rem' }}>{t('invite')}</p>
 
         <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
           <a href="mailto:kelly@seomarketing.com" style={linkStyle}>
@@ -52,12 +47,7 @@ export function Contact() {
           </a>
 
           {linkedinIsLive ? (
-            <a
-              href={linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={linkStyle}
-            >
+            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" style={linkStyle}>
               {t('linkedin.label')}
             </a>
           ) : (
@@ -73,11 +63,7 @@ export function Contact() {
           )}
         </div>
 
-        <div
-          role="group"
-          aria-labelledby="cv-group-label"
-          style={{ marginTop: '3rem' }}
-        >
+        <div role="group" aria-labelledby="cv-group-label" style={{ marginTop: '3rem' }}>
           <p
             id="cv-group-label"
             style={{ marginBottom: '0.75rem', fontSize: '0.875rem', opacity: 0.6 }}

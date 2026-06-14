@@ -36,9 +36,7 @@ export function About() {
         <p style={{ fontSize: '1.125rem', lineHeight: 1.7, marginBottom: '1.5rem' }}>
           {t('paragraph2')}
         </p>
-        <p style={{ fontSize: '1.125rem', lineHeight: 1.7, marginBottom: 0 }}>
-          {t('paragraph3')}
-        </p>
+        <p style={{ fontSize: '1.125rem', lineHeight: 1.7, marginBottom: 0 }}>{t('paragraph3')}</p>
       </RevealSection>
     </section>
   )
