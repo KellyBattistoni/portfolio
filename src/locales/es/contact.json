@@ -1,1 +1,19 @@
-{ "_placeholder": "TODO Phase 3 (ES) — copia de la sección contact" }
+{
+  "heading": "Hablemos",
+  "invite": "Construyo sistemas de automatización de extremo a extremo — los que eliminan el trabajo repetitivo y liberan a las personas para hacer el pensamiento que realmente importa. Si diriges una agencia SEO, un equipo de marketing o cualquier operación donde todavía se hace demasiado a mano, quiero escuchar en qué estás trabajando. Los proyectos que tomo: diseño de flujos de trabajo a medida, operaciones asistidas por IA, integraciones MCP y pipelines de scraping a CRM.",
+  "email": {
+    "label": "kelly@seomarketing.com"
+  },
+  "linkedin": {
+    "label": "LinkedIn",
+    "url": "LINKEDIN_URL"
+  },
+  "cv": {
+    "label": "Descargar CV",
+    "toggle": {
+      "en": "EN",
+      "es": "ES"
+    },
+    "download": "Descargar"
+  }
+}

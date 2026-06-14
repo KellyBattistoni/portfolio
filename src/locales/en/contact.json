@@ -1,1 +1,19 @@
-{ "_placeholder": "TODO Phase 3 (EN) — contact section copy" }
+{
+  "heading": "Let's talk",
+  "invite": "I build end-to-end automation systems — the kind that replace the repetitive work and free people to do the thinking that actually matters. If you're running an SEO agency, a marketing team, or any operation where too much is still done by hand, I want to hear what you're working on. Engagements I take on: custom workflow design, AI-assisted operations, MCP integrations, and scraping-to-CRM pipelines.",
+  "email": {
+    "label": "kelly@seomarketing.com"
+  },
+  "linkedin": {
+    "label": "LinkedIn",
+    "url": "LINKEDIN_URL"
+  },
+  "cv": {
+    "label": "Download CV",
+    "toggle": {
+      "en": "EN",
+      "es": "ES"
+    },
+    "download": "Download"
+  }
+}
