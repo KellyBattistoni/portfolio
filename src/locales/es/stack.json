@@ -1,1 +1,10 @@
-{ "_placeholder": "TODO Phase 3 (ES) — copia de la sección stack" }
+{
+  "title": "Herramientas",
+  "categories": {
+    "automation": "Automatización",
+    "ai": "IA",
+    "infrastructure": "Infraestructura",
+    "languages": "Lenguajes",
+    "data": "Datos"
+  }
+}

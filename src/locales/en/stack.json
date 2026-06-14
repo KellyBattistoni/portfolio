@@ -1,1 +1,10 @@
-{ "_placeholder": "TODO Phase 3 (EN) — stack section copy" }
+{
+  "title": "Stack",
+  "categories": {
+    "automation": "Automation",
+    "ai": "AI",
+    "infrastructure": "Infrastructure",
+    "languages": "Languages",
+    "data": "Data"
+  }
+}
