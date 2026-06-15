@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 5 — Hero + PillNav (First Vertical Slice)
+**Current focus:** Phase 6 — About section animation pass complete; Phase 6 closure still pending SUMMARY write
 
 ## Current Position
 
-Phase: 5 of 8 (Hero + PillNav — First Vertical Slice) — In progress
-Plan: 4 of 4 in Phase 5 — App.tsx wired, browser verification in progress (partial)
-Status: App.tsx rewritten (4b3a564), all test harnesses removed, Hero + PillNav + MobileNav wired. Browser verification checks 1–2 in progress. Stopped mid-verification to continue in new chat.
-Last activity: 2026-06-13 — App.tsx wired. Browser verification in progress. Adjustments: tagline size clamp(1.15rem,2.3vw,1.625rem) opacity 0.88; PillNav expand trigger 40% top, 0.2s width + 0.3s opacity, always-visible EN/ES via maxWidth collapse; MobileNav standalone lang pill at right:1.25rem, hamburger at right:7.5rem; cta updated to "Check my work"/"Revisa mi trabajo"; ES tagline updated to "Automatizo lo que detiene a las personas."
+Phase: 6 of 8 (Content Sections) — Polish complete, awaiting 06-06 SUMMARY + formal closure
+Plan: 6 of 6 implemented + visual polish iteration done 2026-06-15
+Status: All 6 plans executed + post-plan polish pass complete. Hero→About scrubbed transition wired (contentRef pattern, synced to nameRef fadeout at `start: 'top 65%'`). About→Projects same pattern. Dot-grid moved to global body CSS (Projects/Stack/Contact all draw from body background seamlessly). About: explicit `backgroundColor: #050505` covers dots during transition; PlasmaFallback restored with `mask-image` top fade to kill hard seam. Timeline connecting-line overlap with stats border fixed (scoped to arc nodes wrapper). About top padding reduced 6rem→3rem so full content fits in one viewport. LinkedIn URL still placeholder — Phase 7 item.
+Last activity: 2026-06-15 — Visual polish pass: section transitions, dot-grid unification, About layout fixes.
 
-Progress: [█████░░░░░] 54% (13 of ~24 expected plans)
+Progress: [████████░░] 80% (20 of ~24 expected plans)
 
 ## Phase Status
 
@@ -24,14 +24,20 @@ Progress: [█████░░░░░] 54% (13 of ~24 expected plans)
 | 2 | i18n Backbone | Complete ✓ | 3/3 |
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
-| 5 | Hero + PillNav — First Vertical Slice | In progress ◑ | 3/4 |
-| 6 | Content Sections | Pending | TBD |
+| 5 | Hero + PillNav — First Vertical Slice | Complete ✓ | 4/4 |
+| 6 | Content Sections | In progress | 6/6 (awaiting closure) |
 | 7 | Polish & Performance | Pending | TBD |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
 
-Phase 5 in progress. Plan 05-03 (PillNav + MobileNav) shipped 2026-06-13. `src/components/nav/PillNav.tsx` (220 LOC) implements a glass-pill desktop nav fixed top-right: four nav items (About/Work/Stack/Contact via `t('common:nav.*')`) with rising-circle hover (real DOM `.nav-circle` scale 0→1 + `.nav-text` y:0→-4 driven by GSAP), entrance via ScrollTrigger at 70% hero-top scroll (autoAlpha + x:-20→0, once:true self-killing), composed `<LanguageSwitcher className="flex gap-3" />`. `src/components/nav/MobileNav.tsx` (262 LOC) implements a hamburger trigger (☰/×, fades in at the same 70% threshold) + side panel sliding from the right via a paused GSAP timeline (panel x:100%→0% then nav items autoAlpha+y stagger 0.08s, '-=0.15' overlap). Timeline direction is toggled via `tlRef.current.reversed(!tlRef.current.reversed())` — `useState` is reserved for ARIA + icon only and is NOT in the useGSAP dependency array (the documented anti-pattern). `contextSafe` wraps all five event handlers (mouseenter/leave, toggle, close, navClick). Reduced-motion handled cleanly in both: PillNav early-returns so the pill renders visible from first paint; MobileNav skips timeline entirely and the panel uses `display:flex/none` from `isOpen`. Build + lint green. Deviation: Task 1's PillNav.tsx was captured in the parallel 05-02 Hero commit (`908e256`) due to Wave 2 sibling-directory staging; content is correct and matches plan, documented in 05-03 SUMMARY. Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder + the standalone LanguageSwitcher.
+About section animation pass complete (2026-06-14). Full GSAP timeline in `src/components/sections/About.tsx`: accent line scaleX draw → heading rises → paragraphs cascade left, arc nodes reveal sequentially right. Timing contract: P1.start=T1.start, P2.end=T3.end (both at start+1.25s), P3.start=S1.start (start+1.0s). Connecting line draws continuously for full T1→T3 window (1.25s, power1.inOut). Dot expand/glow strictly sequential: T1 expands at start+0, T2 at start+0.35, T3 at start+0.70 — each begins when previous expand ends. T3 keeps SOFT_GLOW; T1/T2 return to NO_GLOW. Heading preamble overlaps with paragraphs via `addLabel('start', '-=0.45')` to eliminate felt delay. All durations cinematic (0.7–0.8s). Build + types green.
+
+Still needs: write 06-06-SUMMARY.md and formally close Phase 6 before starting Phase 7.
+
+Next: Write 06-06-SUMMARY.md → mark Phase 6 Complete → plan/execute Phase 7 (Polish & Performance: LinkedIn URL swap, meta title/description, performance audit, CV PDFs in public/, mobile QA).
+
+Previous (Phase 5): Plan 05-04 shipped 2026-06-13. `src/components/nav/PillNav.tsx` (220 LOC) implements a glass-pill desktop nav fixed top-right: four nav items (About/Work/Stack/Contact via `t('common:nav.*')`) with rising-circle hover (real DOM `.nav-circle` scale 0→1 + `.nav-text` y:0→-4 driven by GSAP), entrance via ScrollTrigger at 70% hero-top scroll (autoAlpha + x:-20→0, once:true self-killing), composed `<LanguageSwitcher className="flex gap-3" />`. `src/components/nav/MobileNav.tsx` (262 LOC) implements a hamburger trigger (☰/×, fades in at the same 70% threshold) + side panel sliding from the right via a paused GSAP timeline (panel x:100%→0% then nav items autoAlpha+y stagger 0.08s, '-=0.15' overlap). Timeline direction is toggled via `tlRef.current.reversed(!tlRef.current.reversed())` — `useState` is reserved for ARIA + icon only and is NOT in the useGSAP dependency array (the documented anti-pattern). `contextSafe` wraps all five event handlers (mouseenter/leave, toggle, close, navClick). Reduced-motion handled cleanly in both: PillNav early-returns so the pill renders visible from first paint; MobileNav skips timeline entirely and the panel uses `display:flex/none` from `isOpen`. Build + lint green. Deviation: Task 1's PillNav.tsx was captured in the parallel 05-02 Hero commit (`908e256`) due to Wave 2 sibling-directory staging; content is correct and matches plan, documented in 05-03 SUMMARY. Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder + the standalone LanguageSwitcher.
 
 ## Performance Metrics
 
@@ -176,7 +182,11 @@ Phase 5 in progress. Plan 05-03 (PillNav + MobileNav) shipped 2026-06-13. `src/c
 - Whether HeroBackdrop should re-mount or just swap when `useFallback` flips at runtime (e.g. user toggles OS reduced-motion mid-session) — resolved direction in plan 04-02
 - Symmetric fade-in on scroll-back remount of Plasma — polish item flagged in 04-RESEARCH §Open Questions, decide during 04-03 browser checkpoint
 
+## Blockers / Carried Concerns
+
+None.
+
 ## Session Continuity
 
-Last session: 2026-06-13
-Stopped at: Completed Plan 05-03 (PillNav + MobileNav). Wave 2 of Phase 5 now closed — Hero, PillNav, and MobileNav all built. Next: Plan 05-04 — mount Hero + PillNav + MobileNav into App.tsx, pass `heroRef` from the Hero section down to both nav components, retire the Phase 4 plasma test harness placeholder, and remove the standalone `<LanguageSwitcher />` block (now composed inside the nav components).
+Last session: 2026-06-14
+Stopped at: Phase 6 all 6 plans executed. About section redesigned (two-column + career arc + stats + PlasmaFallback). Section entrance animations on About/Projects/Stack/Contact. STATE.md updated. Next: browser verification pass + 06-06-SUMMARY.md.
