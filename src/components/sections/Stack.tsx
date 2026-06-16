@@ -4,7 +4,6 @@ import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { STACK, STACK_ORDER } from '@/components/stack/stack-registry'
 import { StackIcon } from '@/components/stack/StackIcon'
-import { PlasmaFallback } from '@/components/plasma/PlasmaFallback'
 
 const STACK_STYLES = `
 .bands-grid {
@@ -165,14 +164,31 @@ export function Stack() {
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.18,
           pointerEvents: 'none',
-          maskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+          background:
+            'radial-gradient(ellipse at 100% 50%, rgba(74,31,204,0.22) 0%, rgba(74,31,204,0.14) 18%, rgba(74,31,204,0.06) 35%, rgba(74,31,204,0) 52%)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
         }}
-      >
-        <PlasmaFallback />
-      </div>
+      />
+
+      {/* Horizontal scanlines */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          backgroundImage:
+            'repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(255,255,255,0.009) 5px, rgba(255,255,255,0.009) 6px)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+        }}
+      />
 
       <div
         style={{ position: 'relative', zIndex: 1, maxWidth: 'min(90rem, 88vw)', margin: '0 auto' }}

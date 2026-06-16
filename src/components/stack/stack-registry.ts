@@ -14,7 +14,6 @@ import {
   SiGooglecloud,
   SiGoogledrive,
   SiGoogleanalytics,
-  SiGooglesearchconsole,
   SiRailway,
   SiPerplexity,
   SiJson,
@@ -30,6 +29,7 @@ import { StackApify } from './StackApify'
 import { StackOpenAI } from './StackOpenAI'
 import { StackGHL } from './StackGHL'
 import { StackBuzz } from './StackBuzz'
+import { StackSearchConsole } from './StackSearchConsole'
 
 export type StackCategory = 'automation' | 'ai' | 'infrastructure' | 'development' | 'data'
 
@@ -266,7 +266,7 @@ export const STACK: readonly StackEntry[] = [
     id: 'searchconsole',
     name: 'Search Console',
     category: 'data',
-    Icon: SiGooglesearchconsole,
+    Icon: StackSearchConsole,
     url: 'https://search.google.com/search-console',
     brandColor: '#458CF5',
   },

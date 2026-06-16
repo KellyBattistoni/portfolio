@@ -93,9 +93,50 @@ export function Projects() {
       ref={sectionRef}
       id="work"
       aria-label={t('title')}
-      style={{ minHeight: '100vh', padding: '6rem 1.5rem', position: 'relative' }}
+      style={{
+        minHeight: '100vh',
+        padding: '6rem 1.5rem',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
     >
       <style>{PROJECTS_STYLE}</style>
+
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background:
+            'radial-gradient(ellipse at 50% 0%, rgba(74,31,204,0.18) 0%, rgba(74,31,204,0.155) 8%, rgba(74,31,204,0.129) 16%, rgba(74,31,204,0.103) 24%, rgba(74,31,204,0.079) 32%, rgba(74,31,204,0.057) 40%, rgba(74,31,204,0.038) 48%, rgba(74,31,204,0.022) 56%, rgba(74,31,204,0.010) 63%, rgba(74,31,204,0.003) 69%, rgba(74,31,204,0) 74%)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+        }}
+      />
+
+      {/* Perspective grid — lines converge toward bottom horizon */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-30%',
+          right: '-30%',
+          bottom: 0,
+          height: '65%',
+          transformOrigin: 'bottom center',
+          transform: 'perspective(350px) rotateX(60deg)',
+          backgroundImage:
+            'linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), ' +
+            'linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+          maskImage: 'linear-gradient(to top, black 0%, transparent 70%)',
+          WebkitMaskImage: 'linear-gradient(to top, black 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ maxWidth: 'min(90rem, 88vw)', margin: '0 auto 4rem' }}>

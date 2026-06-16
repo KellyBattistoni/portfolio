@@ -83,6 +83,7 @@ const CONTACT_STYLES = `
   cursor: pointer;
   transition: color 0.2s ease;
 }
+.cv-lang-btn:hover { color: rgba(255,255,255,0.85); }
 .cv-lang-btn[aria-checked="true"] { color: rgba(255,255,255,1); }
 .cv-lang-btn::after {
   content: '';
@@ -223,10 +224,50 @@ export function Contact() {
       ref={sectionRef}
       id="contact"
       aria-label={t('heading')}
-      style={{ minHeight: '100vh', padding: '6rem 1.5rem', display: 'flex', alignItems: 'center' }}
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        padding: '6rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
+      }}
     >
       <style>{CONTACT_STYLES}</style>
-      <div style={{ maxWidth: 'min(90rem, 88vw)', margin: '0 auto', width: '100%' }}>
+
+      {/* Rising ember glow from the bottom */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(to top, rgba(255,69,0,0.18) 0%, rgba(255,69,0,0.155) 7%, rgba(255,69,0,0.129) 14%, rgba(255,69,0,0.105) 21%, rgba(255,69,0,0.083) 28%, rgba(255,69,0,0.063) 35%, rgba(255,69,0,0.045) 42%, rgba(255,69,0,0.030) 49%, rgba(255,69,0,0.017) 56%, rgba(255,69,0,0.007) 63%, rgba(255,69,0,0.001) 69%, rgba(255,69,0,0) 73%), ' +
+            'linear-gradient(to bottom, rgba(74,31,204,0.10) 0%, rgba(74,31,204,0.078) 8%, rgba(74,31,204,0.058) 16%, rgba(74,31,204,0.040) 24%, rgba(74,31,204,0.025) 33%, rgba(74,31,204,0.013) 42%, rgba(74,31,204,0.005) 51%, rgba(74,31,204,0) 58%)',
+          pointerEvents: 'none',
+        }}
+      />
+      {/* Grain overlay dithers the gradient to prevent banding */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.75" type="fractalNoise" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)" opacity="0.05"/></svg>')}")`,
+          backgroundSize: '200px 200px',
+          opacity: 0.4,
+          pointerEvents: 'none',
+        }}
+      />
+
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: 'min(90rem, 88vw)',
+          margin: '0 auto',
+          width: '100%',
+        }}
+      >
         <div className="contact-columns">
           {/* Left: copy */}
           <div>
@@ -285,7 +326,7 @@ export function Contact() {
                 <span className="contact-method-rule" aria-hidden="true" />
               </div>
               <div data-method-content>
-                <a href="mailto:kelly@seomarketing.com" className="contact-email-link">
+                <a href="mailto:kellybattistoniv@gmail.com" className="contact-email-link">
                   {t('email.label')}
                 </a>
               </div>
@@ -316,15 +357,13 @@ export function Contact() {
                 <span className="contact-method-rule" aria-hidden="true" />
               </div>
               <div data-method-content>
-                <div
-                  role="radiogroup"
-                  aria-label={t('cv.method')}
-                  className="cv-lang-group"
-                >
+                <div role="radiogroup" aria-label={t('cv.method')} className="cv-lang-group">
                   {(['en', 'es'] as const).map((lang) => (
                     <button
                       key={lang}
-                      ref={(el) => { langBtnRefs.current[lang] = el }}
+                      ref={(el) => {
+                        langBtnRefs.current[lang] = el
+                      }}
                       type="button"
                       role="radio"
                       aria-checked={cvLang === lang}

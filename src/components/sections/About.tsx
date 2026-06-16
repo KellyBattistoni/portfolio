@@ -2,7 +2,8 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
-import { PlasmaFallback } from '@/components/plasma/PlasmaFallback'
+
+const GRAIN_BG = `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><filter id="n"><feTurbulence baseFrequency="0.75" type="fractalNoise" numOctaves="4" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(#n)" opacity="0.05"/></svg>')}")`
 
 const ARC_NODES = [
   { key: 'node1', isCurrent: false },
@@ -177,14 +178,33 @@ export function About() {
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: 0.28,
           pointerEvents: 'none',
-          maskImage: 'linear-gradient(to bottom, transparent 0%, black 30%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 30%)',
+          background:
+            'radial-gradient(ellipse at 15% 50%, rgba(255,69,0,0.18) 0%, rgba(255,69,0,0.12) 20%, rgba(255,69,0,0.05) 40%, rgba(255,69,0,0) 58%), ' +
+            'radial-gradient(ellipse at 85% 40%, rgba(74,31,204,0.16) 0%, rgba(74,31,204,0.10) 20%, rgba(74,31,204,0.04) 40%, rgba(74,31,204,0) 58%)',
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
         }}
-      >
-        <PlasmaFallback />
-      </div>
+      />
+
+      {/* Film grain — SVG fractal noise tiled at 200px */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          backgroundImage: GRAIN_BG,
+          backgroundSize: '200px 200px',
+          opacity: 0.35,
+          maskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+          WebkitMaskImage:
+            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+        }}
+      />
 
       <div style={{ position: 'relative', zIndex: 1, width: '90vw', margin: '0 auto' }}>
         <div className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-2 md:items-center">
