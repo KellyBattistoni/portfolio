@@ -1,33 +1,31 @@
 /**
- * MobileNav — mobile hamburger trigger + GSAP-timeline side panel.
+ * MobileNav — mobile glass-pill nav + GSAP-timeline side panel.
  *
- * Renders a fixed top-right hamburger button that fades in at the same 70%
- * hero-scroll threshold as PillNav (shared trigger anchor: `heroRef`). Tapping
- * the trigger toggles a right-edge side panel via a paused GSAP timeline
- * (`tlRef.current.reversed()` flip pattern) — no useState drives the
- * animation. The timeline is built once inside `useGSAP`; the only React
- * state, `isOpen`, exists for `aria-expanded` + icon swap (☰ / ×).
+ * Mirrors PillNav's glass-pill container (same styles, same 40% scroll trigger).
+ * On load the pill shows EN/ES only; at 40% hero scroll the hamburger wrapper
+ * expands left (maxWidth: 0 → 80px, 0.2s) then fades in (opacity: 0 → 1, 0.3s),
+ * exactly matching PillNav's nav-items entrance.
+ *
+ * Tapping the hamburger toggles a right-edge side panel via a paused GSAP
+ * timeline (`tl.reversed()` flip pattern). The timeline is built once inside
+ * `useGSAP`; `isOpen` state exists for `aria-expanded` + icon swap (☰ / ×) only.
  *
  * Timeline structure:
  *   t=0     : panel slides x: 100% → 0%   (0.4s, power3.out)
  *   t=0.25s : nav items fade-up stagger (0.08s per item, 0.35s each, '-=0.15')
  *
- * Toggle handler reads `tl.reversed()`, flips it, and pushes the new boolean
- * into React state so the icon/aria stay in sync with the underlying timeline.
- * On close, the timeline reverses; `setTimeout(150)` deferred scrollIntoView
- * lets the close animation start before the page begins scrolling.
+ * Initialisation: tl.seek(0).reversed(true).paused(false) — NOT tl.reverse(0).
+ * reverse(0) contains `seek(0 || totalDuration())` which resolves to totalDuration
+ * (JS falsy 0), playing the close animation on load. seek(0) bypasses that.
  *
- * Reduced motion: when `prefersReducedMotion` is true, no timeline is built
- * and no scroll-trigger animation fires. The panel toggles open/closed via
- * a `display: flex` / `display: none` style switch (driven by `isOpen` state
- * via a conditional spread on the panel `style`). The hamburger trigger is
- * visible from first paint (no fade-in animation).
+ * Reduced motion: no GSAP runs. Hamburger wrapper is visible from first paint
+ * (no maxWidth constraint set). Panel toggles via display:flex / display:none.
  *
  * GSAP imports route through `@/lib/gsap` so plugins stay registered exactly
  * once at module level (see `src/lib/gsap.ts`).
  */
 
-import { useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
@@ -50,22 +48,37 @@ export function MobileNav({ heroRef }: MobileNavProps) {
   const { t } = useTranslation('common')
   const { prefersReducedMotion } = useDeviceCapabilities()
 
-  // `isOpen` is for aria-expanded + ☰/× icon swap ONLY. It is intentionally
-  // NOT included in the useGSAP dependency array — the timeline is built once
-  // and only its `reversed()` direction is flipped on toggle.
   const [isOpen, setIsOpen] = useState(false)
+  // Drives pill background opacity separately from isOpen so it can be
+  // delayed on close (fade in only after the panel finishes sliding out).
+  const [pillBgHidden, setPillBgHidden] = useState(false)
+
+  // Lock body scroll while panel is open.
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isOpen])
+
+  // Pill background: hide immediately on open, restore after close animation.
+  useEffect(() => {
+    if (isOpen) {
+      setPillBgHidden(true)
+    } else {
+      const timer = setTimeout(() => setPillBgHidden(false), 800)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLButtonElement>(null)
+  const hamburgerWrapRef = useRef<HTMLDivElement>(null)
   const panelRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
   const tlRef = useRef<gsap.core.Timeline | null>(null)
 
   const { contextSafe } = useGSAP(
     () => {
-      // Reduced-motion: skip all GSAP work. Trigger renders visible from first
-      // paint, and the panel open/close is handled below via a display style
-      // toggle driven by `isOpen`.
       if (prefersReducedMotion) return
 
       const mm = gsap.matchMedia()
@@ -73,25 +86,24 @@ export function MobileNav({ heroRef }: MobileNavProps) {
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (!heroRef.current) return
 
-        // Hamburger entrance — same 70% hero-scroll threshold as PillNav.
-        gsap.set(triggerRef.current, { autoAlpha: 0 })
-        gsap.to(triggerRef.current, {
-          autoAlpha: 1,
-          duration: 0.4,
-          ease: 'power2.out',
+        // Hamburger entrance — matches PillNav exactly: 40% scroll, expand then fade.
+        gsap.set(hamburgerWrapRef.current, { maxWidth: 0, opacity: 0 })
+        const entranceTl = gsap.timeline({
           scrollTrigger: {
             trigger: heroRef.current,
-            start: '70% top',
+            start: '40% top',
             once: true,
           },
         })
+        entranceTl
+          .to(hamburgerWrapRef.current, { maxWidth: 80, duration: 0.2, ease: 'power2.out' })
+          .to(hamburgerWrapRef.current, { opacity: 1, duration: 0.3, ease: 'power2.out' })
 
-        // Side-panel timeline — starts paused + off-screen right. The toggle
-        // handlers flip `reversed()` to play/reverse without rebuilding.
-        gsap.set(panelRef.current, { x: '100%' })
+        // Side-panel timeline — starts paused + off-screen right.
+        gsap.set(panelRef.current, { x: '100%', autoAlpha: 1 })
         const tl = gsap
           .timeline({ paused: true })
-          .to(panelRef.current, { x: '0%', duration: 0.4, ease: 'power3.out' })
+          .to(panelRef.current, { x: 0, duration: 0.4, ease: 'power3.out' })
           .from(
             itemRefs.current.filter(Boolean),
             {
@@ -103,9 +115,7 @@ export function MobileNav({ heroRef }: MobileNavProps) {
             },
             '-=0.15'
           )
-        // Park the timeline at t=0 in reversed direction so the first
-        // `tl.reversed(!tl.reversed())` call plays it forward (open).
-        tl.reverse(0)
+        tl.seek(0).reversed(true).paused(false)
         tlRef.current = tl
 
         return () => {
@@ -122,21 +132,13 @@ export function MobileNav({ heroRef }: MobileNavProps) {
     { scope: containerRef, dependencies: [prefersReducedMotion] }
   )
 
-  // Toggle handlers are wrapped in contextSafe so any tweens they spawn (and
-  // the underlying timeline play state) revert cleanly with the GSAP context
-  // on unmount.
   const handleToggle = contextSafe(() => {
     const tl = tlRef.current
     if (tl) {
-      // `tl.reversed()` returns the CURRENT direction. Flipping it via
-      // `tl.reversed(!tl.reversed())` triggers play forward if currently
-      // reversed (closed → opening), or reverse if currently forward
-      // (open → closing). `nextOpen` reflects the post-flip state.
       const nextOpen = tl.reversed()
       tl.reversed(!tl.reversed())
       setIsOpen(nextOpen)
     } else {
-      // Reduced-motion fallback — instant toggle via display style.
       setIsOpen((prev) => !prev)
     }
   })
@@ -149,9 +151,6 @@ export function MobileNav({ heroRef }: MobileNavProps) {
     setIsOpen(false)
   })
 
-  // Nav-link click — close panel first, then scroll. The 150ms defer lets the
-  // close animation start before scrollIntoView fires so the user sees the
-  // panel collapse, not a snap-and-scroll combo.
   const handleNavClick = contextSafe((href: string) => {
     handleClose()
     setTimeout(() => {
@@ -162,55 +161,83 @@ export function MobileNav({ heroRef }: MobileNavProps) {
 
   return (
     <>
-      {/* Language switcher — always visible from page load, independent of hamburger threshold */}
-      <div
+      {/* Single glass-pill nav — mirrors PillNav styling exactly.
+          Pill is visible from first paint (EN/ES always shown);
+          hamburger wrapper expands in at 40% scroll. */}
+      <nav
+        aria-label={t('nav.ariaLabel')}
         style={{
           position: 'fixed',
-          top: '1.25rem',
-          right: '1.25rem',
+          top: '1.5rem',
+          right: '1.5rem',
           zIndex: 60,
-          background: 'rgba(0,0,0,0.45)',
+          display: 'flex',
+          alignItems: 'center',
+          background: pillBgHidden ? 'rgba(0,0,0,0)' : 'rgba(0,0,0,0.45)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.08)',
+          borderWidth: '1px',
+          borderStyle: 'solid',
+          borderColor: pillBgHidden ? 'rgba(255,255,255,0)' : 'rgba(255,255,255,0.08)',
           borderRadius: '9999px',
-          padding: '0.4rem 0.75rem',
+          padding: '0.4rem 1rem',
+          transition: 'background 0.3s ease, border-color 0.3s ease',
         }}
       >
-        <LanguageSwitcher className="flex gap-3" />
-      </div>
-
-      <div ref={containerRef}>
-        {/* Hamburger — animates in at 70% hero scroll, positioned left of lang pill */}
-        <button
-          ref={triggerRef}
-          type="button"
-          onClick={handleToggle}
-          aria-expanded={isOpen}
-          aria-label={isOpen ? 'Close menu' : 'Open menu'}
+        {/* Hamburger + separator — collapses to maxWidth:0 on load (GSAP), expands at 40% scroll.
+            Reduced-motion: no GSAP → renders at natural width (hamburger visible from paint). */}
+        <div
+          ref={hamburgerWrapRef}
           style={{
-            position: 'fixed',
-            top: '1.25rem',
-            right: '7.5rem',
-            zIndex: 60,
-            background: 'rgba(0,0,0,0.45)',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '9999px',
-            width: '2.5rem',
-            height: '2.5rem',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            color: 'white',
-            fontSize: '1.1rem',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
           }}
         >
-          {isOpen ? '×' : '☰'}
-        </button>
+          <button
+            type="button"
+            onClick={handleToggle}
+            aria-expanded={isOpen}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: 'white',
+              fontSize: '1.1rem',
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '0.4rem 0.75rem',
+            }}
+          >
+            {isOpen ? '×' : '☰'}
+          </button>
+          <span
+            aria-hidden="true"
+            style={{
+              width: '1px',
+              height: '1rem',
+              background: 'rgba(255,255,255,0.15)',
+              margin: '0 0.5rem',
+              flexShrink: 0,
+            }}
+          />
+        </div>
+        <LanguageSwitcher className="flex gap-3" />
+      </nav>
 
+      {/* Full-viewport overlay — overflow:hidden clips the panel at x:100% */}
+      <div
+        ref={containerRef}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          overflow: 'hidden',
+          pointerEvents: 'none',
+          zIndex: 50,
+        }}
+      >
         {/* Backdrop — closes panel on tap; only rendered while panel is open */}
         {isOpen && (
           <div
@@ -226,28 +253,31 @@ export function MobileNav({ heroRef }: MobileNavProps) {
           />
         )}
 
-        {/* Side panel — slides in from right via GSAP timeline (or display
-          toggle for reduced-motion users) */}
+        {/* Side panel — position:absolute inside overflow:hidden container clips it at x:100% */}
         <div
           ref={panelRef}
+          className="mobile-nav-panel"
           style={{
-            position: 'fixed',
+            position: 'absolute',
+            zIndex: 60,
             top: 0,
             right: 0,
             bottom: 0,
             width: '75vw',
             maxWidth: '320px',
-            zIndex: 50,
             background: '#0a0a0a',
             borderLeft: '1px solid rgba(255,255,255,0.06)',
             padding: '5rem 2rem 3rem',
             display: 'flex',
             flexDirection: 'column',
             gap: '0',
-            // Reduced-motion users get an instant display-toggle open/close.
-            // Non-reduced-motion users always have display:flex; the GSAP
-            // timeline handles the off-screen positioning via `x`.
-            ...(prefersReducedMotion ? { display: isOpen ? 'flex' : 'none' } : {}),
+            pointerEvents: 'auto',
+            ...(prefersReducedMotion
+              ? {
+                  display: isOpen ? 'flex' : 'none',
+                  transform: 'none',
+                }
+              : {}),
           }}
         >
           {NAV_ITEMS.map((item, i) => (
@@ -263,9 +293,11 @@ export function MobileNav({ heroRef }: MobileNavProps) {
               }}
               style={{
                 display: 'block',
-                fontFamily: 'var(--font-display)',
-                fontSize: 'clamp(1.5rem, 6vw, 2rem)',
-                color: 'white',
+                fontFamily: 'var(--font-sans)',
+                fontSize: '0.78rem',
+                letterSpacing: '0.06em',
+                textTransform: 'uppercase',
+                color: 'rgba(255,255,255,0.75)',
                 textDecoration: 'none',
                 padding: '0.75rem 0',
                 borderBottom: '1px solid rgba(255,255,255,0.06)',
@@ -274,7 +306,6 @@ export function MobileNav({ heroRef }: MobileNavProps) {
               {t(`nav.${item.key satisfies NavItemKey}` as const)}
             </a>
           ))}
-          <LanguageSwitcher className="mt-6 flex gap-4" />
         </div>
       </div>
     </>

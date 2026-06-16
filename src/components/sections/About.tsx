@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
@@ -23,7 +23,18 @@ export function About() {
   const arcLineRef = useRef<HTMLDivElement>(null)
   const arcNodeRefs = useRef<(HTMLDivElement | null)[]>([])
   const dotRefs = useRef<(HTMLDivElement | null)[]>([])
+  const statsLineRef = useRef<HTMLDivElement>(null)
   const statsRef = useRef<HTMLDivElement>(null)
+  const tlRef = useRef<gsap.core.Timeline | null>(null)
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      if ((e as CustomEvent<string>).detail !== '#about') return
+      tlRef.current?.restart()
+    }
+    window.addEventListener('section:replay', handler)
+    return () => window.removeEventListener('section:replay', handler)
+  }, [])
 
   useGSAP(
     () => {
@@ -43,28 +54,23 @@ export function About() {
         const NO_GLOW = '0 0 0 0px rgba(255,69,0,0), 0 0 0px 0px rgba(255,69,0,0)'
         const SOFT_GLOW = '0 0 0 4px rgba(255,69,0,0.15), 0 0 20px 6px rgba(255,69,0,0.25)'
 
-        // --- initial states ---
-        gsap.set(accentLineRef.current, { scaleX: 0, transformOrigin: 'left center' })
-        gsap.set(headingRef.current, { opacity: 0, y: 30 })
-        gsap.set([para1Ref.current, para2Ref.current, para3Ref.current], { opacity: 0, y: 20 })
-        gsap.set(arcLineRef.current, { scaleY: 0, transformOrigin: 'top center' })
-        gsap.set(nodes, { opacity: 0, y: 18 })
-        gsap.set(dots, { boxShadow: NO_GLOW })
-        gsap.set(statItems, { opacity: 0, y: 16 })
-
         // Timing contract (all offsets from 'start' label):
         //   P1: 0 → 0.75   P2: 0.50 → 1.25   P3: 1.00 → 1.75
         //   T1: 0 → 0.70   T2: 0.30 → 1.00   T3: 0.60 → 1.25  (T3 end = P2 end ✓)
         //   S1 starts at 1.00 (= P3 start ✓)
         //   Dot expands strictly sequential: T1 @ 0, T2 @ 0.35, T3 @ 0.70
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: 'top 70%',
-            once: true,
-          },
-        })
+        gsap.set(accentLineRef.current, { scaleX: 0, transformOrigin: 'left center' })
+        gsap.set(headingRef.current, { opacity: 0, y: 30 })
+        gsap.set([para1Ref.current, para2Ref.current, para3Ref.current], { opacity: 0, y: 20 })
+        gsap.set(arcLineRef.current, { scaleY: 0, transformOrigin: 'top center' })
+        gsap.set(nodes, { opacity: 0, y: 18 })
+        gsap.set(dots, { boxShadow: NO_GLOW })
+        gsap.set(statsLineRef.current, { scaleX: 0, transformOrigin: 'center' })
+        gsap.set(statItems, { opacity: 0, y: 16 })
+
+        const tl = gsap.timeline({ paused: true })
+        tlRef.current = tl
 
         tl
           // Accent line + heading — heading overlaps, 'start' fires while heading is mid-way in
@@ -74,8 +80,16 @@ export function About() {
 
           // Left column ──────────────────────────────────────────
           .to(para1Ref.current, { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' }, 'start')
-          .to(para2Ref.current, { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' }, 'start+=0.5')
-          .to(para3Ref.current, { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' }, 'start+=1.0')
+          .to(
+            para2Ref.current,
+            { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' },
+            'start+=0.5'
+          )
+          .to(
+            para3Ref.current,
+            { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out' },
+            'start+=1.0'
+          )
 
           // Right column — nodes fade in ─────────────────────────
           .to(nodes[0], { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, 'start')
@@ -87,16 +101,53 @@ export function About() {
           // Dot expand/glow — sequential: each expand starts when previous ends ─
           // T1: expand → settle (back to normal — past moment)
           .to(dots[0], { scale: 2.0, boxShadow: GLOW, duration: 0.35, ease: 'power2.out' }, 'start')
-          .to(dots[0], { scale: 1, boxShadow: NO_GLOW, duration: 0.55, ease: 'power2.inOut' }, 'start+=0.35')
+          .to(
+            dots[0],
+            { scale: 1, boxShadow: NO_GLOW, duration: 0.55, ease: 'power2.inOut' },
+            'start+=0.35'
+          )
           // T2: expand → settle
-          .to(dots[1], { scale: 2.0, boxShadow: GLOW, duration: 0.35, ease: 'power2.out' }, 'start+=0.35')
-          .to(dots[1], { scale: 1, boxShadow: NO_GLOW, duration: 0.55, ease: 'power2.inOut' }, 'start+=0.7')
+          .to(
+            dots[1],
+            { scale: 2.0, boxShadow: GLOW, duration: 0.35, ease: 'power2.out' },
+            'start+=0.35'
+          )
+          .to(
+            dots[1],
+            { scale: 1, boxShadow: NO_GLOW, duration: 0.55, ease: 'power2.inOut' },
+            'start+=0.7'
+          )
           // T3 (Now): expand → spring back but keeps its glow
-          .to(dots[2], { scale: 1.7, boxShadow: GLOW, duration: 0.35, ease: 'power2.out' }, 'start+=0.7')
-          .to(dots[2], { scale: 1, boxShadow: SOFT_GLOW, duration: 0.6, ease: 'elastic.out(1,0.4)' }, 'start+=1.05')
+          .to(
+            dots[2],
+            { scale: 1.7, boxShadow: GLOW, duration: 0.35, ease: 'power2.out' },
+            'start+=0.7'
+          )
+          .to(
+            dots[2],
+            { scale: 1, boxShadow: SOFT_GLOW, duration: 0.6, ease: 'elastic.out(1,0.4)' },
+            'start+=1.05'
+          )
 
+          // Stats divider line: expands from center before numbers appear
+          .to(
+            statsLineRef.current,
+            { scaleX: 1, duration: 0.55, ease: 'power2.out' },
+            'start+=0.85'
+          )
           // Stats: S1 starts exactly when P3 starts (start+1.0)
-          .to(statItems, { opacity: 1, y: 0, duration: 0.55, stagger: 0.14, ease: 'power2.out' }, 'start+=1.0')
+          .to(
+            statItems,
+            { opacity: 1, y: 0, duration: 0.55, stagger: 0.14, ease: 'power2.out' },
+            'start+=1.0'
+          )
+
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: 'top 90%',
+          toggleActions: 'play none none reverse',
+          animation: tl,
+        })
 
         return () => {
           ScrollTrigger.getAll().forEach((t) => t.kill())
@@ -114,7 +165,10 @@ export function About() {
       aria-label={t('title')}
       style={{
         position: 'relative',
-        padding: '3rem 1.5rem 6rem',
+        minHeight: '100vh',
+        padding: '6rem 1.5rem',
+        display: 'flex',
+        alignItems: 'center',
         backgroundColor: 'var(--color-brand-bg)',
       }}
     >
@@ -132,7 +186,7 @@ export function About() {
         <PlasmaFallback />
       </div>
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '72rem', margin: '0 auto' }}>
+      <div style={{ position: 'relative', zIndex: 1, width: '90vw', margin: '0 auto' }}>
         <div className="grid grid-cols-1 gap-x-16 gap-y-12 md:grid-cols-2 md:items-center">
           {/* Left: prose */}
           <div>
@@ -158,10 +212,16 @@ export function About() {
             >
               {t('title')}
             </h2>
-            <p ref={para1Ref} style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+            <p
+              ref={para1Ref}
+              style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '1rem' }}
+            >
               {t('paragraph1')}
             </p>
-            <p ref={para2Ref} style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+            <p
+              ref={para2Ref}
+              style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: '1rem' }}
+            >
               {t('paragraph2')}
             </p>
             <p ref={para3Ref} style={{ fontSize: '1.125rem', lineHeight: 1.6, marginBottom: 0 }}>
@@ -191,7 +251,9 @@ export function About() {
                 {ARC_NODES.map((node, i) => (
                   <div
                     key={node.key}
-                    ref={(el) => { arcNodeRefs.current[i] = el }}
+                    ref={(el) => {
+                      arcNodeRefs.current[i] = el
+                    }}
                     style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}
                   >
                     <div
@@ -204,7 +266,9 @@ export function About() {
                       }}
                     >
                       <div
-                        ref={(el) => { dotRefs.current[i] = el }}
+                        ref={(el) => {
+                          dotRefs.current[i] = el
+                        }}
                         style={{
                           width: node.isCurrent ? '12px' : '8px',
                           height: node.isCurrent ? '12px' : '8px',
@@ -263,15 +327,23 @@ export function About() {
               </div>
             </div>
 
-            {/* Stats — below arc, border-top creates visual separation */}
+            {/* Stats — below arc, animated line creates visual separation */}
+            <div
+              ref={statsLineRef}
+              aria-hidden="true"
+              style={{
+                height: '1px',
+                background: 'rgba(255,255,255,0.07)',
+                marginTop: '2.5rem',
+                transformOrigin: 'center',
+              }}
+            />
             <div
               ref={statsRef}
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                marginTop: '2.5rem',
                 paddingTop: '2rem',
-                borderTop: '1px solid rgba(255,255,255,0.07)',
               }}
             >
               {(['continents', 'automations', 'years'] as const).map((key) => (

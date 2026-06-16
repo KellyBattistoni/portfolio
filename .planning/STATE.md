@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 6 — About section animation pass complete; Phase 6 closure still pending SUMMARY write
+**Current focus:** Phase 6 — Bidirectional scroll animations + all polish complete; Phase 6 closure still pending SUMMARY write
 
 ## Current Position
 
-Phase: 6 of 8 (Content Sections) — Polish complete, awaiting 06-06 SUMMARY + formal closure
-Plan: 6 of 6 implemented + visual polish iteration done 2026-06-15
-Status: All 6 plans executed + post-plan polish pass complete. Hero→About scrubbed transition wired (contentRef pattern, synced to nameRef fadeout at `start: 'top 65%'`). About→Projects same pattern. Dot-grid moved to global body CSS (Projects/Stack/Contact all draw from body background seamlessly). About: explicit `backgroundColor: #050505` covers dots during transition; PlasmaFallback restored with `mask-image` top fade to kill hard seam. Timeline connecting-line overlap with stats border fixed (scoped to arc nodes wrapper). About top padding reduced 6rem→3rem so full content fits in one viewport. LinkedIn URL still placeholder — Phase 7 item.
-Last activity: 2026-06-15 — Visual polish pass: section transitions, dot-grid unification, About layout fixes.
+Phase: 6 of 8 (Content Sections) — Full animation + interaction polish pass complete, awaiting 06-06 SUMMARY + formal closure
+Plan: 6 of 6 implemented + three animation/polish passes done 2026-06-15
+Status: All 6 plans executed + full bidirectional scroll animation system built. Each section (About, Projects, Stack, Contact) now has: accent line scaleX draw → h2 rise, then section-specific stagger — all BIDIRECTIONAL (reverse on scroll up, replay on scroll down). Two-trigger architecture per section: enter trigger (top 90%) + reverse trigger (top 35%, requires `onEnter: () => {}` to activate onLeaveBack). Re-entry logic: mid-reverse → `tl.reversed(false).play()`; fully reversed → `tl.restart()`; completed forward or replay → no-op. PillNav links dispatch `section:replay` CustomEvent → each section listens via `useEffect` + `tlRef.current?.restart()`. Stats separator line in About animates scaleX 0→1 from center. Contact padding bumped to `6rem 1.5rem 10rem` to give enough scroll depth for h2 alignment. PillNav: h2-normalized scroll (all sections land at 73px from top), ghost-hover-after-click bug fixed (explicit onMouseLeave on click), IntersectionObserver clears activeHref to '' when no sections visible (fixes orange underline persisting in hero). Hero CTA: fill hover + press-scale click effect wired via contextSafe GSAP handlers. LinkedIn URL still placeholder — Phase 7 item.
+Last activity: 2026-06-15 — Bidirectional scroll animations + PillNav + CTA interaction polish.
 
 Progress: [████████░░] 80% (20 of ~24 expected plans)
 
@@ -31,7 +31,7 @@ Progress: [████████░░] 80% (20 of ~24 expected plans)
 
 ## Active Work
 
-About section animation pass complete (2026-06-14). Full GSAP timeline in `src/components/sections/About.tsx`: accent line scaleX draw → heading rises → paragraphs cascade left, arc nodes reveal sequentially right. Timing contract: P1.start=T1.start, P2.end=T3.end (both at start+1.25s), P3.start=S1.start (start+1.0s). Connecting line draws continuously for full T1→T3 window (1.25s, power1.inOut). Dot expand/glow strictly sequential: T1 expands at start+0, T2 at start+0.35, T3 at start+0.70 — each begins when previous expand ends. T3 keeps SOFT_GLOW; T1/T2 return to NO_GLOW. Heading preamble overlaps with paragraphs via `addLabel('start', '-=0.45')` to eliminate felt delay. All durations cinematic (0.7–0.8s). Build + types green.
+All Phase 6 sections complete with full cinematic GSAP animations and bidirectional scroll behavior. About.tsx: accent line → heading → left paragraphs cascade + right arc nodes reveal + dot expand/glow + stats line scaleX + stat items stagger. Projects.tsx: accent line → heading → left cards stagger + right cards +0.15s offset. Stack.tsx: accent line → heading → category labels slide in (x) + tiles stagger 0.04s. Contact.tsx: accent line → heading → invite → links → CV group sequential. All use two-trigger bidirectional pattern (enter top 90%, reverse top 35%). PillNav: smooth-scrolls to normalized h2 position (73px from viewport top), IntersectionObserver tracks active section, ghost-hover and underline-in-hero bugs fixed. Hero CTA: fill hover animation + press-scale click.
 
 Still needs: write 06-06-SUMMARY.md and formally close Phase 6 before starting Phase 7.
 
@@ -188,5 +188,5 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-06-14
-Stopped at: Phase 6 all 6 plans executed. About section redesigned (two-column + career arc + stats + PlasmaFallback). Section entrance animations on About/Projects/Stack/Contact. STATE.md updated. Next: browser verification pass + 06-06-SUMMARY.md.
+Last session: 2026-06-15
+Stopped at: Bidirectional scroll animations + PillNav/CTA polish complete across all sections. User ending session — next session should write 06-06-SUMMARY.md and close Phase 6, then plan/execute Phase 7.

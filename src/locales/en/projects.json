@@ -5,45 +5,63 @@
     "solution": "Solution",
     "result": "Result",
     "tech": "Stack",
-    "expand": "Read more",
+    "expand": "Show more",
     "collapse": "Show less"
   },
   "cards": {
     "project1": {
-      "title": "Lead-handoff orchestration",
-      "context": "Mid-sized SEO agency, marketing operations",
-      "outcome": "Lead-to-sales latency cut from 18min to <2min, 24/7",
-      "tech": ["Make.com", "n8n", "Airtable", "Notion"],
-      "problem": "Inbound leads slipped between forms, CRMs, and inbox triage. First-touch SLA broke on 40% of nights and weekends, and weekend traffic was effectively a dead zone.",
-      "solution": "Single n8n pipeline normalized every inbound source, scored intent, routed to the rep on rotation, and posted a Claude-drafted opener into the rep's tool of choice — Notion for some, Airtable for others.",
-      "result": "First-touch SLA hit 99% across all hours. Inbox triage stopped being a job. Weekend conversion caught up to weekday."
+      "title": "Signal-first outbound engine",
+      "context": "B2B sales and marketing, outbound operations",
+      "outcome": "$2M deal closed by one client; response and conversion rates up across the board",
+      "tech": ["n8n", "Make.com", "Anthropic", "OpenAI", "Perplexity", "Apify", "Google Workspace", "Anymailfinder"],
+      "problem": "B2B sales teams were sending cold outreach to thousands of contacts with no signal that those people had a real reason to respond. Manually researching companies, finding buying committees, and writing personalized messages was too slow to scale. Most teams chose volume over relevance and paid for it in conversion rates.",
+      "solution": "Two tools built to find signal before a single message was sent. The Demand Intel Tool scraped job posting sites and press releases, compared job descriptions against the client's product offering and ICP to surface companies with a gap the client could fill. The Connect IQ started from B2B prospecting platforms and conducted deeper research on each company and their press releases to find the same gaps without relying on a hiring signal. Both tools then identified the buying committee, researched each person, and generated highly customized outreach sequences ready to send. Anthropic handled the heavy analysis, OpenAI covered lighter tasks, Perplexity powered the research, Apify did the scraping, Anymailfinder verified every email, and Google Workspace stored and classified every lead.",
+      "result": "Outreach shrank from 10,000 untargeted contacts to 3,000 people with an actual reason to respond. Response and conversion rates climbed. One client closed a $2M deal. The sales team stopped guessing and started selling to people who were already in the market."
     },
     "project2": {
-      "title": "Content production pipeline",
-      "context": "SEO agency, content operations",
-      "outcome": "Brief-to-publish time down from 6 days to under 36 hours",
-      "tech": ["n8n", "Claude / MCP", "Notion", "GitHub"],
-      "problem": "Briefs sat in Notion for days waiting for a writer, then waited again for editorial review, then again for SEO QA. Each handoff added a calendar day; the chain was longer than the work.",
-      "solution": "Claude with MCP read each brief, drafted a first pass against brand-voice memory, ran on-page SEO checks against a custom ruleset, and surfaced the result in Notion already flagged for the right human reviewer — writer, editor, or SEO lead.",
-      "result": "Brief-to-publish dropped to under 36 hours. Writers spent their time on the 30% that needed a human, not the 70% that didn't."
+      "title": "ABM knowledge agent",
+      "context": "SEOMarketing.com, internal knowledge operations",
+      "outcome": "A private AI product the team could access from anywhere, trained exclusively on proprietary ABM content",
+      "tech": ["Python", "n8n", "Supabase", "Ollama", "OpenAI", "Whisper", "Railway", "GitHub"],
+      "problem": "The agency had built years of proprietary ABM knowledge: courses, videos, audio recordings, documents, and images. None of it was searchable or easy to reach. Extracting value from it meant hunting through folders and sitting through hours of video. The expertise existed. Getting to it was the problem.",
+      "solution": "A Python pipeline ingested the entire library: audio and video transcribed with Whisper, documents and course content extracted and normalized, everything vectorized and stored in Supabase. On top of that knowledge base lived Goku, a custom AI agent built in n8n, deployed on Railway, and accessible from any browser. Users logged in with their credentials, asked questions in plain language, and got answers grounded in the agency's own content. Conversation history was saved and visible, just like any LLM product they were used to.",
+      "result": "The team had a personalized AI expert available online at any time, trained on knowledge no public model had access to. Years of accumulated ABM expertise became a product anyone on the team could actually use."
     },
     "project3": {
-      "title": "Competitor intelligence loop",
-      "context": "B2B SaaS marketing team",
-      "outcome": "Weekly competitor digest produced fully unattended; analyst hours redeployed to strategy",
-      "tech": ["Apify", "Python", "Supabase", "Claude / MCP"],
-      "problem": "Tracking five competitors across pricing pages, release notes, and ad creative was a 4-hour Friday ritual for one analyst. Half the time the diff was trivial; the other half it mattered, and nobody trusted the eyeball method to catch it consistently.",
-      "solution": "Apify scrapers captured each surface on schedule, Python normalized the diffs into Supabase, and Claude wrote a short narrative every Friday morning naming what changed, what didn't, and what to investigate.",
-      "result": "Weekly digest landed unattended. The analyst stopped scraping and started reading; her time moved to the actual strategy work."
+      "title": "Competitive Edge Blueprint MCP server",
+      "context": "Groundwork, AI agent infrastructure",
+      "outcome": "Full competitive intelligence Blueprint accessible to any MCP-compatible client without a human touching a form",
+      "tech": ["Node.js", "TypeScript", "n8n", "Redis", "BullMQ", "Make.com", "Docker", "MCP SDK"],
+      "problem": "The Competitive Edge Blueprint was a powerful n8n workflow that analyzed any company and produced structured competitive intelligence: opportunity gaps, prioritized actions, TAM analysis. But it only ran through a web form. Any AI agent, coding tool, or partner harness that wanted to use it still needed a human to click through the form first.",
+      "solution": "An MCP server in Node.js and TypeScript exposed the Blueprint as three tools: one to trigger a run, one to poll its status, and one to retrieve the full structured JSON results. A Redis and BullMQ job queue managed up to 3 concurrent runs, cached results for 72 hours, and kept status updated through every execution stage. SSE transport served all HTTP clients; stdio worked locally with Claude Desktop and Cursor. Make.com fired Slack notifications on every MCP-triggered run. The whole thing deployed as a Docker container alongside the existing n8n instance.",
+      "result": "Claude Desktop, Cursor, and partner agent harnesses could invoke a full Blueprint run programmatically and retrieve structured JSON results without any human in the loop. The same architecture was designed as the replication template for the other three Blueprint products."
     },
     "project4": {
-      "title": "Client reporting & dashboards ETL",
-      "context": "Marketing agency, account management",
-      "outcome": "Monthly reporting effort per client cut from ~6 hours to ~20 minutes of review",
-      "tech": ["Python", "Docker", "Railway", "Google Cloud", "Supabase"],
-      "problem": "Each account manager hand-pulled GA, Search Console, and ad-platform numbers into a deck every month. Three or four data sources, twelve clients, six hours each — and the deck still didn't tie out half the time.",
-      "solution": "Containerized Python ETL on Railway pulled every source on a schedule into Supabase, with a Google Cloud Run job assembling per-client dashboard snapshots. Account managers got a pre-filled draft with the numbers already reconciled.",
-      "result": "Monthly reporting collapsed to a 20-minute review pass. Numbers tied out. Account managers spent the recovered time on the conversation the client actually wanted."
+      "title": "Multi-location SEO report automation",
+      "context": "SEOMarketing.com, 300+ franchise client",
+      "outcome": "Weekly per-site and monthly executive SEO reports for 100+ locations, fully automated",
+      "tech": ["Make.com", "JavaScript", "Google Analytics", "Search Console", "Data Studio", "Charts API", "OpenAI"],
+      "problem": "911 Restoration operates 300+ franchise locations across the US and Canada. Their SEO agency needed to deliver weekly KPI reports per location and a consolidated executive digest for leadership every month. At 100+ active websites, doing this manually was never realistic. The volume alone made it a full-time job with no room for actual analysis.",
+      "solution": "A Make.com pipeline pulled GA and Search Console data for every location on schedule, generated per-site performance diagrams via Charts API, and had OpenAI write the narrative summaries. Location owners received a branded PDF report by email every week, with a link to a Data Studio dashboard showing KPIs across all locations, updated weekly. The CEO, CFO, and executive team received a consolidated monthly version by email.",
+      "result": "Every location got an accurate weekly performance snapshot without anyone touching a spreadsheet. Leadership got a consistent monthly executive digest. A task that was impossible for one person became fully unattended."
+    },
+    "project5": {
+      "title": "LinkedIn content engine",
+      "context": "Content operations, social media automation",
+      "outcome": "Daily posting presence maintained with 1 hour of review per week",
+      "tech": ["Make.com", "Apify", "OpenAI", "Google Workspace"],
+      "problem": "Posting consistently on a professional network requires time every single day: finding inspiration, writing, editing, scheduling. For someone with a packed schedule, that daily commitment was a real cost even when the strategic value was clear.",
+      "solution": "A Make.com workflow scraped a curated list of professional network profiles and video content platforms on demand, extracted relevant content around chosen topics like SEO, ABM, or sales, and used OpenAI to generate a batch of high-quality post drafts with or without images. When the run finished, an email notification arrived. Inside a Google Spreadsheet, each post could be reviewed, edited, and scheduled with a single button click. The next day at posting time, a confirmation email arrived when the post went live.",
+      "result": "Daily posting became a weekly 1-hour review session. No more daily writing, no more blank page. A consistent, high-quality presence built from real industry content, running on autopilot."
+    },
+    "project6": {
+      "title": "The site you're on",
+      "context": "Personal project",
+      "outcome": "A fully custom, bilingual, animated portfolio designed to feel as precise as the work it showcases",
+      "tech": ["React", "TypeScript", "Vite", "GSAP", "i18next", "GitHub", "Claude"],
+      "problem": "A template portfolio is a contradiction. If your work is about building systems that are exact, intentional, and built for a specific purpose, showing up with a generic theme says the opposite. The portfolio needed to be proof of the same craft it was trying to sell.",
+      "solution": "Built entirely from scratch in React and TypeScript. GSAP drives every motion: a plasma backdrop in the hero, a navigation pill that collapses on load and expands as you scroll into the page, and the project cards you have been opening throughout this section. Fully bilingual in EN and ES, with a custom i18n setup that switches instantly without a page reload. No layout libraries, no shortcuts, no borrowed structure.",
+      "result": "The site itself is the argument. Every animation, every transition, every detail was a deliberate choice. You have been inside the portfolio this whole time."
     }
   }
 }

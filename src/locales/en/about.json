@@ -2,5 +2,27 @@
   "title": "About",
   "paragraph1": "People are taught to pick a lane early and build everything around it. I've always thought that leaves too much on the table. Think of Leonardo da Vinci: a polymath, a man of both science and art, the very symbol of the Renaissance ideal. There's a reason that model still resonates: breadth isn't a distraction, it's how you see things other people miss.",
   "paragraph2": "In practice, it's meant moving from engineering into marketing and SEO, and eventually into building the automations that hold those worlds together. I spent years inside an agency watching good work get buried under spreadsheets nobody fully trusted and manual steps nobody had time to fix. So I started fixing them, and it turned out that was the most interesting work in the room.",
-  "paragraph3": "I'm good at seeing how everything connects, and I tend to care more about the business problem than the technical one. The question I always end up at is: what is this person spending time on that they really shouldn't have to? When the answer is clear, everything else follows."
+  "stats": {
+    "continents": { "value": "4", "suffix": "", "label": "Continents of clients" },
+    "automations": { "value": "30", "suffix": "+", "label": "Automations shipped" },
+    "years": { "value": "2", "suffix": "+", "label": "Years building systems" }
+  },
+  "paragraph3": "I'm good at seeing how everything connects, and I tend to care more about the business problem than the technical one. The question I always end up at is: what is this person spending time on that they really shouldn't have to? When the answer is clear, everything else follows.",
+  "arc": {
+    "node1": {
+      "year": "2020",
+      "role": "Mechanical Engineering",
+      "desc": "B.Eng. 2020–2025. Fluid simulations, FEA, systems thinking."
+    },
+    "node2": {
+      "year": "2024",
+      "role": "AI Automations Manager",
+      "desc": "SEOMarketing.com · 2024–2026. Production pipelines across 4 continents."
+    },
+    "node3": {
+      "year": "Now",
+      "role": "Freelance AI",
+      "desc": "Independent automation consulting and projects."
+    }
+  }
 }

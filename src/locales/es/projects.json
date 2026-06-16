@@ -5,45 +5,63 @@
     "solution": "Solución",
     "result": "Resultado",
     "tech": "Stack",
-    "expand": "Ver más",
+    "expand": "Mostrar más",
     "collapse": "Mostrar menos"
   },
   "cards": {
     "project1": {
-      "title": "Orquestación de derivación de leads",
-      "context": "Agencia SEO mediana, operaciones de marketing",
-      "outcome": "Latencia de lead a ventas reducida de 18min a <2min, 24/7",
-      "tech": ["Make.com", "n8n", "Airtable", "Notion"],
-      "problem": "Los leads entrantes se perdían entre formularios, CRMs y triage de bandeja. El SLA de primer contacto se rompía en el 40% de las noches y fines de semana, y el tráfico de fin de semana era prácticamente zona muerta.",
-      "solution": "Un único pipeline en n8n normalizó cada fuente de entrada, puntuó intención, derivó al comercial en rotación y publicó una apertura redactada por Claude en la herramienta de cada comercial — Notion para unos, Airtable para otros.",
-      "result": "El SLA de primer contacto subió al 99% en todas las franjas. El triage de bandeja dejó de ser un trabajo. La conversión de fin de semana se igualó a la de entre semana."
+      "title": "Motor de outbound basado en señal",
+      "context": "Ventas y marketing B2B, operaciones de outbound",
+      "outcome": "Un cliente cerró un deal de $2M; tasas de respuesta y conversión al alza en todos los casos",
+      "tech": ["n8n", "Make.com", "Anthropic", "OpenAI", "Perplexity", "Apify", "Google Workspace", "Anymailfinder"],
+      "problem": "Los equipos de ventas B2B enviaban outreach en frío a miles de contactos sin ninguna señal de que esas personas tuvieran un motivo real para responder. Investigar empresas manualmente, encontrar los comités de compra y escribir mensajes personalizados era demasiado lento para escalar. La mayoría elegía volumen sobre relevancia y lo pagaba en tasas de conversión.",
+      "solution": "Dos herramientas diseñadas para encontrar señal antes de enviar un solo mensaje. El Demand Intel Tool extraía datos de sitios de ofertas de empleo y notas de prensa, comparaba las descripciones de los puestos con el producto y el ICP del cliente para identificar empresas con una brecha que el cliente podía cubrir. El Connect IQ partía de plataformas de prospección B2B y realizaba una investigación más profunda de cada empresa y sus notas de prensa para encontrar las mismas brechas sin depender de una señal de contratación. Ambas herramientas identificaban después el comité de compra, investigaban a cada persona y generaban secuencias de mensajes altamente personalizadas listas para enviar. Anthropic se encargaba del análisis pesado, OpenAI de las tareas más ligeras, Perplexity de la investigación, Apify del scraping, Anymailfinder verificaba cada email y Google Workspace almacenaba y clasificaba cada lead.",
+      "result": "El outreach pasó de 10.000 contactos sin criterio a 3.000 personas con un motivo real para responder. Las tasas de respuesta y conversión subieron. Un cliente cerró un deal de $2M. El equipo de ventas dejó de adivinar y empezó a vender a personas que ya estaban en el mercado."
     },
     "project2": {
-      "title": "Pipeline de producción de contenido",
-      "context": "Agencia SEO, operaciones de contenido",
-      "outcome": "Tiempo de brief a publicación reducido de 6 días a menos de 36 horas",
-      "tech": ["n8n", "Claude / MCP", "Notion", "GitHub"],
-      "problem": "Los briefs se quedaban en Notion esperando un redactor durante días, después esperaban revisión editorial, después QA de SEO. Cada handoff sumaba un día al calendario; la cadena era más larga que el trabajo.",
-      "solution": "Claude con MCP leía cada brief, redactaba una primera versión contra una memoria de voz de marca, ejecutaba checks de SEO on-page contra un ruleset propio y dejaba el resultado en Notion ya etiquetado para la persona correcta — redactor, editor o SEO lead.",
-      "result": "El brief a publicación bajó de 36 horas. Los redactores dedicaron tiempo al 30% que necesitaba a una persona, no al 70% que no."
+      "title": "Agente de conocimiento ABM",
+      "context": "SEOMarketing.com, operaciones de conocimiento interno",
+      "outcome": "Un producto de IA privado accesible desde cualquier lugar, entrenado exclusivamente con contenido propietario de ABM",
+      "tech": ["Python", "n8n", "Supabase", "Ollama", "OpenAI", "Whisper", "Railway", "GitHub"],
+      "problem": "La agencia había acumulado años de conocimiento propietario sobre ABM: cursos, videos, grabaciones de audio, documentos e imágenes. Nada de eso era fácil de buscar ni de consultar. Extraer valor de ese material significaba revisar carpetas y ver horas de video. El conocimiento existía. El problema era poder acceder a él.",
+      "solution": "Un pipeline en Python procesó toda la biblioteca: audio y video transcritos con Whisper, documentos y materiales de cursos extraídos y normalizados, todo vectorizado y almacenado en Supabase. Sobre esa base de conocimiento vivía Goku, un agente de IA personalizado construido en n8n, desplegado en Railway y accesible desde cualquier navegador. Los usuarios iniciaban sesión con sus credenciales, hacían preguntas en lenguaje natural y recibían respuestas basadas exclusivamente en el contenido de la agencia. El historial de conversaciones se guardaba y era visible, igual que cualquier producto LLM al que estuvieran acostumbrados.",
+      "result": "El equipo contaba con un experto en ABM disponible online en cualquier momento, entrenado con conocimiento al que ningún modelo público tenía acceso. Años de experiencia acumulada se convirtieron en un producto que cualquier miembro del equipo podía usar de verdad."
     },
     "project3": {
-      "title": "Loop de inteligencia competitiva",
-      "context": "Equipo de marketing de SaaS B2B",
-      "outcome": "Informe semanal de competidores producido de forma desatendida; horas de la analista redirigidas a estrategia",
-      "tech": ["Apify", "Python", "Supabase", "Claude / MCP"],
-      "problem": "Hacer seguimiento a cinco competidores entre páginas de pricing, release notes y creatividades de anuncios era un ritual de 4 horas cada viernes para una analista. La mitad de las veces el diff era trivial; la otra mitad importaba, y nadie confiaba en que el método a ojo lo cazara siempre.",
-      "solution": "Los scrapers de Apify capturaban cada superficie en horario, Python normalizaba los diffs en Supabase y Claude escribía cada viernes por la mañana una narrativa breve nombrando qué cambió, qué no, y qué tocaba investigar.",
-      "result": "El informe semanal aterrizaba desatendido. La analista dejó de scrapear y empezó a leer; su tiempo se movió al trabajo real de estrategia."
+      "title": "Servidor MCP del Competitive Edge Blueprint",
+      "context": "Groundwork, infraestructura de agentes de IA",
+      "outcome": "Blueprint de inteligencia competitiva completo, accesible desde cualquier cliente MCP sin que ninguna persona toque un formulario",
+      "tech": ["Node.js", "TypeScript", "n8n", "Redis", "BullMQ", "Make.com", "Docker", "MCP SDK"],
+      "problem": "El Competitive Edge Blueprint era un potente flujo en n8n que analizaba cualquier empresa y producía inteligencia competitiva estructurada: brechas de oportunidad, acciones priorizadas y análisis de TAM. Pero solo se podía ejecutar a través de un formulario web. Cualquier agente de IA, herramienta de código o harness de partners que quisiera usarlo seguía necesitando que una persona hiciera clic en el formulario.",
+      "solution": "Un servidor MCP en Node.js y TypeScript expuso el Blueprint como tres herramientas: una para lanzar una ejecución, otra para consultar su estado y otra para recuperar los resultados JSON estructurados completos. Una cola Redis y BullMQ gestionaba hasta 3 ejecuciones concurrentes, almacenaba los resultados en caché durante 72 horas y mantenía el estado actualizado en cada etapa. El transporte SSE servía a todos los clientes HTTP; stdio funcionaba en local con Claude Desktop y Cursor. Make.com enviaba notificaciones a Slack en cada ejecución iniciada por MCP. Todo se desplegó como un contenedor Docker junto a la instancia existente de n8n.",
+      "result": "Claude Desktop, Cursor y los harnesses de agentes asociados podían lanzar una ejecución completa del Blueprint de forma programática y recuperar resultados JSON estructurados sin ningún humano en el proceso. La misma arquitectura se diseñó como plantilla de replicación para los otros tres productos Blueprint."
     },
     "project4": {
-      "title": "Reporting de clientes y ETL de dashboards",
-      "context": "Agencia de marketing, gestión de cuentas",
-      "outcome": "Esfuerzo mensual de reporting por cliente reducido de ~6 horas a ~20 minutos de revisión",
-      "tech": ["Python", "Docker", "Railway", "Google Cloud", "Supabase"],
-      "problem": "Cada account manager extraía a mano números de GA, Search Console y plataformas de ads para un deck mensual. Tres o cuatro fuentes, doce clientes, seis horas cada uno — y el deck igual no cuadraba la mitad de las veces.",
-      "solution": "Un ETL en Python contenedorizado sobre Railway tiraba de cada fuente en horario hacia Supabase, con un job en Google Cloud Run montando snapshots de dashboard por cliente. Los account managers recibían un borrador pre-rellenado con las cifras ya reconciliadas.",
-      "result": "El reporting mensual se redujo a una pasada de revisión de 20 minutos. Las cifras cuadraban. Los account managers dedicaron el tiempo recuperado a la conversación que el cliente realmente quería tener."
+      "title": "Automatización de reportes SEO a escala",
+      "context": "SEOMarketing.com, cliente franquicia 300+ locales",
+      "outcome": "Reportes SEO semanales por local y mensual ejecutivo para 100+ ubicaciones, totalmente automatizados",
+      "tech": ["Make.com", "JavaScript", "Google Analytics", "Search Console", "Data Studio", "Charts API", "OpenAI"],
+      "problem": "911 Restoration opera más de 300 locales en EE.UU. y Canadá. Su agencia SEO necesitaba entregar reportes semanales de KPIs por local y un resumen ejecutivo mensual para la directiva. Con más de 100 sitios web activos, hacerlo manualmente no era viable. El volumen por sí solo convertía esto en un trabajo a tiempo completo sin margen para el análisis real.",
+      "solution": "Un pipeline en Make.com extraía datos de GA y Search Console para cada local según horario, generaba diagramas de rendimiento por sitio mediante Charts API y usaba OpenAI para redactar los resúmenes. Los propietarios de cada local recibían por correo un PDF con el reporte y un enlace a un dashboard en Data Studio con los KPIs de todas las ubicaciones, actualizado semanalmente. El CEO, CFO y el equipo directivo recibían una versión mensual consolidada por correo.",
+      "result": "Cada local obtuvo su reporte de rendimiento semanal sin que nadie tocara una hoja de cálculo. La directiva recibió un resumen ejecutivo mensual puntual. Una tarea imposible para una sola persona pasó a ejecutarse de forma completamente desatendida."
+    },
+    "project5": {
+      "title": "Motor de contenido para LinkedIn",
+      "context": "Operaciones de contenido, automatización en redes sociales",
+      "outcome": "Presencia diaria en redes mantenida con 1 hora de revisión a la semana",
+      "tech": ["Make.com", "Apify", "OpenAI", "Google Workspace"],
+      "problem": "Publicar de forma constante en una red profesional requiere tiempo cada día: encontrar inspiración, escribir, editar, programar. Para alguien con una agenda apretada, ese compromiso diario era un coste real aunque el valor estratégico estuviera claro.",
+      "solution": "Un flujo de Make.com extraía bajo demanda contenido de una lista curada de perfiles en redes profesionales y plataformas de contenido en video, identificaba información relevante sobre temas elegidos como SEO, ABM o ventas, y usaba OpenAI para generar un lote de borradores de alta calidad con o sin imágenes. Al terminar, llegaba una notificación por email. En una hoja de cálculo de Google, cada post podía revisarse, editarse y programarse con un solo clic. Al día siguiente, a la hora de publicar, llegaba un email de confirmación cuando el post ya estaba en vivo.",
+      "result": "Publicar a diario se convirtió en una sesión semanal de revisión de 1 hora. Sin escritura diaria, sin página en blanco. Una presencia constante y de calidad construida a partir de contenido real del sector, funcionando en piloto automático."
+    },
+    "project6": {
+      "title": "El sitio en el que estás",
+      "context": "Proyecto personal",
+      "outcome": "Un portafolio completamente personalizado, bilingüe y animado, diseñado para ser tan preciso como el trabajo que muestra",
+      "tech": ["React", "TypeScript", "Vite", "GSAP", "i18next", "GitHub", "Claude"],
+      "problem": "Un portafolio con plantilla es una contradicción. Si tu trabajo consiste en construir sistemas exactos, intencionales y diseñados para un propósito concreto, presentarte con un tema genérico dice exactamente lo contrario. El portafolio tenía que ser la prueba del mismo oficio que intentaba vender.",
+      "solution": "Construido desde cero en React y TypeScript. GSAP impulsa cada movimiento: un fondo de plasma en el hero, una píldora de navegación que se colapsa al cargar y se expande al hacer scroll, y las tarjetas de proyectos que has ido abriendo a lo largo de esta sección. Completamente bilingüe en EN y ES, con una configuración de i18n personalizada que cambia de idioma al instante sin recargar la página. Sin librerías de layout, sin atajos, sin estructura prestada.",
+      "result": "El sitio en sí mismo es el argumento. Cada animación, cada transición, cada detalle fue una decisión deliberada. Has estado dentro del portafolio todo este tiempo."
     }
   }
 }

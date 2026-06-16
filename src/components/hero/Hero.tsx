@@ -48,8 +48,10 @@ export function Hero({ sectionRef }: HeroProps) {
   const nameRef = useRef<HTMLHeadingElement>(null)
   const taglineRef = useRef<HTMLParagraphElement>(null)
   const ctaRef = useRef<HTMLAnchorElement>(null)
+  const ctaFillRef = useRef<HTMLSpanElement>(null)
+  const ctaTextRef = useRef<HTMLSpanElement>(null)
 
-  useGSAP(
+  const { contextSafe } = useGSAP(
     () => {
       // Reduced-motion: skip animation setup entirely. Content renders in its
       // resting state — no GSAP tweens or ScrollTriggers ever created.
@@ -103,6 +105,34 @@ export function Hero({ sectionRef }: HeroProps) {
     { dependencies: [prefersReducedMotion] }
   )
 
+  const handleCTAEnter = contextSafe(() => {
+    gsap.to(ctaFillRef.current, { scaleX: 1, duration: 0.3, ease: 'power2.out' })
+    gsap.to(ctaTextRef.current, { color: '#050505', duration: 0.3, ease: 'power2.out' })
+  })
+
+  const handleCTALeave = contextSafe(() => {
+    gsap.to(ctaFillRef.current, { scaleX: 0, duration: 0.25, ease: 'power2.in' })
+    gsap.to(ctaTextRef.current, { color: 'white', duration: 0.25, ease: 'power2.in' })
+  })
+
+  const handleCTAClick = contextSafe((e: React.MouseEvent) => {
+    e.preventDefault()
+    gsap
+      .timeline()
+      .to(ctaRef.current, { scale: 0.94, duration: 0.1, ease: 'power2.in' })
+      .to(ctaRef.current, { scale: 1, duration: 0.25, ease: 'power2.out' })
+    handleCTALeave()
+    const section = document.querySelector<HTMLElement>('#work')
+    const h2 = section?.querySelector('h2')
+    if (h2) {
+      window.scrollTo({
+        top: Math.max(0, h2.getBoundingClientRect().top + window.scrollY - 73),
+        behavior: 'smooth',
+      })
+    }
+    window.dispatchEvent(new CustomEvent('section:replay', { detail: '#work' }))
+  })
+
   return (
     <section
       ref={sectionRef}
@@ -112,11 +142,12 @@ export function Hero({ sectionRef }: HeroProps) {
         minHeight: '100vh',
         overflow: 'hidden',
         isolation: 'isolate',
+        backgroundColor: '#050505',
       }}
       aria-label="Hero"
     >
       <AnimationErrorBoundary>
-        <HeroBackdrop />
+        <HeroBackdrop heroRef={sectionRef} />
       </AnimationErrorBoundary>
       <div
         style={{
@@ -160,6 +191,9 @@ export function Hero({ sectionRef }: HeroProps) {
         <a
           ref={ctaRef}
           href="#work"
+          onClick={handleCTAClick}
+          onMouseEnter={handleCTAEnter}
+          onMouseLeave={handleCTALeave}
           style={{
             display: 'inline-block',
             padding: '0.875rem 2.25rem',
@@ -172,9 +206,25 @@ export function Hero({ sectionRef }: HeroProps) {
             textDecoration: 'none',
             background: 'transparent',
             cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          {t('cta')}
+          <span
+            ref={ctaFillRef}
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: '#FF4500',
+              transform: 'scaleX(0)',
+              transformOrigin: 'left',
+              pointerEvents: 'none',
+            }}
+          />
+          <span ref={ctaTextRef} style={{ position: 'relative', zIndex: 1 }}>
+            {t('cta')}
+          </span>
         </a>
       </div>
     </section>

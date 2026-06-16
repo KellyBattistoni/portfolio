@@ -24,7 +24,7 @@
  * once at module level (see `src/lib/gsap.ts`).
  */
 
-import { useRef, type RefObject } from 'react'
+import { useRef, useState, useEffect, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
@@ -53,17 +53,29 @@ export interface PillNavProps {
 function PillNavItem({
   href,
   label,
+  isActive,
   onMouseEnter,
   onMouseLeave,
+  onClick,
 }: {
   href: string
   label: string
+  isActive: boolean
   onMouseEnter: (el: HTMLElement) => void
   onMouseLeave: (el: HTMLElement) => void
+  onClick: () => void
 }) {
   const wrapRef = useRef<HTMLSpanElement>(null)
   return (
-    <a href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>
+    <a
+      href={href}
+      onClick={(e) => {
+        e.preventDefault()
+        if (wrapRef.current) onMouseLeave(wrapRef.current)
+        onClick()
+      }}
+      style={{ textDecoration: 'none', display: 'inline-block' }}
+    >
       <span
         ref={wrapRef}
         style={{
@@ -100,10 +112,25 @@ function PillNavItem({
             fontFamily: 'var(--font-sans)',
             letterSpacing: '0.06em',
             textTransform: 'uppercase',
-            color: 'rgba(255,255,255,0.75)',
+            color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.75)',
           }}
         >
           {label}
+          <span
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: '-3px',
+              height: '1px',
+              background: '#FF4500',
+              transformOrigin: 'left',
+              transform: isActive ? 'scaleX(1)' : 'scaleX(0)',
+              transition: 'transform 0.3s ease',
+              pointerEvents: 'none',
+            }}
+          />
         </span>
       </span>
     </a>
@@ -116,6 +143,41 @@ export function PillNav({ heroRef }: PillNavProps) {
   const pillRef = useRef<HTMLElement>(null)
   // Nav items collapse to maxWidth:0 on load; the pill shrinks to fit EN/ES only.
   const navItemsRef = useRef<HTMLDivElement>(null)
+  const [activeHref, setActiveHref] = useState('')
+
+  useEffect(() => {
+    const targets = NAV_ITEMS.map((item) => document.querySelector<HTMLElement>(item.href)).filter(
+      Boolean
+    ) as HTMLElement[]
+
+    const visible = new Set<string>()
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const id = '#' + entry.target.id
+          if (entry.isIntersecting) {
+            visible.add(id)
+            setActiveHref(id)
+          } else {
+            visible.delete(id)
+          }
+        })
+        if (visible.size === 0) setActiveHref('')
+      },
+      { threshold: 0.2 }
+    )
+
+    targets.forEach((el) => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
+
+  const handleNavClick = (href: string) => {
+    const section = document.querySelector<HTMLElement>(href)
+    if (section) {
+      window.scrollTo({ top: section.offsetTop, behavior: 'smooth' })
+    }
+    window.dispatchEvent(new CustomEvent('section:replay', { detail: href }))
+  }
 
   const { contextSafe } = useGSAP(
     () => {
@@ -154,14 +216,16 @@ export function PillNav({ heroRef }: PillNavProps) {
   const handleMouseEnter = contextSafe((el: HTMLElement) => {
     const text = el.querySelector('.nav-text')
     const circle = el.querySelector('.nav-circle')
-    if (text) gsap.to(text, { y: -4, duration: 0.2, ease: 'power2.out' })
+    if (text)
+      gsap.to(text, { y: -4, color: 'rgba(255,255,255,1)', duration: 0.2, ease: 'power2.out' })
     if (circle) gsap.to(circle, { scale: 1, duration: 0.25, ease: 'power2.out' })
   })
 
   const handleMouseLeave = contextSafe((el: HTMLElement) => {
     const text = el.querySelector('.nav-text')
     const circle = el.querySelector('.nav-circle')
-    if (text) gsap.to(text, { y: 0, duration: 0.2, ease: 'power2.out' })
+    if (text)
+      gsap.to(text, { y: 0, color: 'rgba(255,255,255,0.75)', duration: 0.2, ease: 'power2.out' })
     if (circle) gsap.to(circle, { scale: 0, duration: 0.2, ease: 'power2.in' })
   })
 
@@ -200,8 +264,10 @@ export function PillNav({ heroRef }: PillNavProps) {
             key={item.key}
             href={item.href}
             label={t(`nav.${item.key satisfies NavItemKey}` as const)}
+            isActive={activeHref === item.href}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
+            onClick={() => handleNavClick(item.href)}
           />
         ))}
         <span

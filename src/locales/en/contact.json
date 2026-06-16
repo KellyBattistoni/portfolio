@@ -1,15 +1,18 @@
 {
   "heading": "Let's talk",
-  "invite": "I build end-to-end automation systems — the kind that replace the repetitive work and free people to do the thinking that actually matters. If you're running an SEO agency, a marketing team, or any operation where too much is still done by hand, I want to hear what you're working on. Engagements I take on: custom workflow design, AI-assisted operations, MCP integrations, and scraping-to-CRM pipelines.",
+  "invite": "I work with companies that have a process they've been tolerating for too long. Outreach that should be smarter. Reports that take days instead of minutes. Knowledge buried in files nobody searches. If your team is doing something by hand that shouldn't need a human, I want to hear what it is.",
+  "openTo": "Open to freelance projects, long-term retainers, and one-off builds. Any scale, any industry.",
   "email": {
+    "method": "Email",
     "label": "kelly@seomarketing.com"
   },
   "linkedin": {
-    "label": "LinkedIn",
-    "url": "LINKEDIN_URL"
+    "method": "LinkedIn",
+    "label": "Connect",
+    "url": "https://www.linkedin.com/in/kelly-battistoni-villota-mechanical-engineer/"
   },
   "cv": {
-    "label": "Download CV",
+    "method": "CV",
     "toggle": {
       "en": "EN",
       "es": "ES"

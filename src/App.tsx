@@ -30,10 +30,18 @@ export default function App() {
       <NoiseOverlay />
       <Hero sectionRef={heroRef} />
       {isMobile ? <MobileNav heroRef={heroRef} /> : <PillNav heroRef={heroRef} />}
-      <AnimationErrorBoundary><About /></AnimationErrorBoundary>
-      <AnimationErrorBoundary><Projects /></AnimationErrorBoundary>
-      <AnimationErrorBoundary><Stack /></AnimationErrorBoundary>
-      <AnimationErrorBoundary><Contact /></AnimationErrorBoundary>
+      <AnimationErrorBoundary>
+        <About />
+      </AnimationErrorBoundary>
+      <AnimationErrorBoundary>
+        <Projects />
+      </AnimationErrorBoundary>
+      <AnimationErrorBoundary>
+        <Stack />
+      </AnimationErrorBoundary>
+      <AnimationErrorBoundary>
+        <Contact />
+      </AnimationErrorBoundary>
     </>
   )
 }

@@ -1,15 +1,18 @@
 {
   "heading": "Hablemos",
-  "invite": "Construyo sistemas de automatización de extremo a extremo — los que eliminan el trabajo repetitivo y liberan a las personas para hacer el pensamiento que realmente importa. Si diriges una agencia SEO, un equipo de marketing o cualquier operación donde todavía se hace demasiado a mano, quiero escuchar en qué estás trabajando. Los proyectos que tomo: diseño de flujos de trabajo a medida, operaciones asistidas por IA, integraciones MCP y pipelines de scraping a CRM.",
+  "invite": "Trabajo con empresas que tienen un proceso que llevan demasiado tiempo tolerando. Prospección que debería ser más inteligente. Reportes que tardan días en lugar de minutos. Conocimiento enterrado en archivos que nadie busca. Si tu equipo hace algo a mano que no debería necesitar un humano, quiero escuchar de qué se trata.",
+  "openTo": "Disponible para proyectos freelance, contratos de largo plazo y automatizaciones puntuales. Cualquier escala, cualquier industria.",
   "email": {
+    "method": "Email",
     "label": "kelly@seomarketing.com"
   },
   "linkedin": {
-    "label": "LinkedIn",
-    "url": "LINKEDIN_URL"
+    "method": "LinkedIn",
+    "label": "Conectar",
+    "url": "https://www.linkedin.com/in/kelly-battistoni-villota-mechanical-engineer/"
   },
   "cv": {
-    "label": "Descargar CV",
+    "method": "CV",
     "toggle": {
       "en": "EN",
       "es": "ES"
