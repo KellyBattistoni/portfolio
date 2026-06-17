@@ -23,7 +23,7 @@ const STACK_STYLES = `
   font-family: var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.38);
+  color: rgba(255,255,255,0.55);
   white-space: nowrap;
 }
 .band-rule {
@@ -51,7 +51,7 @@ const STACK_STYLES = `
   min-width: 84px;
   border-radius: 10px;
   text-decoration: none;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.6);
   border: 1px solid transparent;
   transition: transform 0.22s ease, color 0.22s ease, background 0.22s ease, border-color 0.22s ease;
 }
