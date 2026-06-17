@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OG Card Preview — Kelly Battistoni</title>
+    <!-- Fonts: Playfair Display 700 + Inter 300/400 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Reset */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      body {
+        background-color: #1a1a1a;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 40px;
+        min-height: 100vh;
+        font-family: 'Inter', sans-serif;
+      }
+
+      /* Note for user: screenshot this card at exactly 1200×630px */
+      .screenshot-note {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 69, 0, 0.15);
+        border-bottom: 1px solid rgba(255, 69, 0, 0.4);
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 12px;
+        font-family: 'Inter', sans-serif;
+        padding: 8px 16px;
+        text-align: center;
+        z-index: 100;
+      }
+
+      /* OG Card — exactly 1200×630px */
+      .og-card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        background-color: #050505;
+        overflow: hidden;
+        flex-shrink: 0;
+        margin-top: 40px;
+      }
+
+      /* Subtle radial glow — deep red ambient, off-center to the left */
+      .og-card::before {
+        content: '';
+        position: absolute;
+        top: -120px;
+        left: -80px;
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(ellipse 55% 50% at 40% 50%, rgba(255, 69, 0, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      /* Top-left accent rule — thin #FF4500 horizontal line */
+      .accent-rule {
+        position: absolute;
+        top: 80px;
+        left: 80px;
+        width: 80px;
+        height: 1px;
+        background-color: #FF4500;
+      }
+
+      /* Name — Playfair Display 72px weight 700 */
+      .name {
+        position: absolute;
+        top: 120px;
+        left: 80px;
+        font-family: 'Playfair Display', Georgia, serif;
+        font-weight: 700;
+        font-size: 72px;
+        line-height: 1.1;
+        color: #FFFFFF;
+        letter-spacing: -0.5px;
+      }
+
+      /* Role — Inter 28px weight 400 */
+      .role {
+        position: absolute;
+        top: 285px;
+        left: 80px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        font-size: 28px;
+        color: rgba(255, 255, 255, 0.65);
+        letter-spacing: 0;
+      }
+
+      /* Tagline — Inter 18px weight 300 */
+      .tagline {
+        position: absolute;
+        top: 345px;
+        left: 80px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.38);
+        letter-spacing: 0.02em;
+      }
+
+      /* URL credit — bottom right */
+      .url-credit {
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+        font-family: 'Inter', sans-serif;
+        font-weight: 300;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.30);
+        letter-spacing: 0.01em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="screenshot-note">
+      OG Card Preview — Screenshot this card at exactly <strong>1200&times;630px</strong> and save as <code>public/og-image.png</code>. Use DevTools &rarr; Device toolbar and set custom dimensions 1200&times;630, then capture a screenshot.
+    </div>
+
+    <div class="og-card">
+      <div class="accent-rule"></div>
+      <h1 class="name">Kelly Battistoni</h1>
+      <p class="role">AI Automations Manager</p>
+      <p class="tagline">AI Strategy &middot; Process Design &middot; Full-Stack Automation</p>
+      <p class="url-credit">kellybattistoni.github.io</p>
+    </div>
+  </body>
+</html>
