@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 7 — Polish & Performance (LinkedIn URL, meta tags, CV PDFs in public/, mobile QA)
+**Current focus:** Phase 7 — Polish & Performance (context gathered; ready for planning)
 
 ## Current Position
 
-Phase: 7 of 8 (Polish & Performance) — Phase 6 complete ✓; Phase 7 not yet planned
+Phase: 7 of 8 (Polish & Performance) — Phase 6 complete ✓; Phase 7 context gathered, not yet planned
 Plan: 0 of TBD
-Status: Phase 6 closed 2026-06-16 (commit dc4c9ab). All four content sections ship with bidirectional GSAP animations and distinct per-section backgrounds. Body-level fixed radial gradient ties the full page into one color world. Phase 7 next: LinkedIn URL swap, meta title/description, copy CV PDFs to public/, mobile QA pass.
-Last activity: 2026-06-16 — Final background polish (body gradient, Hero corners, section textures); Phase 6 formally closed.
+Status: Phase 7 context gathered 2026-06-16 (commit 909d0ea). Key decisions locked: useEffect-based dynamic meta tags, lazy-load Plasma via React.lazy(), font-display:swap for Google Fonts, #FF4500 focus rings globally, Lighthouse audit-first approach, static OG image (dark cinematic, 1200×630), hreflang tags, DevTools-only mobile QA at 375/430px, Playwright WebKit for Safari. CV PDFs and LinkedIn URL already in place (no Phase 7 work needed). Ready to plan.
+Last activity: 2026-06-16 — Phase 7 context discussion completed.
 
 Progress: [█████████░] 88% (~21 of ~24 expected plans)
 
