@@ -23,7 +23,7 @@ const CONTACT_STYLES = `
   font-family: var(--font-sans);
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.38);
+  color: rgba(255,255,255,0.55);
   white-space: nowrap;
 }
 .contact-method-rule {
@@ -78,7 +78,7 @@ const CONTACT_STYLES = `
   font-family: var(--font-sans);
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.55);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -310,7 +310,7 @@ export function Contact() {
               style={{
                 fontSize: '0.875rem',
                 lineHeight: 1.6,
-                color: 'rgba(255,255,255,0.38)',
+                color: 'rgba(255,255,255,0.55)',
                 marginBottom: 0,
               }}
             >
