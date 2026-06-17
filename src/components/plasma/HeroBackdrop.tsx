@@ -74,3 +74,5 @@ export function HeroBackdrop({ heroRef }: HeroBackdropProps) {
     </div>
   )
 }
+
+export default HeroBackdrop
