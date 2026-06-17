@@ -130,7 +130,13 @@ Plans:
   2. Full keyboard tab navigation reaches every interactive element with a visible focus indicator, and body text meets 4.5:1 contrast on the `#050505` background.
   3. `prefers-reduced-motion: reduce` disables Plasma, scroll-reveal, parallax, and PillNav entrance animations — the page is fully usable without motion.
   4. Site renders correctly on a real mid-range Android device (375–430px), latest Chrome, Safari 16.4+, and Firefox; Open Graph 1200×630 image and per-language `<title>`/`hreflang` meta tags appear in LinkedIn/WhatsApp previews.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Lighthouse baseline + useMetaTags hook + EN/ES locale strings + OG tags + hreflang + OG card preview artifact
+- [ ] 07-02-PLAN.md — React.lazy HeroBackdrop bundle split + global :focus-visible focus ring CSS
+- [ ] 07-03-PLAN.md — WCAG AA contrast fixes: Stack, About, Contact rgba alpha values
+- [ ] 07-04-PLAN.md — Playwright WebKit install + smoke test + final Lighthouse audit + human QA checkpoint
 
 ### Phase 8: Deployment
 **Goal**: Ship the site live at `KellyBattistoni.github.io` via the `gh-pages` branch with deep-link safety.
@@ -156,7 +162,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
 | 6. Content Sections | 0/TBD | Not started | - |
-| 7. Polish & Performance | 0/TBD | Not started | - |
+| 7. Polish & Performance | 0/4 | In progress | - |
 | 8. Deployment | 0/TBD | Not started | - |
 
 ---
