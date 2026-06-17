@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { NoiseOverlay } from '@/components/layout/NoiseOverlay'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { useLocalizeDocumentAttributes } from '@/hooks/useLocalizeDocumentAttributes'
+import { useMetaTags } from '@/hooks/useMetaTags'
 import { ScrollTrigger } from '@/lib/gsap'
 import { Hero } from '@/components/hero/Hero'
 import { PillNav } from '@/components/nav/PillNav'
@@ -14,6 +15,7 @@ import { Contact } from '@/components/sections/Contact'
 
 export default function App() {
   useLocalizeDocumentAttributes()
+  useMetaTags()
   const { isMobile } = useDeviceCapabilities()
   const heroRef = useRef<HTMLElement>(null)
 
