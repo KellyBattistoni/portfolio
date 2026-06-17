@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 6 — Bidirectional scroll animations + all polish complete; Phase 6 closure still pending SUMMARY write
+**Current focus:** Phase 7 — Polish & Performance (LinkedIn URL, meta tags, CV PDFs in public/, mobile QA)
 
 ## Current Position
 
-Phase: 6 of 8 (Content Sections) — Full animation + interaction polish pass complete, awaiting 06-06 SUMMARY + formal closure
-Plan: 6 of 6 implemented + three animation/polish passes done 2026-06-15
-Status: All 6 plans executed + full bidirectional scroll animation system built. Each section (About, Projects, Stack, Contact) now has: accent line scaleX draw → h2 rise, then section-specific stagger — all BIDIRECTIONAL (reverse on scroll up, replay on scroll down). Two-trigger architecture per section: enter trigger (top 90%) + reverse trigger (top 35%, requires `onEnter: () => {}` to activate onLeaveBack). Re-entry logic: mid-reverse → `tl.reversed(false).play()`; fully reversed → `tl.restart()`; completed forward or replay → no-op. PillNav links dispatch `section:replay` CustomEvent → each section listens via `useEffect` + `tlRef.current?.restart()`. Stats separator line in About animates scaleX 0→1 from center. Contact padding bumped to `6rem 1.5rem 10rem` to give enough scroll depth for h2 alignment. PillNav: h2-normalized scroll (all sections land at 73px from top), ghost-hover-after-click bug fixed (explicit onMouseLeave on click), IntersectionObserver clears activeHref to '' when no sections visible (fixes orange underline persisting in hero). Hero CTA: fill hover + press-scale click effect wired via contextSafe GSAP handlers. LinkedIn URL still placeholder — Phase 7 item.
-Last activity: 2026-06-15 — Bidirectional scroll animations + PillNav + CTA interaction polish.
+Phase: 7 of 8 (Polish & Performance) — Phase 6 complete ✓; Phase 7 not yet planned
+Plan: 0 of TBD
+Status: Phase 6 closed 2026-06-16 (commit dc4c9ab). All four content sections ship with bidirectional GSAP animations and distinct per-section backgrounds. Body-level fixed radial gradient ties the full page into one color world. Phase 7 next: LinkedIn URL swap, meta title/description, copy CV PDFs to public/, mobile QA pass.
+Last activity: 2026-06-16 — Final background polish (body gradient, Hero corners, section textures); Phase 6 formally closed.
 
-Progress: [████████░░] 80% (20 of ~24 expected plans)
+Progress: [█████████░] 88% (~21 of ~24 expected plans)
 
 ## Phase Status
 
@@ -25,17 +25,15 @@ Progress: [████████░░] 80% (20 of ~24 expected plans)
 | 3 | Scroll Infrastructure | Complete ✓ | 3/3 |
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
 | 5 | Hero + PillNav — First Vertical Slice | Complete ✓ | 4/4 |
-| 6 | Content Sections | In progress | 6/6 (awaiting closure) |
-| 7 | Polish & Performance | Pending | TBD |
+| 6 | Content Sections | Complete ✓ | 6/6 |
+| 7 | Polish & Performance | In progress | 0/TBD |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
 
-All Phase 6 sections complete with full cinematic GSAP animations and bidirectional scroll behavior. About.tsx: accent line → heading → left paragraphs cascade + right arc nodes reveal + dot expand/glow + stats line scaleX + stat items stagger. Projects.tsx: accent line → heading → left cards stagger + right cards +0.15s offset. Stack.tsx: accent line → heading → category labels slide in (x) + tiles stagger 0.04s. Contact.tsx: accent line → heading → invite → links → CV group sequential. All use two-trigger bidirectional pattern (enter top 90%, reverse top 35%). PillNav: smooth-scrolls to normalized h2 position (73px from viewport top), IntersectionObserver tracks active section, ghost-hover and underline-in-hero bugs fixed. Hero CTA: fill hover animation + press-scale click.
+Phase 7 not yet planned. Ready to start.
 
-Still needs: write 06-06-SUMMARY.md and formally close Phase 6 before starting Phase 7.
-
-Next: Write 06-06-SUMMARY.md → mark Phase 6 Complete → plan/execute Phase 7 (Polish & Performance: LinkedIn URL swap, meta title/description, performance audit, CV PDFs in public/, mobile QA).
+Next: plan Phase 7 (Polish & Performance) — LinkedIn URL swap, meta title/description, copy CV PDFs to public/, mobile QA pass, performance audit.
 
 Previous (Phase 5): Plan 05-04 shipped 2026-06-13. `src/components/nav/PillNav.tsx` (220 LOC) implements a glass-pill desktop nav fixed top-right: four nav items (About/Work/Stack/Contact via `t('common:nav.*')`) with rising-circle hover (real DOM `.nav-circle` scale 0→1 + `.nav-text` y:0→-4 driven by GSAP), entrance via ScrollTrigger at 70% hero-top scroll (autoAlpha + x:-20→0, once:true self-killing), composed `<LanguageSwitcher className="flex gap-3" />`. `src/components/nav/MobileNav.tsx` (262 LOC) implements a hamburger trigger (☰/×, fades in at the same 70% threshold) + side panel sliding from the right via a paused GSAP timeline (panel x:100%→0% then nav items autoAlpha+y stagger 0.08s, '-=0.15' overlap). Timeline direction is toggled via `tlRef.current.reversed(!tlRef.current.reversed())` — `useState` is reserved for ARIA + icon only and is NOT in the useGSAP dependency array (the documented anti-pattern). `contextSafe` wraps all five event handlers (mouseenter/leave, toggle, close, navClick). Reduced-motion handled cleanly in both: PillNav early-returns so the pill renders visible from first paint; MobileNav skips timeline entirely and the panel uses `display:flex/none` from `isOpen`. Build + lint green. Deviation: Task 1's PillNav.tsx was captured in the parallel 05-02 Hero commit (`908e256`) due to Wave 2 sibling-directory staging; content is correct and matches plan, documented in 05-03 SUMMARY. Next: Plan 05-04 to mount Hero + Nav into App.tsx and retire the Phase 4 test harness placeholder + the standalone LanguageSwitcher.
 
