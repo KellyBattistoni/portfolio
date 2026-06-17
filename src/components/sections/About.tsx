@@ -320,7 +320,7 @@ export function About() {
                           lineHeight: 1,
                           color: node.isCurrent
                             ? 'rgba(255,255,255,0.95)'
-                            : 'rgba(255,255,255,0.45)',
+                            : 'rgba(255,255,255,0.65)',
                           marginBottom: '0.5rem',
                         }}
                       >
@@ -344,8 +344,8 @@ export function About() {
                           fontSize: '0.8125rem',
                           lineHeight: 1.55,
                           color: node.isCurrent
-                            ? 'rgba(255,255,255,0.45)'
-                            : 'rgba(255,255,255,0.35)',
+                            ? 'rgba(255,255,255,0.65)'
+                            : 'rgba(255,255,255,0.55)',
                           margin: 0,
                         }}
                       >
@@ -396,7 +396,7 @@ export function About() {
                       fontSize: '0.65rem',
                       letterSpacing: '0.1em',
                       textTransform: 'uppercase',
-                      color: 'rgba(255,255,255,0.3)',
+                      color: 'rgba(255,255,255,0.55)',
                       marginTop: '0.5rem',
                     }}
                   >
