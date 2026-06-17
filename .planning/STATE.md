@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 7 — Polish & Performance (context gathered; ready for planning)
+**Current focus:** Phase 7 — Polish & Performance (4 plans ready; ready to execute)
 
 ## Current Position
 
-Phase: 7 of 8 (Polish & Performance) — Phase 6 complete ✓; Phase 7 context gathered, not yet planned
-Plan: 0 of TBD
-Status: Phase 7 context gathered 2026-06-16 (commit 909d0ea). Key decisions locked: useEffect-based dynamic meta tags, lazy-load Plasma via React.lazy(), font-display:swap for Google Fonts, #FF4500 focus rings globally, Lighthouse audit-first approach, static OG image (dark cinematic, 1200×630), hreflang tags, DevTools-only mobile QA at 375/430px, Playwright WebKit for Safari. CV PDFs and LinkedIn URL already in place (no Phase 7 work needed). Ready to plan.
-Last activity: 2026-06-16 — Phase 7 context discussion completed.
+Phase: 7 of 8 (Polish & Performance) — Phase 6 complete ✓; Phase 7 in progress
+Plan: 1 of 4 (07-01 at human checkpoint — awaiting meta copy review + og-image.png screenshot)
+Status: 07-01 executed through Task 3. useMetaTags hook wired, EN/ES meta strings populated, OG tags + hreflang added to index.html, og-card-preview.html created. Paused at checkpoint:human-verify — user must review meta copy and save public/og-image.png before 07-02 can proceed.
+Last activity: 2026-06-17 — 07-01 executed (Tasks 1–3 committed; Task 4 checkpoint reached).
 
-Progress: [█████████░] 88% (~21 of ~24 expected plans)
+Progress: [█████████░] 90% (~22 of ~24 expected plans)
 
 ## Phase Status
 
@@ -26,7 +26,7 @@ Progress: [█████████░] 88% (~21 of ~24 expected plans)
 | 4 | Visual Foundations — Plasma + Noise | Complete ✓ | 3/3 |
 | 5 | Hero + PillNav — First Vertical Slice | Complete ✓ | 4/4 |
 | 6 | Content Sections | Complete ✓ | 6/6 |
-| 7 | Polish & Performance | In progress | 0/TBD |
+| 7 | Polish & Performance | Ready to execute | 0/4 |
 | 8 | Deployment | Pending | TBD |
 
 ## Active Work
@@ -162,6 +162,10 @@ Previous (Phase 5): Plan 05-04 shipped 2026-06-13. `src/components/nav/PillNav.t
 - [05-03] Reduced-motion MobileNav uses `display:flex/none` on the panel via conditional spread on `style` driven by `isOpen` — `position:fixed` panel means `visibility:hidden` is semantically wrong; `display:none` is the explicit "functionally absent" signal for assistive tech
 - [05-03] `contextSafe` wraps all five event handlers (handleMouseEnter/Leave/Toggle/Close/NavClick) — events fire outside React's render cycle, GSAP context must own them to revert on unmount
 - [05-03] Parallel-wave cross-commit: Task 1 PillNav.tsx was bundled into the Plan 05-02 Hero commit `908e256` due to Wave 2 sibling-directory staging — content is correct, build/lint pass; documented in 05-03 SUMMARY rather than rewritten
+- [07-01] useMetaTags follows exact same pattern as useLocalizeDocumentAttributes — direct DOM mutation via useEffect, dependency array [i18n.resolvedLanguage, t], no react-helmet-async (D-01)
+- [07-01] Static OG + hreflang in index.html only — social crawlers (LinkedIn, WhatsApp) and Googlebot cannot execute JS; dynamic JS-injected meta would be invisible to scrapers (D-03, D-04, D-05)
+- [07-01] EN meta title 59 chars / description 156 chars locked; ES title 49 chars / description 167 chars — user may trim ES description at checkpoint (D-02 locks copy as collaborative)
+- [07-01] Baseline bundle: 522KB JS (gzip 175KB) single chunk pre-lazy-split; Vite >500KB warning noted — addressed in Plan 07-02 via React.lazy Plasma split
 
 ### Resolved Blockers
 
@@ -186,5 +190,5 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-06-15
-Stopped at: Bidirectional scroll animations + PillNav/CTA polish complete across all sections. User ending session — next session should write 06-06-SUMMARY.md and close Phase 6, then plan/execute Phase 7.
+Last session: 2026-06-17
+Stopped at: 07-01 checkpoint:human-verify — Tasks 1–3 committed (68b6843, ae1624e). Awaiting user: (1) review meta copy in locale JSON, (2) save public/og-image.png screenshot of og-card-preview.html, (3) record Lighthouse baseline scores. Type "approved" to continue to 07-02.

@@ -162,7 +162,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
 | 6. Content Sections | 0/TBD | Not started | - |
-| 7. Polish & Performance | 0/4 | In progress | - |
+| 7. Polish & Performance | 0/4 (07-01 at checkpoint) | In progress | - |
 | 8. Deployment | 0/TBD | Not started | - |
 
 ---
