@@ -109,11 +109,8 @@ export function Projects() {
           inset: 0,
           pointerEvents: 'none',
           background:
-            'radial-gradient(ellipse at 50% 0%, rgba(74,31,204,0.18) 0%, rgba(74,31,204,0.155) 8%, rgba(74,31,204,0.129) 16%, rgba(74,31,204,0.103) 24%, rgba(74,31,204,0.079) 32%, rgba(74,31,204,0.057) 40%, rgba(74,31,204,0.038) 48%, rgba(74,31,204,0.022) 56%, rgba(74,31,204,0.010) 63%, rgba(74,31,204,0.003) 69%, rgba(74,31,204,0) 74%)',
-          maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
-          WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%)',
+            'radial-gradient(ellipse at 88% 0%, rgba(74,31,204,0.16) 0%, rgba(74,31,204,0.10) 20%, rgba(74,31,204,0.04) 40%, rgba(74,31,204,0) 58%), ' +
+            'radial-gradient(ellipse at 10% 100%, rgba(255,69,0,0.12) 0%, rgba(255,69,0,0.06) 25%, rgba(255,69,0,0.02) 45%, rgba(255,69,0,0) 58%)',
         }}
       />
 

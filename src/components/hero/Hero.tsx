@@ -140,12 +140,22 @@ export function Hero({ sectionRef }: HeroProps) {
         position: 'relative',
         zIndex: 1,
         minHeight: '100vh',
-        overflow: 'hidden',
         isolation: 'isolate',
         backgroundColor: '#050505',
       }}
       aria-label="Hero"
     >
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background:
+            'radial-gradient(ellipse at 92% 5%, rgba(74,31,204,0.18) 0%, rgba(74,31,204,0.09) 22%, rgba(74,31,204,0.02) 42%, transparent 58%), ' +
+            'radial-gradient(ellipse at 85% 95%, rgba(74,31,204,0.14) 0%, rgba(74,31,204,0.07) 22%, rgba(74,31,204,0.02) 42%, transparent 58%)',
+        }}
+      />
       <AnimationErrorBoundary>
         <HeroBackdrop heroRef={sectionRef} />
       </AnimationErrorBoundary>

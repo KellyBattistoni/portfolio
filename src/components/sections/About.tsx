@@ -170,9 +170,19 @@ export function About() {
         padding: '6rem 1.5rem',
         display: 'flex',
         alignItems: 'center',
-        backgroundColor: 'var(--color-brand-bg)',
       }}
     >
+      {/* Hero→About bridge: shows color immediately at the section top */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background:
+            'linear-gradient(to bottom, rgba(74,31,204,0.10) 0%, rgba(255,69,0,0.06) 22%, transparent 50%)',
+        }}
+      />
       <div
         aria-hidden="true"
         style={{
@@ -183,9 +193,9 @@ export function About() {
             'radial-gradient(ellipse at 15% 50%, rgba(255,69,0,0.18) 0%, rgba(255,69,0,0.12) 20%, rgba(255,69,0,0.05) 40%, rgba(255,69,0,0) 58%), ' +
             'radial-gradient(ellipse at 85% 40%, rgba(74,31,204,0.16) 0%, rgba(74,31,204,0.10) 20%, rgba(74,31,204,0.04) 40%, rgba(74,31,204,0) 58%)',
           maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 5%, black 65%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 5%, black 65%, transparent 100%)',
         }}
       />
 
@@ -200,9 +210,9 @@ export function About() {
           backgroundSize: '200px 200px',
           opacity: 0.35,
           maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
         }}
       />
 

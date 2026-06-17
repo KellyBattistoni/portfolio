@@ -159,6 +159,7 @@ export function Stack() {
     >
       <style>{STACK_STYLES}</style>
 
+      {/* Dual-color atmosphere: orange upper-left + indigo right */}
       <div
         aria-hidden="true"
         style={{
@@ -166,27 +167,28 @@ export function Stack() {
           inset: 0,
           pointerEvents: 'none',
           background:
-            'radial-gradient(ellipse at 100% 50%, rgba(74,31,204,0.22) 0%, rgba(74,31,204,0.14) 18%, rgba(74,31,204,0.06) 35%, rgba(74,31,204,0) 52%)',
+            'radial-gradient(ellipse at 88% 80%, rgba(255,69,0,0.18) 0%, rgba(255,69,0,0.10) 22%, rgba(255,69,0,0.03) 44%, rgba(255,69,0,0) 60%), ' +
+            'radial-gradient(ellipse at 8% 25%, rgba(74,31,204,0.26) 0%, rgba(74,31,204,0.16) 20%, rgba(74,31,204,0.06) 38%, rgba(74,31,204,0) 56%)',
           maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
         }}
       />
 
-      {/* Horizontal scanlines */}
+      {/* Dot-matrix texture — technical, circuit-board feel */}
       <div
         aria-hidden="true"
         style={{
           position: 'absolute',
           inset: 0,
           pointerEvents: 'none',
-          backgroundImage:
-            'repeating-linear-gradient(0deg, transparent, transparent 5px, rgba(255,255,255,0.009) 5px, rgba(255,255,255,0.009) 6px)',
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.065) 1px, transparent 1px)',
+          backgroundSize: '22px 22px',
           maskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
           WebkitMaskImage:
-            'linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, black 10%, black 65%, transparent 100%)',
         }}
       />
 
