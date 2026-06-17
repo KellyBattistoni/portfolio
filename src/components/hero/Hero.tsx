@@ -28,13 +28,15 @@
  * canvas above the text layer despite CSS stacking spec.
  */
 
-import { useRef } from 'react'
+import { useRef, lazy, Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { AnimationErrorBoundary } from '@/components/error/AnimationErrorBoundary'
-import { HeroBackdrop } from '@/components/plasma/HeroBackdrop'
+import { PlasmaFallback } from '@/components/plasma/PlasmaFallback'
+
+const HeroBackdrop = lazy(() => import('@/components/plasma/HeroBackdrop'))
 
 export interface HeroProps {
   /** Forwarded to the root <section> so PillNav's ScrollTrigger can use it as trigger. */
@@ -157,7 +159,9 @@ export function Hero({ sectionRef }: HeroProps) {
         }}
       />
       <AnimationErrorBoundary>
-        <HeroBackdrop heroRef={sectionRef} />
+        <Suspense fallback={<PlasmaFallback />}>
+          <HeroBackdrop heroRef={sectionRef} />
+        </Suspense>
       </AnimationErrorBoundary>
       <div
         style={{
