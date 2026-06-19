@@ -18,6 +18,8 @@ export function PlasmaFallback() {
         position: 'absolute',
         inset: 0,
         background:
+          'radial-gradient(ellipse at 85% 10%, rgba(74,31,204,0.45) 0%, rgba(74,31,204,0.24) 22%, rgba(74,31,204,0.08) 45%, transparent 68%), ' +
+          'radial-gradient(ellipse at 10% 85%, rgba(74,31,204,0.35) 0%, rgba(74,31,204,0.18) 22%, rgba(74,31,204,0.05) 45%, transparent 65%), ' +
           'radial-gradient(ellipse at 50% 38%, ' +
           'rgb(90, 18, 2) 0%, ' +
           'rgb(74, 15, 2) 12%, ' +

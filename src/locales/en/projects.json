@@ -22,7 +22,7 @@
       "title": "ABM knowledge agent",
       "context": "SEOMarketing.com, internal knowledge operations",
       "outcome": "A private AI product the team could access from anywhere, trained exclusively on proprietary ABM content",
-      "tech": ["Python", "n8n", "Supabase", "Ollama", "OpenAI", "Whisper", "Railway", "GitHub"],
+      "tech": ["RAG", "Python", "n8n", "Supabase", "Ollama", "OpenAI", "Whisper", "Railway", "GitHub"],
       "problem": "The agency had built years of proprietary ABM knowledge: courses, videos, audio recordings, documents, and images. None of it was searchable or easy to reach. Extracting value from it meant hunting through folders and sitting through hours of video. The expertise existed. Getting to it was the problem.",
       "solution": "A Python pipeline ingested the entire library: audio and video transcribed with Whisper, documents and course content extracted and normalized, everything vectorized and stored in Supabase. On top of that knowledge base lived Goku, a custom AI agent built in n8n, deployed on Railway, and accessible from any browser. Users logged in with their credentials, asked questions in plain language, and got answers grounded in the agency's own content. Conversation history was saved and visible, just like any LLM product they were used to.",
       "result": "The team had a personalized AI expert available online at any time, trained on knowledge no public model had access to. Years of accumulated ABM expertise became a product anyone on the team could actually use."

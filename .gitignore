@@ -26,3 +26,6 @@ dist-ssr
 # Playwright artifacts
 test-results/
 .playwright-mcp/
+
+# Claude Code local settings
+.claude/
