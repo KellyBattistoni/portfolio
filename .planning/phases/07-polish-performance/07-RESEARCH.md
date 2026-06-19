@@ -638,7 +638,7 @@ No security work required in Phase 7.
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Lighthouse score without running it**
    - What we know: 510KB single JS bundle, no OG tags, no hreflang, no focus rings

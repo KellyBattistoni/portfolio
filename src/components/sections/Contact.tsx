@@ -114,7 +114,7 @@ export function Contact() {
   const openToRef = useRef<HTMLParagraphElement>(null)
   const rightColRef = useRef<HTMLDivElement>(null)
   const langBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({ en: null, es: null })
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
   const tlRef = useRef<gsap.core.Timeline | null>(null)
 
   useEffect(() => {
@@ -128,7 +128,7 @@ export function Contact() {
 
   const { contextSafe } = useGSAP(
     () => {
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (
@@ -199,7 +199,7 @@ export function Contact() {
       })
       return () => mm.revert()
     },
-    { scope: sectionRef, dependencies: [prefersReducedMotion] }
+    { scope: sectionRef, dependencies: [prefersReducedMotion, isMobile] }
   )
 
   const handleLangToggle = contextSafe((lang: 'en' | 'es') => {

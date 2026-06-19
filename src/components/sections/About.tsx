@@ -13,7 +13,7 @@ const ARC_NODES = [
 
 export function About() {
   const { t } = useTranslation('about')
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
 
   const sectionRef = useRef<HTMLElement>(null)
   const accentLineRef = useRef<HTMLSpanElement>(null)
@@ -39,7 +39,7 @@ export function About() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (!sectionRef.current || !statsRef.current) return
@@ -156,7 +156,7 @@ export function About() {
       })
       return () => mm.revert()
     },
-    { dependencies: [prefersReducedMotion] }
+    { dependencies: [prefersReducedMotion, isMobile] }
   )
 
   return (

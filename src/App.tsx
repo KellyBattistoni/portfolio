@@ -22,10 +22,11 @@ export default function App() {
   // Playfair Display loads from Google Fonts asynchronously.
   // Refresh ScrollTrigger after font swap so trigger positions are correct.
   useEffect(() => {
+    if (isMobile) return
     document.fonts.ready.then(() => {
       ScrollTrigger.refresh()
     })
-  }, [])
+  }, [isMobile])
 
   return (
     <>

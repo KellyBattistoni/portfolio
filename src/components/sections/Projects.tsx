@@ -27,7 +27,7 @@ export function Projects() {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const leftColRef = useRef<HTMLDivElement>(null)
   const rightColRef = useRef<HTMLDivElement>(null)
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
   const tlRef = useRef<gsap.core.Timeline | null>(null)
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export function Projects() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (!sectionRef.current || !accentLineRef.current || !headingRef.current) return
@@ -85,7 +85,7 @@ export function Projects() {
       })
       return () => mm.revert()
     },
-    { dependencies: [prefersReducedMotion] }
+    { dependencies: [prefersReducedMotion, isMobile] }
   )
 
   return (

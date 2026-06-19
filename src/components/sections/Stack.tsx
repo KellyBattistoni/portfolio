@@ -77,7 +77,7 @@ export function Stack() {
   const accentLineRef = useRef<HTMLSpanElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
   const bandsRef = useRef<HTMLDivElement>(null)
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
   const tlRef = useRef<gsap.core.Timeline | null>(null)
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export function Stack() {
 
   useGSAP(
     () => {
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
       const mm = gsap.matchMedia()
       mm.add('(prefers-reduced-motion: no-preference)', () => {
         if (!sectionRef.current || !headingRef.current || !bandsRef.current) return
@@ -147,7 +147,7 @@ export function Stack() {
       })
       return () => mm.revert()
     },
-    { dependencies: [prefersReducedMotion] }
+    { dependencies: [prefersReducedMotion, isMobile] }
   )
 
   return (

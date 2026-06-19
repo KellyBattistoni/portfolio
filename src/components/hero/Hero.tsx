@@ -45,7 +45,7 @@ export interface HeroProps {
 
 export function Hero({ sectionRef }: HeroProps) {
   const { t } = useTranslation('hero')
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
 
   const nameRef = useRef<HTMLHeadingElement>(null)
   const taglineRef = useRef<HTMLParagraphElement>(null)
@@ -57,7 +57,7 @@ export function Hero({ sectionRef }: HeroProps) {
     () => {
       // Reduced-motion: skip animation setup entirely. Content renders in its
       // resting state — no GSAP tweens or ScrollTriggers ever created.
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
 
       const mm = gsap.matchMedia()
 
@@ -104,7 +104,7 @@ export function Hero({ sectionRef }: HeroProps) {
     // No `scope` — refs target individual elements inside the section, not
     // the section root. Passing the section as scope here would be incorrect
     // because we'd be scoping selectors that we don't use.
-    { dependencies: [prefersReducedMotion] }
+    { dependencies: [prefersReducedMotion, isMobile] }
   )
 
   const handleCTAEnter = contextSafe(() => {

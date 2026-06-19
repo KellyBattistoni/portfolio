@@ -12,7 +12,7 @@ export interface HeroBackdropProps {
 
 export function HeroBackdrop({ heroRef }: HeroBackdropProps) {
   const { prefersReducedMotion, isMobile, supportsWebGL2 } = useDeviceCapabilities()
-  const useFallback = prefersReducedMotion || !supportsWebGL2
+  const useFallback = prefersReducedMotion || !supportsWebGL2 || isMobile
 
   // 'visible'   — Plasma mounted, opacity scrubbed by scroll
   // 'unmounted' — hero fully past viewport, Plasma unmounted to stop rAF + free GL
