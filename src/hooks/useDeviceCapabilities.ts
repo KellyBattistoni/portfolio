@@ -25,7 +25,7 @@ export interface DeviceCapabilities {
  */
 type NavigatorWithDeviceMemory = Navigator & { deviceMemory?: number }
 
-const MOBILE_BREAKPOINT_PX = 768
+const MOBILE_BREAKPOINT_PX = 1080
 const LOW_END_CORE_THRESHOLD = 4
 const LOW_END_MEMORY_THRESHOLD_GB = 4
 const RESIZE_DEBOUNCE_MS = 16 // ~1 rAF frame at 60 Hz
