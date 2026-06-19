@@ -80,13 +80,11 @@ export function RevealSection({
   style,
 }: RevealSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { prefersReducedMotion } = useDeviceCapabilities()
+  const { prefersReducedMotion, isMobile } = useDeviceCapabilities()
 
   useGSAP(
     () => {
-      // Reduced-motion: skip the animation entirely. Children render in their
-      // final state (no `from` ever applied, no ScrollTrigger created).
-      if (prefersReducedMotion) return
+      if (prefersReducedMotion || isMobile) return
 
       const mm = gsap.matchMedia()
 
@@ -138,7 +136,7 @@ export function RevealSection({
     },
     {
       scope: containerRef,
-      dependencies: [variant, stagger, duration, delay, prefersReducedMotion],
+      dependencies: [variant, stagger, duration, delay, prefersReducedMotion, isMobile],
     }
   )
 

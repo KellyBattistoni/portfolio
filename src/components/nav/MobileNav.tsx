@@ -25,9 +25,9 @@
  * once at module level (see `src/lib/gsap.ts`).
  */
 
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { gsap, ScrollTrigger, useGSAP } from '@/lib/gsap'
+import { gsap, useGSAP } from '@/lib/gsap'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { LanguageSwitcher } from '@/components/i18n/LanguageSwitcher'
 
@@ -40,11 +40,9 @@ const NAV_ITEMS = [
 
 type NavItemKey = (typeof NAV_ITEMS)[number]['key']
 
-export interface MobileNavProps {
-  heroRef: RefObject<HTMLElement | null>
-}
+export interface MobileNavProps {}
 
-export function MobileNav({ heroRef }: MobileNavProps) {
+export function MobileNav({}: MobileNavProps) {
   const { t } = useTranslation('common')
   const { prefersReducedMotion } = useDeviceCapabilities()
 
@@ -84,23 +82,9 @@ export function MobileNav({ heroRef }: MobileNavProps) {
       const mm = gsap.matchMedia()
 
       mm.add('(prefers-reduced-motion: no-preference)', () => {
-        if (!heroRef.current) return
-
-        // Hamburger entrance — matches PillNav exactly: 40% scroll, expand then fade.
-        gsap.set(hamburgerWrapRef.current, { maxWidth: 0, opacity: 0 })
-        const entranceTl = gsap.timeline({
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: '40% top',
-            once: true,
-          },
-        })
-        entranceTl
-          .to(hamburgerWrapRef.current, { maxWidth: 80, duration: 0.2, ease: 'power2.out' })
-          .to(hamburgerWrapRef.current, { opacity: 1, duration: 0.3, ease: 'power2.out' })
-
-        // Side-panel timeline — starts paused + off-screen right.
-        gsap.set(panelRef.current, { x: '100%', autoAlpha: 1 })
+        // Hamburger is visible from first paint on mobile — no entrance ScrollTrigger.
+        // This avoids the forced reflow that ScrollTrigger.refresh() causes on mount,
+        // which was the primary TBT contributor on Lighthouse mobile audits.
         const tl = gsap
           .timeline({ paused: true })
           .to(panelRef.current, { x: 0, duration: 0.4, ease: 'power3.out' })
@@ -121,7 +105,6 @@ export function MobileNav({ heroRef }: MobileNavProps) {
         return () => {
           tlRef.current?.kill()
           tlRef.current = null
-          ScrollTrigger.getAll().forEach((trigger) => trigger.kill())
         }
       })
 

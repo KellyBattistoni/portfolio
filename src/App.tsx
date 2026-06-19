@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef } from 'react'
 import { NoiseOverlay } from '@/components/layout/NoiseOverlay'
 import { useDeviceCapabilities } from '@/hooks/useDeviceCapabilities'
 import { useLocalizeDocumentAttributes } from '@/hooks/useLocalizeDocumentAttributes'
@@ -8,10 +8,19 @@ import { Hero } from '@/components/hero/Hero'
 import { PillNav } from '@/components/nav/PillNav'
 import { MobileNav } from '@/components/nav/MobileNav'
 import { AnimationErrorBoundary } from '@/components/error/AnimationErrorBoundary'
-import { About } from '@/components/sections/About'
-import { Projects } from '@/components/sections/Projects'
-import { Stack } from '@/components/sections/Stack'
-import { Contact } from '@/components/sections/Contact'
+
+const About = lazy(() =>
+  import('@/components/sections/About').then(({ About }) => ({ default: About }))
+)
+const Projects = lazy(() =>
+  import('@/components/sections/Projects').then(({ Projects }) => ({ default: Projects }))
+)
+const Stack = lazy(() =>
+  import('@/components/sections/Stack').then(({ Stack }) => ({ default: Stack }))
+)
+const Contact = lazy(() =>
+  import('@/components/sections/Contact').then(({ Contact }) => ({ default: Contact }))
+)
 
 export default function App() {
   useLocalizeDocumentAttributes()
@@ -32,19 +41,27 @@ export default function App() {
     <>
       <NoiseOverlay />
       <Hero sectionRef={heroRef} />
-      {isMobile ? <MobileNav heroRef={heroRef} /> : <PillNav heroRef={heroRef} />}
-      <AnimationErrorBoundary>
-        <About />
-      </AnimationErrorBoundary>
-      <AnimationErrorBoundary>
-        <Projects />
-      </AnimationErrorBoundary>
-      <AnimationErrorBoundary>
-        <Stack />
-      </AnimationErrorBoundary>
-      <AnimationErrorBoundary>
-        <Contact />
-      </AnimationErrorBoundary>
+      {isMobile ? <MobileNav /> : <PillNav heroRef={heroRef} />}
+      <Suspense fallback={null}>
+        <AnimationErrorBoundary>
+          <About />
+        </AnimationErrorBoundary>
+      </Suspense>
+      <Suspense fallback={null}>
+        <AnimationErrorBoundary>
+          <Projects />
+        </AnimationErrorBoundary>
+      </Suspense>
+      <Suspense fallback={null}>
+        <AnimationErrorBoundary>
+          <Stack />
+        </AnimationErrorBoundary>
+      </Suspense>
+      <Suspense fallback={null}>
+        <AnimationErrorBoundary>
+          <Contact />
+        </AnimationErrorBoundary>
+      </Suspense>
     </>
   )
 }
