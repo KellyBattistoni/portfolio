@@ -75,3 +75,24 @@ body {
   outline-offset: 2px;
 }
 
+/* Scrollbar — themed to match dark background + orange accent */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #111111;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 69, 0, 0.45);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 69, 0, 0.75);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 69, 0, 0.45) #111111;
+}
+
