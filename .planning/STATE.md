@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: "Phase 7 closed 2026-06-19. All 4 ROADMAP SC criteria confirmed PASS. Final Lighthouse: Perf 92, A11y 100, BP 100, SEO 100, LCP 2.8s, TBT 50ms, CLS 0. Playwright WebKit smoke test passing. PlasmaFallback indigo improvement applied."
-stopped_at: Phase 8 context gathered
-last_updated: "2026-06-19T07:39:05.288Z"
-last_activity: 2026-06-19 — Phase 7 human QA checkpoint approved; 07-04 SUMMARY written; Phase 8 Deployment is next.
+status: "Phase 8 planned 2026-06-19. 4 plans in 4 waves: repo setup → CI/CD + 404.html → README → live verify. Ready to execute."
+stopped_at: Phase 8 planned — ready to execute
+last_updated: "2026-06-19T08:00:00.000Z"
+last_activity: 2026-06-19 — Phase 8 planned (4 plans, 4 waves). peaceiris/actions-gh-pages@v4, Playwright WebKit CI gate, SIGTTIN fix documented. Ready to execute.
 progress:
   total_phases: 8
   completed_phases: 7
-  total_plans: 26
+  total_plans: 30
   completed_plans: 26
-  percent: 88
+  percent: 87
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-06-09)
 
 **Core value:** A visitor leaves thinking: "This person doesn't just execute tasks — she sees the full system, adapts faster than anyone, and always thinks ahead on the business."
-**Current focus:** Phase 7 — Polish & Performance (07-04 in progress; at final human checkpoint)
+**Current focus:** Phase 8 — Deployment (planned; ready to execute)
 
 ## Current Position
 
-Phase: 8 of 8 (Deployment) — Phase 7 complete ✓; Phase 8 next
-Plan: 0 of TBD — not yet planned
-Status: Phase 7 closed 2026-06-19. All 4 ROADMAP SC criteria confirmed PASS. Final Lighthouse: Perf 92, A11y 100, BP 100, SEO 100, LCP 2.8s, TBT 50ms, CLS 0. Playwright WebKit smoke test passing. PlasmaFallback indigo improvement applied.
-Last activity: 2026-06-19 — Phase 7 human QA checkpoint approved; 07-04 SUMMARY written; Phase 8 Deployment is next.
+Phase: 8 of 8 (Deployment) — Phase 8 planned ✓; ready to execute
+Plan: 0 of 4 — not yet executed
+Status: Phase 8 planned 2026-06-19. 4 plans in 4 waves: repo setup → CI/CD + 404.html → README → live verify. peaceiris/actions-gh-pages@v4, SIGTTIN workaround, Playwright WebKit gate.
+Last activity: 2026-06-19 — Phase 8 planned (4 plans, 4 waves). Ready to execute.
 
-Progress: [█████████░] 90% (~22 of ~24 expected plans)
+Progress: [█████████░] 87% (26 of 30 total plans)
 
 ## Phase Status
 
@@ -43,11 +43,15 @@ Progress: [█████████░] 90% (~22 of ~24 expected plans)
 | 5 | Hero + PillNav — First Vertical Slice | Complete ✓ | 4/4 |
 | 6 | Content Sections | Complete ✓ | 6/6 |
 | 7 | Polish & Performance | Complete ✓ | 4/4 |
-| 8 | Deployment | Pending | TBD |
+| 8 | Deployment | Planned | 0/4 |
 
 ## Active Work
 
-Phase 7 not yet planned. Ready to start.
+Phase 8 planned. 4 plans ready to execute in strict serial order (each wave requires the previous):
+- **Wave 1 (08-01):** GitHub repo creation + master→main rename + initial push (2 human checkpoints)
+- **Wave 2 (08-02):** `public/404.html` + `.github/workflows/deploy.yml` (auto — peaceiris@v4, SIGTTIN fix, Playwright gate)
+- **Wave 3 (08-03):** README.md deployment runbook (auto)
+- **Wave 4 (08-04):** Trigger first CI deploy + human sign-off on all 4 ROADMAP success criteria
 
 Next: plan Phase 7 (Polish & Performance) — LinkedIn URL swap, meta title/description, copy CV PDFs to public/, mobile QA pass, performance audit.
 
