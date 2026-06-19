@@ -11,7 +11,7 @@ function nonBlockingCss() {
     name: 'non-blocking-css',
     transformIndexHtml(html: string): string {
       return html.replace(
-        /<link rel="stylesheet" crossorigin href="(\/assets\/[^"]+\.css)">/g,
+        /<link rel="stylesheet" crossorigin href="(\/[^"]+\.css)">/g,
         (_, href) =>
           `<link rel="preload" href="${href}" as="style" onload="this.onload=null;this.rel='stylesheet'">` +
           `<noscript><link rel="stylesheet" href="${href}"></noscript>`
@@ -21,7 +21,7 @@ function nonBlockingCss() {
 }
 
 export default defineConfig({
-  base: '/',
+  base: '/portfolio/',
   plugins: [react(), tailwindcss(), nonBlockingCss()],
   resolve: {
     alias: {
