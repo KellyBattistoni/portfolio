@@ -62,6 +62,17 @@ export default function App() {
           <Contact />
         </AnimationErrorBoundary>
       </Suspense>
+      <footer
+        style={{
+          padding: '2rem 1.5rem',
+          textAlign: 'center',
+          color: 'rgba(255,255,255,0.3)',
+          fontSize: '0.75rem',
+          letterSpacing: '0.08em',
+        }}
+      >
+        © {new Date().getFullYear()} Kelly Battistoni. All rights reserved.
+      </footer>
     </>
   )
 }

@@ -218,7 +218,9 @@ export function Contact() {
   })
 
   const cvHref =
-    cvLang === 'en' ? '/CV_Kelly_Battistoni_EN.pdf' : '/CV_Kelly_Battistoni_ES.pdf'
+    cvLang === 'en'
+      ? `${import.meta.env.BASE_URL}CV_Kelly_Battistoni_EN.pdf`
+      : `${import.meta.env.BASE_URL}CV_Kelly_Battistoni_ES.pdf`
 
   return (
     <section
