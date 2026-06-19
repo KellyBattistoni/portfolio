@@ -147,7 +147,13 @@ Plans:
   2. Visiting `https://KellyBattistoni.github.io/` loads the production hero within 2.5s LCP and language preference persists across reloads.
   3. Deep links like `https://KellyBattistoni.github.io/#/about` resolve to the correct section (HashRouter) and the `public/404.html` defensive redirect is in place.
   4. A GitHub Actions workflow (optional but configured) auto-deploys on push to `main`, or a documented manual `npm run deploy` flow exists in the README.
-**Plans**: TBD
+**Plans**: 4 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — GitHub repo setup, master→main rename, initial push (human checkpoints)
+- [ ] 08-02-PLAN.md — CI/CD workflow (deploy.yml) + public/404.html redirect
+- [ ] 08-03-PLAN.md — README.md deployment runbook + onboarding
+- [ ] 08-04-PLAN.md — First-deploy human checkpoint + ROADMAP criteria sign-off
 
 ## Progress
 
@@ -162,8 +168,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8
 | 4. Visual Foundations — Plasma + Noise | 0/TBD | Not started | - |
 | 5. Hero + PillNav — First Vertical Slice | 0/TBD | Not started | - |
 | 6. Content Sections | 0/TBD | Not started | - |
-| 7. Polish & Performance | 0/4 (07-01 at checkpoint) | In progress | - |
-| 8. Deployment | 0/TBD | Not started | - |
+| 7. Polish & Performance | 4/4 | Complete ✓ | 2026-06-19 |
+| 8. Deployment | 0/4 | Not started | - |
 
 ---
 *Roadmap created: 2026-06-09*
