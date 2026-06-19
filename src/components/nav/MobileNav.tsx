@@ -40,9 +40,7 @@ const NAV_ITEMS = [
 
 type NavItemKey = (typeof NAV_ITEMS)[number]['key']
 
-export interface MobileNavProps {}
-
-export function MobileNav({}: MobileNavProps) {
+export function MobileNav() {
   const { t } = useTranslation('common')
   const { prefersReducedMotion } = useDeviceCapabilities()
 
