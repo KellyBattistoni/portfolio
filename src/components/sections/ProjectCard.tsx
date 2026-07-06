@@ -155,50 +155,57 @@ export function ProjectCard({ projectId, index }: ProjectCardProps) {
         id={detailsId}
         aria-hidden={!expanded}
         style={{
-          maxHeight: expanded ? '800px' : 0,
-          opacity: expanded ? 1 : 0,
-          overflow: 'hidden',
-          transition: prefersReducedMotion ? 'none' : 'max-height 0.45s ease, opacity 0.3s ease',
+          display: 'grid',
+          gridTemplateRows: expanded ? '1fr' : '0fr',
+          transition: prefersReducedMotion ? 'none' : 'grid-template-rows 0.45s ease',
           background: 'transparent',
-          padding: expanded ? '0 2rem 1.5rem' : '0 2rem',
         }}
       >
-        <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
-          {t('labels.problem')}
-        </h4>
-        <p style={{ margin: '0 0 1.5rem' }}>{t(`cards.${projectId}.problem`)}</p>
-
-        <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
-          {t('labels.solution')}
-        </h4>
-        <p style={{ margin: '0 0 1.5rem' }}>{t(`cards.${projectId}.solution`)}</p>
-
-        <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
-          {t('labels.result')}
-        </h4>
-        <p style={{ margin: 0 }}>{t(`cards.${projectId}.result`)}</p>
-
-        <button
-          type="button"
-          onClick={() => setExpanded(false)}
-          className="card-cue"
+        <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.25rem',
-            marginTop: '1.25rem',
-            marginLeft: 'auto',
-            background: 'none',
-            border: 'none',
-            color: 'inherit',
-            cursor: 'pointer',
-            fontSize: '0.75rem',
-            padding: 0,
+            overflow: 'hidden',
+            opacity: expanded ? 1 : 0,
+            transition: prefersReducedMotion ? 'none' : 'opacity 0.3s ease',
+            padding: expanded ? '0 2rem 1.5rem' : '0 2rem',
           }}
         >
-          <span>{t('labels.collapse')}</span>
-          <span>↑</span>
-        </button>
+          <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
+            {t('labels.problem')}
+          </h4>
+          <p style={{ margin: '0 0 1.5rem' }}>{t(`cards.${projectId}.problem`)}</p>
+
+          <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
+            {t('labels.solution')}
+          </h4>
+          <p style={{ margin: '0 0 1.5rem' }}>{t(`cards.${projectId}.solution`)}</p>
+
+          <h4 style={{ margin: '0 0 0.5rem', color: 'var(--color-brand-accent)' }}>
+            {t('labels.result')}
+          </h4>
+          <p style={{ margin: 0 }}>{t(`cards.${projectId}.result`)}</p>
+
+          <button
+            type="button"
+            onClick={() => setExpanded(false)}
+            className="card-cue"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+              marginTop: '1.25rem',
+              marginLeft: 'auto',
+              background: 'none',
+              border: 'none',
+              color: 'inherit',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              padding: 0,
+            }}
+          >
+            <span>{t('labels.collapse')}</span>
+            <span>↑</span>
+          </button>
+        </div>
       </div>
     </div>
   )
